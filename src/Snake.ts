@@ -9,7 +9,7 @@ export default class Snake {
     public segments: Segment[] = [];
     private color: string;
     public isAlive: boolean = true;
-    public turnRadius: number = 130;
+    public turnRadius: number = 60;
     private emitter: Emitter | null = null;
     private canvasCtx: CanvasRenderingContext2D;
 
@@ -40,7 +40,7 @@ export default class Snake {
                     return;
                 }
                 if (segment instanceof ArcSegment){
-                    // segment.drawDebug(context, '#666666');
+                    // segment.drawDebug(this.canvasCtx, '#666666');
                     this.canvasCtx.beginPath();
                     this.canvasCtx.arc(segment.center.x, segment.center.y, segment.radius, segment.endAngle, segment.endAngle, segment.isCounterClockwise());
                     this.canvasCtx.stroke();
@@ -73,7 +73,7 @@ export default class Snake {
 
             //TODO change to a time based system
             //chance to make a new segment that is non collidable
-            if( lastSegment.isCollidable && Math.random()>0.99){
+            if( lastSegment.isCollidable && Math.random()>0.995){
                 this.addSegment(new LineSegment (lastSegment.endPoint, new Vector(lastSegment.endPoint.x + dx, lastSegment.endPoint.y + dy) , false, lastSegment.endAngle))
                 return;
             }
@@ -90,7 +90,7 @@ export default class Snake {
             const angleExtension = distance / lastSegment.radius;
 
             //chance to make a new segment that is non collidable
-            if( lastSegment.isCollidable && Math.random()>0.99){
+            if( lastSegment.isCollidable && Math.random()>0.995){
                 this.addSegment(new ArcSegment (lastSegment.center, lastSegment.radius, lastSegment.endAngle, lastSegment.endAngle, lastSegment.isCounterClockwise(), false))
                 return;
             }

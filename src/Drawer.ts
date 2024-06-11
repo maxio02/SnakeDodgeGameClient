@@ -36,6 +36,20 @@ export function drawDot(dotX: number, dotY: number, dotSize: number, color: stri
     backgroundCanvasCtx.closePath();
 }
 
+export function drawArc(dotX: number, dotY: number, radius: number, startAngle: number, endAngle: number, counterClockwise: boolean) {
+    backgroundCanvasCtx.lineCap = "round";
+    backgroundCanvasCtx.strokeStyle = "#3466aa";
+    backgroundCanvasCtx.beginPath();
+    backgroundCanvasCtx.arc(dotX, dotY, radius, 0, 2 * Math.PI, counterClockwise);
+
+    backgroundCanvasCtx.lineWidth = 5;
+    backgroundCanvasCtx.stroke();
+
+    backgroundCanvasCtx.closePath();
+}
+
+
+
 
 export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vector) {
     if (from.x != to.x && from.y != to.y) {

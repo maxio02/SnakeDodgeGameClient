@@ -33,4 +33,9 @@ export default class LineSegment extends Segment {
     private calcEndAngle(): number{
         return Math.atan((this.endPoint.y - this.startPoint.y) / (this.endPoint.x - this.startPoint.x));
     }
+
+    get length(): number{
+        return Math.sqrt((this.startPoint.x - this.endPoint.x)**2 + (this.startPoint.y - this.endPoint.y)**2);
+    }
+
 }
