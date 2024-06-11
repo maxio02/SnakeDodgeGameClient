@@ -74,7 +74,7 @@ const snakes: Snake[] = []
 const inputManagers: InputManager[] = []
 const colors: string[] = ["#ef8888", "#ff0000", "#00aabb", "#0000ee"]
 const keymaps: string[][] =[['A','D'],['F','H'],['J','L'], ['8','0']] 
-for (let i = 0; i < 2; i++){
+for (let i = 0; i < 3; i++){
     let startPos = new Vector(Math.random()* 1800, Math.random()*900);
     snakes.push(new Snake(new LineSegment(startPos, startPos.add(new Vector(10,10)), true ,Math.random()* 2* Math.PI), colors[i], gameCanvasCtx));
     inputManagers.push(new InputManager(snakes[i], keymaps[i][0], keymaps[i][1]))

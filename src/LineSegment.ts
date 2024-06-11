@@ -38,4 +38,14 @@ export default class LineSegment extends Segment {
         return Math.sqrt((this.startPoint.x - this.endPoint.x)**2 + (this.startPoint.y - this.endPoint.y)**2);
     }
 
+    getContinuingSegment(transform: Vector): Segment {
+        const transformedEndpoint = this.endPoint.clone().add(transform) as Vector;
+        return new LineSegment(
+            transformedEndpoint, 
+            transformedEndpoint, 
+            this.isCollidable, 
+            this.endAngle
+        );
+    }
+
 }

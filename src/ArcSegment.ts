@@ -66,4 +66,8 @@ export default class ArcSegment extends Segment {
     isCounterClockwise(): boolean{
         return this.counterClockwise;
     }
+
+    getContinuingSegment(transform: Vec2D.Vector): Segment {
+        return new ArcSegment(this.center.clone().add(transform) as Vec2D.Vector, this.radius, this.endAngle, this.endAngle, this.counterClockwise, this.isCollidable);
+    }
 }

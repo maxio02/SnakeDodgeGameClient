@@ -98,7 +98,7 @@ export default class InputManager {
     }
     this.keyMap[key] = false;
 
-    console.log(this.snake.head);
+    //console.log(this.snake.head);
 
     let head = this.snake.head;
     let endPoint = head.endPoint;
@@ -116,7 +116,7 @@ export default class InputManager {
 
     this.snake.addSegment(new LineSegment(endPoint,
       new Vector(endPoint.x + 5 * Math.cos(angle), endPoint.y + 5 * Math.sin(angle)), head.isCollidable ,angle));
-    console.log(this.snake.head);
+    //console.log(this.snake.head);
   }
 
 

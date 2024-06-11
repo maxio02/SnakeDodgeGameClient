@@ -5,4 +5,5 @@ export default abstract class Segment {
     abstract draw(context: CanvasRenderingContext2D, color: string): void;
     abstract get endAngle(): number;
     abstract get endPoint(): Vector;
+    abstract getContinuingSegment(transform: Vector): Segment;
 }
