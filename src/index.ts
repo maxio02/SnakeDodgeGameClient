@@ -5,6 +5,8 @@ import InputManager from "./InputManager";
 import LineSegment from "./LineSegment";
 import Snake from "./Snake";
 import Emitter from "./ParticleSystem/Emitter";
+import CollisionHandler from "./CollisionHandler";
+
 var fpsCounter = document.createElement('div');
 fpsCounter.style.position = 'absolute';
 fpsCounter.style.top = '10px';
@@ -25,15 +27,14 @@ gameCanvas!.width = gameCanvas.getBoundingClientRect().width;
 gameCanvas!.height = gameCanvas.getBoundingClientRect().height;
 export var gridSize = 60;
 
-
 function updateCanvasSize() {
     gameCanvas.width = gameCanvas.getBoundingClientRect().width;
     gameCanvas.height = gameCanvas.getBoundingClientRect().height;
     backgroundCanvas.width = backgroundCanvas.getBoundingClientRect().width;
     backgroundCanvas.height = backgroundCanvas.getBoundingClientRect().height;
     drawGrid();
-    playerOneSnake.draw(gameCanvasCtx);
-    playerTwoSnake.draw(gameCanvasCtx);
+    playerOneSnake.draw();
+    playerTwoSnake.draw();
   }
 
 function animate() {
@@ -44,11 +45,19 @@ function animate() {
         fpsCounter.innerText = `FPS: ${fps}`;
     }
     gameCanvasCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-    playerOneSnake.draw(gameCanvasCtx);
+
+    playerOneSnake.draw();
     playerOneSnake.move(2);
-    playerTwoSnake.draw(gameCanvasCtx);
+    
+    playerTwoSnake.draw();
     playerTwoSnake.move(2);
+
+    playerOneSnake.updateEmitter(0.3);
+    playerTwoSnake.updateEmitter(0.3);
+
+    collisionHandler.checkCollisions();
     requestAnimationFrame(animate);
+    
     // emitter.tick(0.3);
     // emitter.draw();
 }
@@ -64,18 +73,18 @@ function calculateFPS() {
 
 window.addEventListener("resize", updateCanvasSize);
 drawGrid();
-const playerOneSnake = new Snake(new LineSegment(new Vector(100, 100), new Vector(110, 110), true ,Math.PI/4), "#ff0088");
-const playerTwoSnake = new Snake(new LineSegment(new Vector(300, 300), new Vector(295, 295), true ,Math.PI/4), "#33ee55");
+const playerOneSnake = new Snake(new LineSegment(new Vector(100, 100), new Vector(110, 110), true ,Math.PI/4), "#ff0088", gameCanvasCtx);
+const playerTwoSnake = new Snake(new LineSegment(new Vector(300, 300), new Vector(295, 295), true ,Math.PI/4), "#33ee55", gameCanvasCtx);
 
 const playerOneInputManager = new InputManager(playerOneSnake, 'A', 'D');
 const playerTwoInputManager = new InputManager(playerTwoSnake, 'J', 'L');
-
+const collisionHandler = new CollisionHandler([playerOneSnake, playerTwoSnake])
 // const emitter = new Emitter(new Vector(gameCanvas.width/2, gameCanvas.height/2), 2, 10, 5, 'circle', {r:255, g:0, b:255, a:0.5}, gameCanvasCtx, true, true, 200)
 
 // snake.addSegment(new LineSegment(new Vector(100, 100), new Vector(200, 200)));
 // snake.addSegment(new LineSegment(new Vector(100, 100), new Vector(200, 200)));
 // snake.addSegment(new ArcSegment(new Vector(100, 100), 50, 0.5, 1));
-playerOneSnake.draw(gameCanvasCtx);
-playerTwoSnake.draw(gameCanvasCtx);
+playerOneSnake.draw();
+playerTwoSnake.draw();
 
 requestAnimationFrame(animate);

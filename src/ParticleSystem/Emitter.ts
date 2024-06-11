@@ -12,14 +12,16 @@ export default class Emitter{
     public color: {r: number, g: number, b: number, a: number};
     public fadeColor: boolean;
     public fadeSize: boolean;
-    public age: number;
+    public particleMaxAge: number;
     public canvasCtx: CanvasRenderingContext2D;
+    public emitTimeMillis: number;
     private ticks: number = 0;
+    
 
     
-    public constructor(position: Vector, emitTime: number, size: number, speed: number, shape: shape = 'circle', color: {r: number, g: number, b: number, a: number}, canvasCtx:CanvasRenderingContext2D,  fadeColor: boolean = true, fadeSize: boolean = true, age: number ){
+    public constructor(position: Vector, emitInterval: number, size: number, speed: number, shape: shape = 'circle', color: {r: number, g: number, b: number, a: number}, canvasCtx:CanvasRenderingContext2D,  fadeColor: boolean = true, fadeSize: boolean = true, age: number, emitTimeMillis: number = 0){
     this.position = position;
-    this.emitTime = emitTime;
+    this.emitTime = emitInterval;
     this.size = size;
     this.speed = speed;
     this.shape = shape;
@@ -27,14 +29,20 @@ export default class Emitter{
     this.canvasCtx = canvasCtx;
     this.fadeColor = fadeColor;
     this.fadeSize = fadeSize; 
-    this.age = age;
+    this.particleMaxAge = age;
+    this.emitTimeMillis = emitTimeMillis;
     }
 
     public tick(dt: number){
-        if (this.ticks % this.emitTime == 0){
-            this.aliveParticles.push(new Particle(this.position.clone() as Vector, getRandomDirection(), this.size, this.speed, this.shape,{...this.color},this.canvasCtx, this.age, this.fadeColor, this.fadeSize));
-            this.aliveParticles.push(new Particle(this.position.clone() as Vector, getRandomDirection(), this.size, this.speed, this.shape,{...this.color},this.canvasCtx, this.age, this.fadeColor, this.fadeSize));
-            this.aliveParticles.push(new Particle(this.position.clone() as Vector, getRandomDirection(), this.size, this.speed, this.shape,{...this.color},this.canvasCtx, this.age, this.fadeColor, this.fadeSize));
+        if ((this.emitTimeMillis + this.particleMaxAge) < 0) return;
+
+        this.emitTimeMillis -= dt;
+
+
+        if (this.ticks % this.emitTime == 0 && this.emitTimeMillis > 0){
+            this.aliveParticles.push(new Particle(this.position.clone() as Vector, getRandomDirection(), this.size, this.speed, this.shape,{...this.color},this.canvasCtx, this.particleMaxAge, this.fadeColor, this.fadeSize));
+            this.aliveParticles.push(new Particle(this.position.clone() as Vector, getRandomDirection(), this.size, this.speed, this.shape,{...this.color},this.canvasCtx, this.particleMaxAge, this.fadeColor, this.fadeSize));
+            this.aliveParticles.push(new Particle(this.position.clone() as Vector, getRandomDirection(), this.size, this.speed, this.shape,{...this.color},this.canvasCtx, this.particleMaxAge, this.fadeColor, this.fadeSize));
         }
         this.aliveParticles.forEach(particle => {
             particle.tick(dt)

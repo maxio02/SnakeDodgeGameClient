@@ -18,8 +18,11 @@ export default class InputManager {
   }
 
   private onKeyDown(event: KeyboardEvent): void {
-    const key = event.key.toUpperCase();
+    //if snake is dead, ignore the key presses
+    if(!this.snake.isAlive) return;
 
+    const key = event.key.toUpperCase();
+    
 
     //ignore keys not assigned to self, this would result in the keymap having unnecessary keys and triggering the onkeyUp events
     if(key != this.leftKey && key != this.rightKey){
@@ -84,7 +87,9 @@ export default class InputManager {
     
   }
   private onKeyUp(event: KeyboardEvent): void {
-    console.log(this.keyMap);
+    //if snake is dead, ignore the key presses
+    if(!this.snake.isAlive) return;
+    
     const key = event.key.toUpperCase();
 
     //check if the key is in the keymap, if not just ignore it
