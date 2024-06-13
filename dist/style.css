@@ -1,21 +1,106 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 
-body{
+#login-screen-body{
+  
   font-family: Raleway;
-}
-div#background {
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    z-index: -3;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
 }
 
-canvas{
+#game-canvas{
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
+}
+
+#background-canvas{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -3;
+}
+
+div#game-canvas-container{
+  aspect-ratio: 1 / 1;
+  height: 95%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0px 0px 20px 15px rgba(255, 0, 0, 1);
+}
+
+
+.red-border{
+  border: 2px solid #f10000;
+  border-radius: 1rem;
+}
+
+#title{
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 5rem;
+  font-weight: 600;
+  color:white;
+  margin-top: 0;
+}
+
+
+.login-box{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box;
+  aspect-ratio: 1 / 0.6;
+  background-color: #e0c7e0;
+  border-radius: 30px;
+  text-align: center;
+  padding: 5vh;
+  
+
+}
+
+.login-box * {
+  color:white;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 2.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.login-box input{
+  transition: background-color 0.4s;
+  background-color: #b580b4;
+  margin: 1rem 0 1rem 0;
+  border: 1px none #a1a1a1;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.login-box input:focus{
+  outline:0;
+  background-color: #976294;
+}
+
+.login-box button {
+  transition: background-color 0.4s;
+  border-radius: 1rem;
+  background-color: #b580b4;
+  padding: 1rem;
+  border-color: #00000000;
+  margin: 1rem 0 1rem 0;
+}
+
+.login-box button:hover{
+  background-color: #976294;
+}
+
+.login-box button:disabled{
+  background-color: #f7f0f7;
+  color: #cda5cc;
 }

@@ -2,7 +2,10 @@
 var path = require('path');
 module.exports = {
     mode: 'development',
-    entry: ['./src/index.ts'],
+    entry: {
+        game: './src/index.ts',
+        login: './src/MenuManager/login.ts'
+    },
     devtool: 'inline-source-map',
     module: {
         rules: [
@@ -17,7 +20,7 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-        filename: 'script.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
     },
     optimization: {

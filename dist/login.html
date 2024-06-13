@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+
+    <title>Snake Game</title>
+</head>
+<body id="login-screen-body">
+    <div class="login-box center"> 
+        <p id ="title">WELCOME TO<br>SNAKE GAME</p>
+        <input type="text" id="usernameInput" placeholder="ENTER USERNAME" oninput="updateButton()" />
+        <input type="text" id="roomCodeInput" placeholder="ENTER ROOM CODE" maxlength="5" oninput="updateButton()"/>
+        <button id="joinButton" onclick="handleRoomAction()" disabled>CREATE ROOM</button>
+    </div>
+            
+
+    <script src="./login.js"></script>
+</body>
+</html>
