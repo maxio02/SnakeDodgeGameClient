@@ -50,7 +50,7 @@ function animate() {
             snake.move((performance.now()/10 - lastTime)/2);
         }
         
-        snake.updateEmitter(0.3);
+        snake.updateEmitter((performance.now()/10 - lastTime)/10);
     });
     collisionHandler.checkCollisions();
     requestAnimationFrame(animate);
@@ -82,11 +82,5 @@ for (let i = 0; i < 3; i++){
 
 const collisionHandler = new CollisionHandler(snakes)
 // const emitter = new Emitter(new Vector(gameCanvas.width/2, gameCanvas.height/2), 2, 10, 5, 'circle', {r:255, g:0, b:255, a:0.5}, gameCanvasCtx, true, true, 200)
-
-// snake.addSegment(new LineSegment(new Vector(100, 100), new Vector(200, 200)));
-// snake.addSegment(new LineSegment(new Vector(100, 100), new Vector(200, 200)));
-// snake.addSegment(new ArcSegment(new Vector(100, 100), 50, 0.5, 1));
-// playerOneSnake.draw();
-// playerTwoSnake.draw();
 
 requestAnimationFrame(animate);

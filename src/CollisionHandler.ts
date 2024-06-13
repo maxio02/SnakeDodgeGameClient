@@ -41,7 +41,6 @@ export default class CollisionHandler {
 
                     if (segment instanceof LineSegment) {
                         if (this.isPointOnLine(segment, snake1.head.endPoint, 0.5)) {
-                            console.log("killed by straight (not gay)");
                             console.log(segment);
                             snake1.kill();
                             return;
@@ -50,7 +49,6 @@ export default class CollisionHandler {
                     }
                     else if (segment instanceof ArcSegment) {
                         if (this.isPointOnArc(segment, snake1.head.endPoint, 2)) {
-                            console.log("killed by gay (not straight)");
                             console.log(segment);
                             snake1.kill();
                             return;
@@ -71,10 +69,10 @@ export default class CollisionHandler {
         let d1 = point.distance(line.startPoint)
         let d2 = point.distance(line.endPoint)
 
-        if (Math.abs(d1 + d2 - lineLength) < epsilon) {
-            return true;
+        if (Math.abs(d1 + d2 - lineLength) > epsilon) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     private isPointOnArc(arc: ArcSegment, point: Vector, epsilon: number) {
@@ -105,10 +103,18 @@ export default class CollisionHandler {
         const normalizedEndAngle = normalizeAngle(endAngle);
 
         // Check if the angle lies within the start and end angles
+        //The isCounterClockwise check is for when the start to end has rolled over 2pi
         if (normalizedStartAngle <= normalizedEndAngle) {
-            return normalizedAngle >= normalizedStartAngle && normalizedAngle <= normalizedEndAngle;
+             if(normalizedAngle >= normalizedStartAngle && normalizedAngle <= normalizedEndAngle && !arc.isCounterClockwise()) {
+                console.log(`${normalizedStartAngle} < ${normalizedAngle} < ${normalizedEndAngle}`);
+                return true;
+            };
         } else {
-            return normalizedAngle >= normalizedEndAngle && normalizedAngle <= normalizedStartAngle;
+            if(normalizedAngle >= normalizedEndAngle && normalizedAngle <= normalizedStartAngle && arc.isCounterClockwise() ) {
+                console.log(`${normalizedStartAngle} > ${normalizedAngle} > ${normalizedEndAngle}`)
+                return true;
+            }            
         }
+        return false;
     }
 }
