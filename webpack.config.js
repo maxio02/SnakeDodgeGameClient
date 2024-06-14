@@ -4,7 +4,8 @@ module.exports = {
     mode: 'development',
     entry: {
         game: './src/index.ts',
-        login: './src/MenuManager/login.ts'
+        login: './src/MenuManager/login.ts',
+        websocket: './src/WebSocketClient/websocket.ts'
     },
     devtool: 'inline-source-map',
     module: {

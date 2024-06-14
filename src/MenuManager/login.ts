@@ -1,37 +1,41 @@
+import { createRoom, joinRoom } from "../WebSocketClient/websocket";
+
+const roomCodeInput = (document.getElementById('roomCodeInput') as HTMLInputElement);
+const usernameInput = (document.getElementById('usernameInput') as HTMLInputElement);
+const roomButton = document.getElementById('joinButton') as HTMLButtonElement;
+
 // src/login.ts
 export function updateButton() {
-    const roomCode = (document.getElementById('roomCodeInput') as HTMLInputElement).value;
-    const username = (document.getElementById('usernameInput') as HTMLInputElement).value;
-    const roomButton = document.getElementById('joinButton') as HTMLButtonElement;
+    
 
-    if (username.trim() == '') {
+    if (usernameInput.value.trim() == '') {
         roomButton.disabled = true;
     } else {
         roomButton.disabled = false;
     }
 
-    if (roomCode.trim() == '') {
-        roomButton.textContent = 'CREATE ROOM';
-    } else {
+    if (roomCodeInput.value.trim().length == 5) {
         roomButton.textContent = 'JOIN ROOM';
+    } else {
+        roomButton.textContent = 'CREATE ROOM';
     }
 }
 
 export function handleRoomAction() {
-    const roomButton = document.getElementById('joinButton') as HTMLButtonElement;
     if (roomButton.innerText === 'CREATE ROOM') {
-        createRoom();
+        createRoom(usernameInput.value);
     } else {
-        joinRoom();
+        joinRoom(roomCodeInput.value.toUpperCase(), usernameInput.value);
     }
 }
 
-function createRoom() {
-    console.log('Room created');
-}
-
-function joinRoom() {
-    console.log('Joined room');
+export function showErrorAnimation() {
+    roomButton.classList.add('red-error-message');
+    roomButton.classList.add('wiggle');
+    setTimeout(() => {
+    roomButton.classList.remove('red-error-message');
+    roomButton.classList.remove('wiggle');
+    }, 600)
 }
 
 (window as any).updateButton = updateButton;
