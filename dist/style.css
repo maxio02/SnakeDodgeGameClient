@@ -160,10 +160,22 @@ div#game-canvas-container{
   display: flex;
 }
 
-#room-users-list li{
- font-size: 3rem;
+#room-users-list{
+  padding-left: 0;
+  list-style-type:inside;
 }
 
-#room-users-list{
-  list-style-type:none;
+#room-users-list li{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+ font-size: 3rem;
+ 
 }
+
+#room-users-list li i{
+  font-size: 3rem;
+  transition: color 0.4s ease-in-out, background-color 0.4s ease-in-out;
+ }
+

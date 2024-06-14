@@ -7,13 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
-
+    
     <title>Snake Game</title>
 </head>
 <body id="login-screen-body">
     <div class="menu-box" id="login-div"> 
         <p class ="title">WELCOME TO<br>SNAKE GAME</p>
-        <input type="text" id="usernameInput" placeholder="ENTER USERNAME" oninput="updateButton()" />
+        <input type="text" id="usernameInput" placeholder="ENTER USERNAME" maxlength="15" oninput="updateButton()" />
         <input type="text" class="autocapitalize" id="roomCodeInput" placeholder="ENTER ROOM CODE" maxlength="5" oninput="updateButton()"/>
         <button id="joinButton" onclick="handleRoomAction()" disabled>CREATE ROOM</button>
     </div>
@@ -29,5 +29,7 @@
 
     <script src="./login.js"></script>
     <script src="./websocket.js"></script>
+    <script src="https://kit.fontawesome.com/17886f9b5d.js" crossorigin="anonymous"></script>
+
 </body>
 </html>

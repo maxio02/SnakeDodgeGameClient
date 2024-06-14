@@ -2,6 +2,7 @@ import { Vector } from "vector2d";
 import ArcSegment from "./ArcSegment";
 import LineSegment from "./LineSegment";
 import Snake from "./Snake";
+import { sendKeyEventToServer } from "./WebSocketClient/websocket";
 
 export default class InputManager {
   private keyMap: { [key: string]: boolean } = {};
@@ -48,10 +49,14 @@ export default class InputManager {
     let tangentAngle = 0;
 
     //calculate the starting tangent angle of the line
+
+    sendKeyEventToServer(key, true);
+
     if (head instanceof LineSegment) {
       tangentAngle += Math.PI / 2;
 
       if (key == this.rightKey) {
+
         this.snake.addSegment(new ArcSegment(new Vector(
           endPoint.x + this.snake.turnRadius * Math.cos(this.snake.head.endAngle + tangentAngle),
           endPoint.y + this.snake.turnRadius * Math.sin(this.snake.head.endAngle + tangentAngle)),
@@ -99,6 +104,7 @@ export default class InputManager {
     this.keyMap[key] = false;
 
     //console.log(this.snake.head);
+    sendKeyEventToServer(key, false);
 
     let head = this.snake.head;
     let endPoint = head.endPoint;
@@ -124,5 +130,8 @@ export default class InputManager {
     window.removeEventListener('keydown', this.onKeyDown.bind(this));
     window.removeEventListener('keyup', this.onKeyUp.bind(this));
   }
+
+
+
 }
 

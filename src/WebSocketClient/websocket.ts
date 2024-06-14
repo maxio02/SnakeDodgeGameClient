@@ -23,6 +23,9 @@ function initWebSocket() {
             case 'ROOM_DATA':
                 updateRoomList(event.data);
                 break;
+            case 'GAMEPLAY':
+                // updateGameCanvas();
+                break;
             case 'ERROR':
                 alert(`Error: ${data.message}`);
                 break;
@@ -65,6 +68,14 @@ export function setReadyState(username: string, roomCode: string, readyState: bo
 export function getReadyState(username: string) {
     if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify({ type: 'GET_READY', username: username }));
+    } else {
+        console.error('WebSocket connection is not open');
+    }
+}
+
+export function sendKeyEventToServer(key: string, pressed: boolean){
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: 'KEY_EVENT', key: key, pressed: pressed }));
     } else {
         console.error('WebSocket connection is not open');
     }

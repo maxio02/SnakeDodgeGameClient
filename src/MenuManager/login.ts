@@ -68,7 +68,21 @@ export function updateRoomList(data: JSON){
 
     players.forEach((player: { username: string | number; isReady: boolean; }) => {
         const playerItem = document.createElement('li');
-        playerItem.textContent = player.username + (player.isReady ? ' 🟢' : ' 🔴');
+
+        playerItem.textContent = player.username + '';
+        
+        if(player.username == roomInfo['room']['host']['username']) {
+            playerItem.insertAdjacentHTML('afterbegin', '<i class="fa-solid fa-crown" style="color: #ffd700;"></i>')
+            
+        }
+
+        if (player.isReady) {
+            playerItem.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle" style="color: #37cb48;"></i>');
+        } else {
+            playerItem.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle" style="color: #cb3737;"></i>');
+        }
+
+
         roomUsersList.appendChild(playerItem);
     });
 }
@@ -81,6 +95,10 @@ export function showErrorAnimation() {
     roomButton.classList.remove('wiggle');
     }, 600)
 }
+
+window.onload = () => {
+    updateButton();
+};
 
 (window as any).updateButton = updateButton;
 (window as any).handleRoomAction = handleRoomAction;
