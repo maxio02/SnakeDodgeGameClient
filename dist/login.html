@@ -11,11 +11,19 @@
     <title>Snake Game</title>
 </head>
 <body id="login-screen-body">
-    <div class="login-box center"> 
-        <p id ="title">WELCOME TO<br>SNAKE GAME</p>
+    <div class="menu-box" id="login-div"> 
+        <p class ="title">WELCOME TO<br>SNAKE GAME</p>
         <input type="text" id="usernameInput" placeholder="ENTER USERNAME" oninput="updateButton()" />
         <input type="text" class="autocapitalize" id="roomCodeInput" placeholder="ENTER ROOM CODE" maxlength="5" oninput="updateButton()"/>
         <button id="joinButton" onclick="handleRoomAction()" disabled>CREATE ROOM</button>
+    </div>
+    <div  class="menu-box display-none" id="room-div"> 
+        <p class ="title" id="room-title">WELCOME TO<br></p>
+        <ul id="room-users-list">
+            
+        </ul>
+        <p id="player-count">0/0</p>
+        <button class="red-button" id="readyButton" onclick="handleReadyState()">READY</button>
     </div>
             
 

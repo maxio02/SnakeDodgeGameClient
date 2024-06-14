@@ -1,4 +1,4 @@
-import { showErrorAnimation } from "../MenuManager/login";
+import { showErrorAnimation, showRoomView, updateRoomList } from "../MenuManager/login";
 
 let socket: WebSocket;
 
@@ -14,14 +14,14 @@ function initWebSocket() {
         console.log('Message from server:', data);
         
         switch (data.type) {
-            case 'ROOM_CREATED':
-                alert('Room created successfully!');
-                break;
             case 'JOINED_ROOM':
-                alert('Joined room successfully!');
+                showRoomView(event.data);
                 break;
             case 'ROOM_DOES_NOT_EXIST':
                 showErrorAnimation();
+                break;
+            case 'ROOM_DATA':
+                updateRoomList(event.data);
                 break;
             case 'ERROR':
                 alert(`Error: ${data.message}`);
@@ -53,5 +53,22 @@ export function joinRoom(roomCode: string, username: string) {
         console.error('WebSocket connection is not open');
     }
 }
+
+export function setReadyState(username: string, roomCode: string, readyState: boolean) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: 'SET_READY', username: username, roomCode: roomCode, readyState: readyState}));
+    } else {
+        console.error('WebSocket connection is not open');
+    }
+}
+
+export function getReadyState(username: string) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: 'GET_READY', username: username }));
+    } else {
+        console.error('WebSocket connection is not open');
+    }
+}
+
 
 initWebSocket();

@@ -54,7 +54,7 @@ div#game-canvas-container{
   border-radius: 1rem;
 }
 
-#title{
+.title{
   font-family: "Pixelify Sans", sans-serif;
   font-size: 5rem;
   font-weight: 600;
@@ -63,7 +63,7 @@ div#game-canvas-container{
 }
 
 
-.login-box{
+.menu-box{
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -79,7 +79,7 @@ div#game-canvas-container{
 
 }
 
-.login-box * {
+.menu-box * {
   color:white;
   font-family: "Pixelify Sans", sans-serif;
   font-size: 2.5rem;
@@ -87,7 +87,7 @@ div#game-canvas-container{
   font-weight: 600;
 }
 
-.login-box input{
+.menu-box input{
   transition: background-color 0.4s;
   background-color: #b580b4;
   margin: 1rem 0 1rem 0;
@@ -96,12 +96,17 @@ div#game-canvas-container{
   padding: 1rem;
 }
 
-.login-box input:focus{
+.menu-box input:focus{
   outline:0;
   background-color: #976294;
 }
 
-.login-box button {
+.menu-box input::placeholder{
+  color: #c0bfc0;
+}
+
+
+.menu-box button {
   transition: background-color 0.4s, color 0.4s;
 
   border-radius: 1rem;
@@ -115,16 +120,24 @@ div#game-canvas-container{
   text-transform:uppercase;
 }
 
-.login-box button:hover{
+.menu-box button:hover{
   background-color: #976294;
+  cursor:pointer;
 }
 
-.login-box button:disabled{
-  background-color: #f7f0f7;
+.menu-box button:disabled{
+  background-color: #ede0ee;
   color: #cda5cc;
+  cursor:auto;
 }
 
-.red-error-message {
+.green-button {
+  color: #b1f4ad !important;
+  background-color: #37cb48 !important;
+  transition: color 0.4s ease-in-out, background-color 0.4s ease-in-out;
+}
+
+.red-button {
   color: #f4adad !important;
   background-color: #cb3737 !important;
   transition: color 0.4s ease-in-out, background-color 0.4s ease-in-out;
@@ -137,4 +150,20 @@ div#game-canvas-container{
 }
 .wiggle {
   animation: wiggle 0.6s ease-in-out;
+}
+
+.display-none{
+  display: none;
+}
+
+.display-flex{
+  display: flex;
+}
+
+#room-users-list li{
+ font-size: 3rem;
+}
+
+#room-users-list{
+  list-style-type:none;
 }
