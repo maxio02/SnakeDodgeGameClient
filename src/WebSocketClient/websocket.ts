@@ -1,4 +1,5 @@
 import { showErrorAnimation, showRoomView, updateRoomList } from "../MenuManager/login";
+import { Player } from "../ViewModels/Player";
 
 let socket: WebSocket;
 
@@ -57,17 +58,9 @@ export function joinRoom(roomCode: string, username: string) {
     }
 }
 
-export function setReadyState(username: string, roomCode: string, readyState: boolean) {
+export function setPlayerData(player: Player, roomCode: string) {
     if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ type: 'SET_READY', username: username, roomCode: roomCode, readyState: readyState}));
-    } else {
-        console.error('WebSocket connection is not open');
-    }
-}
-
-export function getReadyState(username: string) {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ type: 'GET_READY', username: username }));
+        socket.send(JSON.stringify({ type: 'PLAYER_DATA', player: player, roomCode: roomCode}));
     } else {
         console.error('WebSocket connection is not open');
     }
