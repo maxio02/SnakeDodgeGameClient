@@ -1,4 +1,5 @@
-import { showErrorAnimation, showRoomView, updateRoomList } from "../MenuManager/login";
+import { updateGameState } from "..";
+import { currentPlayer, showErrorAnimation, showRoomView, switchGameView, updateRoomList } from "../MenuManager/login";
 import { Player } from "../ViewModels/Player";
 
 let socket: WebSocket;
@@ -24,8 +25,11 @@ function initWebSocket() {
             case 'ROOM_DATA':
                 updateRoomList(event.data);
                 break;
-            case 'GAMEPLAY':
-                // updateGameCanvas();
+            case 'GAME_STATE':
+                switchGameView(data);
+                break;
+            case 'GAMEPLAY_DATA':
+                updateGameState(data);
                 break;
             case 'ERROR':
                 alert(`Error: ${data.message}`);
@@ -68,11 +72,20 @@ export function setPlayerData(player: Player, roomCode: string) {
 
 export function sendKeyEventToServer(key: string, pressed: boolean){
     if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ type: 'KEY_EVENT', key: key, pressed: pressed }));
+        socket.send(JSON.stringify({ type: 'KEY_EVENT', username: currentPlayer.username, key: key, pressed: pressed }));
     } else {
         console.error('WebSocket connection is not open');
     }
 }
+
+export function sendStartCommand(roomCode: string) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: 'BEGIN_GAME', roomCode: roomCode}));
+    } else {
+        console.error('WebSocket connection is not open');
+    }
+}
+
 
 
 initWebSocket();

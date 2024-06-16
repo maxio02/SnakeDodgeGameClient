@@ -1,7 +1,10 @@
+import Snake from "../Snake";
+
 export class Player {
     public username: string;
     public isReady: boolean;
     public color: string;
+    public snake: Snake;
     
     constructor(username: string, isReady: boolean = false) {
         this.username = username;

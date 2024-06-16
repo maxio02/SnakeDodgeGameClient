@@ -104,6 +104,7 @@ export default class CollisionHandler {
 
         // Check if the angle lies within the start and end angles
         //The isCounterClockwise check is for when the start to end has rolled over 2pi
+        //TODO THIS IS WRONG
         if (normalizedStartAngle <= normalizedEndAngle) {
              if(normalizedAngle >= normalizedStartAngle && normalizedAngle <= normalizedEndAngle && !arc.isCounterClockwise()) {
                 console.log(`${normalizedStartAngle} < ${normalizedAngle} < ${normalizedEndAngle}`);

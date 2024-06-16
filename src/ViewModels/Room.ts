@@ -1,13 +1,19 @@
 import { Player } from "./Player";
 
+export const enum GameState {
+    RUNNING,
+    IN_LOBBY,
+    FINISHED
+}
 export class Room {
-    private players: Player[] = [];
+    private players: { [key: string]: Player; } = {};
     private maxSize: number;
+    private gameState: GameState;
     private host: Player;
     private code: string;
 
 
-    constructor(code: string, host: Player, players?: Player[], maxSize: number = 5) {
+    constructor(code: string, host: Player, players?: { [key: string]: Player; }, maxSize: number = 5) {
         this.code = code;
         this.host = host;
         this.maxSize = maxSize;
@@ -23,11 +29,11 @@ export class Room {
 
     public addPlayer(player: Player): boolean {
 
-        if (this.players.length >= this.maxSize) {
+        if (Object.keys(this.players).length >= this.maxSize) {
             return false;
         }
 
-        this.players.push(player)
+        this.players[player.username] = player;
         return true;
     }
 
@@ -35,7 +41,7 @@ export class Room {
         return this.code;
     }
 
-    public getPlayers(): Player[] {
+    public getPlayers(): { [key: string]: Player; } {
         return this.players;
     }
 
@@ -47,7 +53,7 @@ export class Room {
         this.host = player;
     }
 
-    public setPlayers(players: Player[]){
+    public setPlayers(players: { [key: string]: Player; }){
         this.players = players;
     }
 
@@ -57,5 +63,13 @@ export class Room {
 
     public getMaxSize(){
         return this.maxSize;
+    }
+
+    public setGameState(newGameState: GameState){
+        this.gameState = newGameState;
+    }
+
+    public getGameState(){
+        return this.gameState;
     }
 }

@@ -1,3 +1,5 @@
+/*! .. */
+
 /*! ../MenuManager/login */
 
 /*! ../ViewModels/Player */
@@ -12,8 +14,6 @@
 
 /*! ./ArrayVector */
 
-/*! ./CollisionHandler */
-
 /*! ./Drawer */
 
 /*! ./Float32Vector */
@@ -21,6 +21,8 @@
 /*! ./InputManager */
 
 /*! ./LineSegment */
+
+/*! ./MenuManager/login */
 
 /*! ./Particle */
 
@@ -73,10 +75,6 @@
 /*!********************************!*\
   !*** ./src/ViewModels/Room.ts ***!
   \********************************/
-
-/*!*********************************!*\
-  !*** ./src/CollisionHandler.ts ***!
-  \*********************************/
 
 /*!**********************************!*\
   !*** ./src/MenuManager/login.ts ***!
