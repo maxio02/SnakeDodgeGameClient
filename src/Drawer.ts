@@ -2,16 +2,21 @@ import { Vector } from "vector2d";
 import { backgroundCanvas, backgroundCanvasCtx, gridSize } from "./index";
 
 export function drawGrid() {
+
+    const scaleX = backgroundCanvasCtx.canvas.width / 2000;
+    const scaleY = backgroundCanvasCtx.canvas.height / 2000;
+
+
     backgroundCanvasCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
     backgroundCanvasCtx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
     backgroundCanvasCtx.lineWidth = 2;
-    for (var x = gridSize; x < backgroundCanvas.width; x += gridSize) {
+    for (var x = gridSize; x < backgroundCanvas.width; x += gridSize * scaleX) {
         backgroundCanvasCtx.beginPath();
-        backgroundCanvasCtx.moveTo(x, 0);
-        backgroundCanvasCtx.lineTo(x, backgroundCanvas.height);
+        backgroundCanvasCtx.moveTo(x , 0);
+        backgroundCanvasCtx.lineTo(x , backgroundCanvas.height);
         backgroundCanvasCtx.stroke();
     }
-    for (var y = gridSize; y < backgroundCanvas.height; y += gridSize) {
+    for (var y = gridSize; y < backgroundCanvas.height; y += gridSize * scaleY) {
         backgroundCanvasCtx.beginPath();
         backgroundCanvasCtx.moveTo(0, y);
         backgroundCanvasCtx.lineTo(backgroundCanvas.width, y);

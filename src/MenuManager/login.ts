@@ -1,3 +1,4 @@
+import { updateCanvasSize } from "..";
 import { Player } from "../ViewModels/Player";
 import { GameState, Room } from "../ViewModels/Room";
 import { GameStateData } from "../WebSocketClient/messageTypes";
@@ -203,6 +204,9 @@ export function switchGameView(data: GameStateData) {
         roomDiv.classList.remove('display-flex');
         gameDiv.classList.remove('display-none');
         gameDiv.classList.add('display-flex');
+        //update the game canvas to fit the screen
+        updateCanvasSize();
+
             break;
         case 1:
         currentRoom.setGameState(GameState.IN_LOBBY);

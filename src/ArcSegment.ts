@@ -26,11 +26,16 @@ export default class ArcSegment extends Segment {
 
 
     draw(context: CanvasRenderingContext2D, color: string): void {
+
+        const scaleX = context.canvas.width / 2000;
+        const scaleY = context.canvas.height / 2000;
+
+        
         context.lineCap = "round";
         context.strokeStyle = color;
         if (this.isCollidable == true){
             context.beginPath();
-            context.arc(this.center.x, this.center.y, this.radius, this.startAngle, this.endAngle, this.counterClockwise);
+            context.arc(this.center.x * scaleX, this.center.y * scaleY, this.radius * Math.min(scaleX, scaleY), this.startAngle, this.endAngle, this.counterClockwise);
             context.stroke();
             context.closePath();
         }

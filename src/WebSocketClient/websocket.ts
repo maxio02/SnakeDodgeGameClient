@@ -1,5 +1,6 @@
 import { updateGameState } from "..";
-import { currentPlayer, showErrorAnimation, showRoomView, switchGameView, updateRoomList } from "../MenuManager/login";
+import { Dir } from "../InputManager";
+import { currentPlayer, currentRoom, showErrorAnimation, showRoomView, switchGameView, updateRoomList } from "../MenuManager/login";
 import { Player } from "../ViewModels/Player";
 
 let socket: WebSocket;
@@ -13,7 +14,7 @@ function initWebSocket() {
 
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        console.log('Message from server:', data);
+        // console.log('Message from server:', data);
         
         switch (data.type) {
             case 'JOINED_ROOM':
@@ -70,9 +71,9 @@ export function setPlayerData(player: Player, roomCode: string) {
     }
 }
 
-export function sendKeyEventToServer(key: string, pressed: boolean){
+export function sendKeyEventToServer(key: Dir, pressed: boolean){
     if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ type: 'KEY_EVENT', username: currentPlayer.username, key: key, pressed: pressed }));
+        socket.send(JSON.stringify({ type: 'KEY_EVENT', roomCode: currentRoom.getCode(), username: currentPlayer.username, key: key, pressed: pressed }));
     } else {
         console.error('WebSocket connection is not open');
     }

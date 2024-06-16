@@ -1,9 +1,10 @@
-import { Vector } from "vector2d";
-import ArcSegment from "./ArcSegment";
-import LineSegment from "./LineSegment";
 import Snake from "./Snake";
 import { sendKeyEventToServer } from "./WebSocketClient/websocket";
 
+export const enum Dir{
+  LEFT,
+  RIGHT
+}
 export default class InputManager {
   private keyMap: { [key: string]: boolean } = {};
   private snake: Snake;
@@ -43,52 +44,7 @@ export default class InputManager {
     }
     this.keyMap[key] = true;
 
-
-    let head = this.snake.head;
-    let endPoint = head.endPoint;
-    let tangentAngle = 0;
-
-
-    sendKeyEventToServer(key == this.rightKey ? 'right' : 'left', true);
-
-
-    // if (head instanceof LineSegment) {
-    //   tangentAngle += Math.PI / 2;
-
-    //   if (key == this.rightKey) {
-
-    //     this.snake.addSegment(new ArcSegment(new Vector(
-    //       endPoint.x + this.snake.turnRadius * Math.cos(this.snake.head.endAngle + tangentAngle),
-    //       endPoint.y + this.snake.turnRadius * Math.sin(this.snake.head.endAngle + tangentAngle)),
-    //       this.snake.turnRadius, this.snake.head.endAngle - tangentAngle, this.snake.head.endAngle - tangentAngle, false, head.isCollidable))
-    //   }
-    //   if (key == this.leftKey) {
-    //     this.snake.addSegment(new ArcSegment(new Vector(
-    //       endPoint.x + this.snake.turnRadius * Math.cos(this.snake.head.endAngle - tangentAngle),
-    //       endPoint.y + this.snake.turnRadius * Math.sin(this.snake.head.endAngle - tangentAngle)),
-    //       this.snake.turnRadius, this.snake.head.endAngle + tangentAngle, this.snake.head.endAngle + tangentAngle, true, head.isCollidable))
-    //   }
-
-    // } 
-
-    // else if (head instanceof ArcSegment) {
-
-    //   tangentAngle = head.isCounterClockwise ? -Math.PI : Math.PI;
-    //   if (key == this.rightKey) {
-    //     this.snake.addSegment(new ArcSegment(new Vector(
-    //       endPoint.x - this.snake.turnRadius * Math.cos(this.snake.head.endAngle + tangentAngle),
-    //       endPoint.y - this.snake.turnRadius * Math.sin(this.snake.head.endAngle + tangentAngle)),
-    //       this.snake.turnRadius, this.snake.head.endAngle - tangentAngle, this.snake.head.endAngle - tangentAngle, false, head.isCollidable))
-    //   }
-    //   if (key == this.leftKey) {
-    //     this.snake.addSegment(new ArcSegment(new Vector(
-    //       endPoint.x - this.snake.turnRadius * Math.cos(this.snake.head.endAngle - tangentAngle),
-    //       endPoint.y - this.snake.turnRadius * Math.sin(this.snake.head.endAngle - tangentAngle)),
-    //       this.snake.turnRadius, this.snake.head.endAngle + tangentAngle, this.snake.head.endAngle + tangentAngle, true, head.isCollidable))
-    //   }
-
-    // }
-
+    sendKeyEventToServer(key == this.rightKey ? Dir.RIGHT : Dir.LEFT, true);
   }
   private onKeyUp(event: KeyboardEvent): void {
     //if snake is dead, ignore the key presses
@@ -102,30 +58,7 @@ export default class InputManager {
     }
     this.keyMap[key] = false;
 
-    sendKeyEventToServer(key == this.rightKey ? 'right' : 'left', false);
-
-
-
-    // let head = this.snake.head;
-    // let endPoint = head.endPoint;
-    // let angle = head.endAngle;
-
-    // if (key == this.leftKey && head instanceof ArcSegment && head.isCounterClockwise()) {
-
-    //   angle -= Math.PI / 2;
-    // } else if (key == this.rightKey && head instanceof ArcSegment && !head.isCounterClockwise()) {
-
-    //   angle += Math.PI / 2;
-    // }
-
-
-
-    // this.snake.addSegment(new LineSegment(endPoint,
-    //   new Vector(endPoint.x + 5 * Math.cos(angle), endPoint.y + 5 * Math.sin(angle)), head.isCollidable ,angle));
-
-
-
-    //console.log(this.snake.head);
+    sendKeyEventToServer(key == this.rightKey ? Dir.RIGHT : Dir.LEFT, false);
   }
 
 

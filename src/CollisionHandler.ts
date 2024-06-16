@@ -26,7 +26,7 @@ export default class CollisionHandler {
             //if the angle of the arc segment at the head exeeds 360 deg kill the snake
             if (snake1.head instanceof ArcSegment && Math.abs(snake1.head.endAngle - snake1.head.startAngle) > 2 * Math.PI) {
                 snake1.kill();
-                console.log(`snake ${snake1} commited circlicide`);
+                // console.log(`snake ${snake1} commited circlicide`);
             }
 
             this.snakes.forEach(snake2 => {

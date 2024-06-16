@@ -19,13 +19,16 @@ export default class LineSegment extends Segment {
       }
 
       draw(context: CanvasRenderingContext2D, color: string): void {
+
+        const scaleX = context.canvas.width / 2000;
+        const scaleY = context.canvas.height / 2000;
         // context.strokeStyle = '#ff00ffff'
         context.strokeStyle = color;
         context.lineCap = "round";
         if (this.isCollidable == true){
             context.beginPath();
-            context.moveTo(this.startPoint.x, this.startPoint.y);
-            context.lineTo(this.endPoint.x, this.endPoint.y);
+            context.moveTo(this.startPoint.x * scaleX, this.startPoint.y * scaleY);
+            context.lineTo(this.endPoint.x * scaleX, this.endPoint.y * scaleY);
             context.stroke();
             context.closePath();
         }

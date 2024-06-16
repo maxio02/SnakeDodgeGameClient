@@ -5,9 +5,7 @@ import InputManager from "./InputManager";
 import LineSegment from "./LineSegment";
 import Snake from "./Snake";
 import Emitter from "./ParticleSystem/Emitter";
-import CollisionHandler from "./CollisionHandler";
-import { MessageGameplay, messageLineSegment } from "./WebSocketClient/messageTypes";
-import Segment from "./Segment";
+import { MessageGameplay, messageArcSegment, messageLineSegment } from "./WebSocketClient/messageTypes";
 import { currentPlayer, currentRoom } from "./MenuManager/login";
 
 var fpsCounter = document.createElement('div');
@@ -30,7 +28,7 @@ gameCanvas!.width = gameCanvas.getBoundingClientRect().width;
 gameCanvas!.height = gameCanvas.getBoundingClientRect().height;
 export var gridSize = 60;
 let inputManager;
-function updateCanvasSize() {
+export function updateCanvasSize() {
     gameCanvas.width = gameCanvas.getBoundingClientRect().width;
     gameCanvas.height = gameCanvas.getBoundingClientRect().height;
     backgroundCanvas.width = backgroundCanvas.getBoundingClientRect().width;
@@ -49,12 +47,8 @@ function animate() {
 
     Object.values(currentRoom.getPlayers()).forEach(player => {
         player.snake.draw();
-        // snake.updateEmitter((performance.now()/10 - lastTime)/10);
+        player.snake.updateEmitter((performance.now()/10 - lastTime)/10);
     })
-    
-    // collisionHandler.checkCollisions();
-    // requestAnimationFrame(animate);
-    
     // emitter.tick(0.3);
     // emitter.draw();
 }
@@ -71,22 +65,6 @@ function calculateFPS() {
 window.addEventListener("resize", updateCanvasSize);
 drawGrid();
 let initialized = false;
-
-// const inputManagers: InputManager[] = []
-// const colors: string[] = ["#ef8888", "#ff0000", "#00aabb", "#0000ee"]
-// const keymaps: string[][] =[['A','D'],['F','H'],['J','L'], ['8','0']] 
-// for (let i = 0; i < 2; i++){
-//     let startPos = new Vector(Math.random()* 1800, Math.random()*900);
-//     snakes.push(new Snake(new LineSegment(startPos, startPos.add(new Vector(10,10)), true ,Math.random()* 2* Math.PI), colors[i], gameCanvasCtx));
-//     inputManagers.push(new InputManager(snakes[i], keymaps[i][0], keymaps[i][1]))
-// }
-
-// const collisionHandler = new CollisionHandler(snakes)
-// const emitter = new Emitter(new Vector(gameCanvas.width/2, gameCanvas.height/2), 2, 10, 5, 'circle', {r:255, g:0, b:255, a:0.5}, gameCanvasCtx, true, true, 200)
-
-// requestAnimationFrame(animate);
-
-
 
 export function updateGameState(gameState: MessageGameplay) {
 
@@ -119,14 +97,22 @@ export function updateGameState(gameState: MessageGameplay) {
                 snakeToUpdate.addSegment(new LineSegment(new Vector(startPos.x, startPos.y), new Vector(endPos.x, endPos.y), head.isCollidable, head.endAngle));
             } 
             else if (newHeadData.segmentType == 'ArcSegment'){
-                // snakes[index].addSegment(new ArcSegment(head.))
+                head = head as messageArcSegment
+                let center = head.center;
+                snakeToUpdate.addSegment(new ArcSegment(new Vector(center.x, center.y), head.radius, head.startAngle, head.endAngle, head.counterClockwise, head.isCollidable));
             }
           }else{
+            if(newHeadData.segmentType == 'LineSegment'){
             head = head as messageLineSegment
             let startPos = head.startPoint;
             snakeToUpdate.segments[snakeToUpdate.segments.length-1] = (new LineSegment(new Vector(startPos.x, startPos.y), new Vector(endPos.x, endPos.y), head.isCollidable, head.endAngle));
           }
-
+        else if (newHeadData.segmentType == 'ArcSegment'){
+            head = head as messageArcSegment
+            let center = head.center;
+            snakeToUpdate.segments[snakeToUpdate.segments.length-1] = (new ArcSegment(new Vector(center.x, center.y), head.radius, head.startAngle, head.endAngle, head.counterClockwise, head.isCollidable));
+        }
+        }
         });
       }
       animate();
