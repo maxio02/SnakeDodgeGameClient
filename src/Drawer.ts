@@ -10,13 +10,13 @@ export function drawGrid() {
     backgroundCanvasCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
     backgroundCanvasCtx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
     backgroundCanvasCtx.lineWidth = 2;
-    for (var x = gridSize; x < backgroundCanvas.width; x += gridSize * scaleX) {
+    for (let x = gridSize * scaleX; x < backgroundCanvas.width; x += gridSize * scaleX) {
         backgroundCanvasCtx.beginPath();
         backgroundCanvasCtx.moveTo(x , 0);
         backgroundCanvasCtx.lineTo(x , backgroundCanvas.height);
         backgroundCanvasCtx.stroke();
     }
-    for (var y = gridSize; y < backgroundCanvas.height; y += gridSize * scaleY) {
+    for (let y = gridSize * scaleY; y < backgroundCanvas.height; y += gridSize * scaleY) {
         backgroundCanvasCtx.beginPath();
         backgroundCanvasCtx.moveTo(0, y);
         backgroundCanvasCtx.lineTo(backgroundCanvas.width, y);
@@ -58,10 +58,10 @@ export function drawArc(dotX: number, dotY: number, radius: number, startAngle: 
 
 export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vector) {
     if (from.x != to.x && from.y != to.y) {
-        var angle = Math.atan2(to.y - from.y, to.x - from.x);
+        let angle = Math.atan2(to.y - from.y, to.x - from.x);
         const width = 10;
-        var headLength = 10;
-        var new_to = new Vector(to.x, to.y);
+        let headLength = 10;
+        let new_to = new Vector(to.x, to.y);
         // This makes it so the end of the arrow head is located at tox, toy, don't ask where 1.15 comes from
         new_to.x -= Math.cos(angle) * ((width * 1.15));
         new_to.y -= Math.sin(angle) * ((width * 1.15));

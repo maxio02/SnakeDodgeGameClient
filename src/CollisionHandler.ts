@@ -41,7 +41,6 @@ export default class CollisionHandler {
 
                     if (segment instanceof LineSegment) {
                         if (this.isPointOnLine(segment, snake1.head.endPoint, 0.5)) {
-                            console.log(segment);
                             snake1.kill();
                             return;
                         }
@@ -49,7 +48,6 @@ export default class CollisionHandler {
                     }
                     else if (segment instanceof ArcSegment) {
                         if (this.isPointOnArc(segment, snake1.head.endPoint, 5)) {
-                            console.log(segment);
                             snake1.kill();
                             return;
                         }

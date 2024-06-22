@@ -1,5 +1,5 @@
 import { Vector } from "vector2d";
-import { Room } from "../ViewModels/Room";
+import { Room } from "../Models/Room";
 
 
 export interface GameStateData {

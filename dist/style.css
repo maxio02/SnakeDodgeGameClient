@@ -312,3 +312,9 @@ div#game-canvas-container{
   transform: translateY(-50%);
   pointer-events: none;
 }
+
+
+#last-winner{
+  font-size: 7rem;
+  color:#37cb48;
+}

@@ -11,14 +11,14 @@ interface Color {
 
 interface EmitterOptions {
     emitInterval?: number;
-    emitAmount?: number;
+    emitAmountPerTick?: number;
     particleSize?: number;
     emitterSize?: number;
     speed?: number;
     particleShape?: shape;
     color?: Color;
-    fadeColor?: boolean;
-    fadeSize?: boolean;
+    doFadeColor?: boolean;
+    doFadeSize?: boolean;
     particleAge?: number;
     emitTimeMillis?: number;
     drawEmitterZone?: boolean;
@@ -40,8 +40,8 @@ export default class Emitter {
     private _particleSize: number;
     private _speed: number;
     private _color: Color;
-    private _fadeColor: boolean;
-    private _fadeSize: boolean;
+    private _doFadeColor: boolean;
+    private _doFadeSize: boolean;
     private _particleMaxAge: number;
     private _canvasCtx: CanvasRenderingContext2D;
     private _remainingEmitTimeMillis: number;
@@ -55,14 +55,14 @@ export default class Emitter {
         canvasCtx: CanvasRenderingContext2D,
         {
             emitInterval = 2,
-            emitAmount = 5,
+            emitAmountPerTick = 5,
             emitterSize = 0,
             particleSize = 10,
             speed = 2,
             particleShape = 'circle',
             color = { r: 255, g: 255, b: 255, a: 1 },
-            fadeColor = true,
-            fadeSize = true,
+            doFadeColor = true,
+            doFadeSize = true,
             particleAge = 50,
             emitTimeMillis = 0,
             drawEmitterZone = false,
@@ -74,13 +74,13 @@ export default class Emitter {
         this.position = position;
         this._canvasCtx = canvasCtx;
         this._emitInterval = emitInterval;
-        this._emitAmountPerTick = emitAmount;
+        this._emitAmountPerTick = emitAmountPerTick;
         this._particleSize = particleSize;
         this._speed = speed;
         this._particleShape = particleShape;
         this._color = color;
-        this._fadeColor = fadeColor;
-        this._fadeSize = fadeSize;
+        this._doFadeColor = doFadeColor;
+        this._doFadeSize = doFadeSize;
         this._particleMaxAge = particleAge;
         this._spreadAngle = spreadAngle;
         this._remainingEmitTimeMillis = emitTimeMillis;
@@ -106,8 +106,8 @@ export default class Emitter {
                     { ...this._color },
                     this._canvasCtx,
                     this._particleMaxAge,
-                    this._fadeColor,
-                    this._fadeSize));
+                    this._doFadeColor,
+                    this._doFadeSize));
             }
         }
 

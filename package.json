@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "webpack"
+    "bundle": "webpack",
+    "start": "serve"
   },
   "keywords": [],
   "author": "",

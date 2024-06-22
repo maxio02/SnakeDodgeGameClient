@@ -1,7 +1,7 @@
 import { updateGameState } from "..";
 import { Dir } from "../InputManager";
 import { currentPlayer, currentRoom, showErrorAnimation, showRoomView, switchGameView, updateRoomList } from "../MenuManager/login";
-import { Player } from "../ViewModels/Player";
+import { Player } from "../Models/Player";
 
 let socket: WebSocket;
 
@@ -20,8 +20,8 @@ function initWebSocket() {
             case 'JOINED_ROOM':
                 showRoomView(event.data);
                 break;
-            case 'ROOM_DOES_NOT_EXIST':
-                showErrorAnimation();
+            case 'JOIN_FAIL':
+                showErrorAnimation(data.reason);
                 break;
             case 'ROOM_DATA':
                 updateRoomList(event.data);
@@ -73,7 +73,7 @@ export function setPlayerData(player: Player, roomCode: string) {
 
 export function sendKeyEventToServer(key: Dir, pressed: boolean){
     if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ type: 'KEY_EVENT', roomCode: currentRoom.getCode(), username: currentPlayer.username, key: key, pressed: pressed }));
+        socket.send(JSON.stringify({ type: 'KEY_EVENT', roomCode: currentRoom.code, username: currentPlayer.username, key: key, pressed: pressed }));
     } else {
         console.error('WebSocket connection is not open');
     }
@@ -86,7 +86,5 @@ export function sendStartCommand(roomCode: string) {
         console.error('WebSocket connection is not open');
     }
 }
-
-
 
 initWebSocket();
