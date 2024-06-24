@@ -6,6 +6,10 @@
 
 /*! ../Models/Room */
 
+/*! ../ParticleSystem/Emitter */
+
+/*! ../ParticleSystem/ParticleSystemUtils */
+
 /*! ../WebSocketClient/websocket */
 
 /*! ./AbstractVector */
@@ -31,6 +35,10 @@
 /*! ./ParticleSystem/ParticleSystemUtils */
 
 /*! ./ParticleSystemUtils */
+
+/*! ./PowerupHandler */
+
+/*! ./PowerupSystem/powerup */
 
 /*! ./Segment */
 
@@ -80,9 +88,17 @@
   !*** ./src/Models/Player.ts ***!
   \******************************/
 
+/*!*******************************!*\
+  !*** ./src/PowerupHandler.ts ***!
+  \*******************************/
+
 /*!**********************************!*\
   !*** ./src/MenuManager/login.ts ***!
   \**********************************/
+
+/*!**************************************!*\
+  !*** ./src/PowerupSystem/powerup.ts ***!
+  \**************************************/
 
 /*!***************************************!*\
   !*** ./src/ParticleSystem/Emitter.ts ***!

@@ -1,6 +1,7 @@
 import { Vector } from "vector2d";
 import Emitter from "../ParticleSystem/Emitter";
 import { hexToRgb } from "../ParticleSystem/ParticleSystemUtils";
+import { MessagePowerup } from "../WebSocketClient/messageTypes";
 
 export enum PowerupType {
   SpeedUp,
@@ -21,33 +22,38 @@ const SVG_PATHS: { [key in PowerupType]: string } = {
 };
 
 export default class Powerup {
+  private _id: number;
   private _position: Vector;
   private _canvasCtx: CanvasRenderingContext2D;
   private _color: string;
-  private _radius: number = 20;
+  private _radius: number = 30;
   private _type: PowerupType;
   private _img: HTMLImageElement;
   private _emitter: Emitter;
 
   constructor(
+    id: number,
     position: Vector,
     canvasCtx: CanvasRenderingContext2D,
     color: string,
-    type: PowerupType,
+    type: PowerupType
   ) {
+    this._id = id;
     this._position = position;
     this._canvasCtx = canvasCtx;
     this._color = color;
     this._type = type;
     this._img = new Image();
     this._img.src = SVG_PATHS[this._type];
-    this._emitter = new Emitter(this._position, this._canvasCtx, {emitterSize: this._radius*0.6,
-        color: {...hexToRgb(this._color), a: 0.8 },
-        particleSize: this._radius/ 2.85,
-        particleAge:60,
-        speed: this._radius/20,
-        emitAmountPerTick: 3,
-        spawnParticlesOnEdge: true})
+    this._emitter = new Emitter(this._position, this._canvasCtx, {
+      emitterSize: this._radius * 0.6,
+      color: { ...hexToRgb(this._color), a: 0.8 },
+      particleSize: this._radius / 2.85,
+      particleAge: 60,
+      speed: this._radius / 20,
+      emitAmountPerTick: 3,
+      spawnParticlesOnEdge: true,
+    });
   }
 
   public draw() {
@@ -66,7 +72,7 @@ export default class Powerup {
     this._canvasCtx.arc(
       this._position.x * scaleX,
       this._position.y * scaleY,
-      this._radius,
+      this._radius * scaleX,
       0,
       2 * Math.PI
     );
@@ -75,7 +81,6 @@ export default class Powerup {
 
     this.drawSVG();
     this._emitter.emitTime = Infinity;
-
   }
 
   private drawSVG() {
@@ -85,10 +90,44 @@ export default class Powerup {
     const scaleFactor = 0.6;
     this._canvasCtx.drawImage(
       this._img,
-      this._position.x * scaleX - this._radius * scaleFactor,
-      this._position.y * scaleY - this._radius * scaleFactor,
-      this._radius * 2 * scaleFactor,
-      this._radius * 2 * scaleFactor
+      this._position.x * scaleX - this._radius * scaleX * scaleFactor,
+      this._position.y * scaleY - this._radius * scaleX * scaleFactor,
+      this._radius * 2 * scaleFactor * scaleX,
+      this._radius * 2 * scaleFactor * scaleX
     );
+  }
+
+  public get id(): number {
+    return this._id;
+  }
+
+  public get position(): Vector {
+    return this._position;
+  }
+
+  public get radius(): number {
+    return this._radius;
+  }
+
+  public get type(): PowerupType {
+    return this._type;
+  }
+
+  public get color(): string {
+    return this._color;
+  }
+
+  toJSON() {
+    return {
+      id: this._id,
+      position: {x: this.position.x, y: this.position.y},
+      color: this._color,
+      type: this._type,
+      radius: this._radius
+    };
+  }
+
+  public static fromMessagePowerup(json: MessagePowerup, canvasCtx: CanvasRenderingContext2D): Powerup {
+    return new Powerup(json.powerup.id, new Vector(json.powerup.position.x, json.powerup.position.y), canvasCtx, json.powerup.color, json.powerup.type)
   }
 }

@@ -9,15 +9,15 @@ export const enum Dir{
 export default class InputManager {
   private _keyMap: { [key: string]: boolean } = {};
   private _snake: Snake;
-  private _leftKey: string;
-  private _rightKey: string;
+  private _leftKeys: string[];
+  private _rightKeys: string[];
 
-  constructor(snake: Snake, leftKey: string, rightKey: string) {
+  constructor(snake: Snake, leftKeys: string[], rightKeys: string[]) {
     window.addEventListener('keydown', this.onKeyDown.bind(this));
     window.addEventListener('keyup', this.onKeyUp.bind(this));
     this._snake = snake;
-    this._leftKey = leftKey;
-    this._rightKey = rightKey;
+    this._leftKeys = leftKeys.map(key => key.toUpperCase());
+    this._rightKeys = rightKeys.map(key => key.toUpperCase());
   }
 
   private onKeyDown(event: KeyboardEvent): void {
@@ -25,27 +25,26 @@ export default class InputManager {
     if(!this._snake.isAlive) return;
 
     const key = event.key.toUpperCase();
-    
 
     //ignore keys not assigned to self, this would result in the keymap having unnecessary keys and triggering the onkeyUp events
-    if(key != this._leftKey && key != this._rightKey){
+    if(!this._leftKeys.includes(key) && !this._rightKeys.includes(key)){
       return;
     }
 
     //switch off the current down key if the other direction is pressed
-    if (this._keyMap[this._rightKey] && key === this._leftKey) {
-      this._keyMap[this._rightKey] = false;
+    if (this._leftKeys.some(leftKey => this._keyMap[leftKey]) && this._rightKeys.includes(key)) {
+      this._leftKeys.forEach(leftKey => this._keyMap[leftKey] = false);
+    } else if (this._rightKeys.some(rightKey => this._keyMap[rightKey]) && this._leftKeys.includes(key)) {
+      this._rightKeys.forEach(rightKey => this._keyMap[rightKey] = false);
     }
-    else if (this._keyMap[this._leftKey] && key === this._rightKey) {
-      this._keyMap[this._leftKey] = false;
-    }
+    
     //return if the key is alraedy in the map, prevents autoclicking
     else if (this._keyMap[key]) {
       return
     }
     this._keyMap[key] = true;
 
-    sendKeyEventToServer(key === this._rightKey ? Dir.RIGHT : Dir.LEFT, true);
+    sendKeyEventToServer(this._rightKeys.includes(key) ? Dir.RIGHT : Dir.LEFT, true);
   }
   private onKeyUp(event: KeyboardEvent): void {
     //if snake is dead, ignore the key presses
@@ -59,7 +58,7 @@ export default class InputManager {
     }
     this._keyMap[key] = false;
 
-    sendKeyEventToServer(key === this._rightKey ? Dir.RIGHT : Dir.LEFT, false);
+    sendKeyEventToServer(this._rightKeys.includes(key) ? Dir.RIGHT : Dir.LEFT, false);
   }
 
 

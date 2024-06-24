@@ -14,7 +14,7 @@ function initWebSocket() {
 
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        // console.log('Message from server:', data);
+        console.log('Message from server:', data);
         
         switch (data.type) {
             case 'JOINED_ROOM':

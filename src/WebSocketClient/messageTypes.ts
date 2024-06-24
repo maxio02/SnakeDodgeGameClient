@@ -1,11 +1,18 @@
 import { Vector } from "vector2d";
 import { Room } from "../Models/Room";
+import Powerup from "../PowerupSystem/powerup";
 
 
 export interface GameStateData {
     type: string;
     state: number;
   }
+  
+  export const enum PowerupAction {
+    REMOVE,
+    ADD
+  }
+
   
   export interface RoomData {
     room: MessageRoom;
@@ -28,7 +35,14 @@ export interface GameStateData {
   export interface MessageGameplay{
     type: string;
     snakeHeads: SnakeHeadData[];
+    powerUpInfo: MessagePowerup;
   }
+
+  export interface MessagePowerup{
+    action: PowerupAction;
+    powerup: Powerup;
+  }
+
 
   export interface SnakeHeadData{
     username: string;

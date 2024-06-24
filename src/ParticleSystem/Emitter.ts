@@ -97,10 +97,12 @@ export default class Emitter {
 
         //emit new particles if the emitter is "alive"
         if (this._ticks % this._emitInterval === 0 && this._remainingEmitTimeMillis > 0) {
+
+            const scaleY = this._canvasCtx.canvas.height / 2000;
             for (let i = 0; i < this._emitAmountPerTick; i++) {
                 this._aliveParticles.push(new Particle(this.position.clone().add(getPositionInCircle(this.emitterSize, this._spawnParticlesOnEdge)) as Vector,
                     getBiasedRandomDirection(this.emitDirection, this._spreadAngle),
-                    this._particleSize,
+                    this._particleSize * scaleY,
                     this._speed,
                     this._particleShape,
                     { ...this._color },
@@ -130,7 +132,7 @@ export default class Emitter {
         if (this._drawEmitterZone === true) {
             const scaleX = this._canvasCtx.canvas.width / 2000;
             const scaleY = this._canvasCtx.canvas.height / 2000;
-
+            
             this._canvasCtx.moveTo(this.position.x * scaleX, this.position.y * scaleY);
             this._canvasCtx.fillStyle = `rgba(${this._color.r},${this._color.g}, ${this._color.b}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;
             this._canvasCtx.beginPath();

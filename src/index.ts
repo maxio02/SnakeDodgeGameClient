@@ -5,8 +5,10 @@ import InputManager from "./InputManager";
 import LineSegment from "./LineSegment";
 import Snake from "./Snake";
 import Emitter from "./ParticleSystem/Emitter";
-import { MessageGameplay, messageArcSegment, messageLineSegment } from "./WebSocketClient/messageTypes";
+import { MessageGameplay, PowerupAction, messageArcSegment, messageLineSegment } from "./WebSocketClient/messageTypes";
 import { currentPlayer, currentRoom } from "./MenuManager/login";
+import PowerupHandler from "./PowerupHandler";
+import Powerup from "./PowerupSystem/powerup";
 
 var fpsCounter = document.createElement('div');
 fpsCounter.style.position = 'absolute';
@@ -27,8 +29,9 @@ backgroundCanvas!.height = backgroundCanvas.getBoundingClientRect().height;
 gameCanvas!.width = gameCanvas.getBoundingClientRect().width;
 gameCanvas!.height = gameCanvas.getBoundingClientRect().height;
 //2000 / 66.666 ~= 30
-export var gridSize = 66.666;
+export let gridSize = 66.666;
 let inputManager;
+let powerupHandler: PowerupHandler;
 export function updateCanvasSize() {
     gameCanvas.width = gameCanvas.getBoundingClientRect().width;
     gameCanvas.height = gameCanvas.getBoundingClientRect().height;
@@ -50,6 +53,8 @@ function animate() {
         player.snake.draw();
         player.snake.updateEmitter((performance.now() / 10 - lastTime) / 10);
     })
+
+    powerupHandler.draw();
 }
 var frameCount = 0;
 var lastTime = performance.now() / 10;
@@ -77,9 +82,9 @@ export function updateGameState(gameState: MessageGameplay) {
             currentRoom.players[username].snake = new Snake(new LineSegment(new Vector(pos.x, pos.y), new Vector(pos.x, pos.y), head.isCollidable, head.endAngle), currentRoom.players[username].color, gameCanvasCtx);
 
         });
-        currentPlayer.snake = (currentRoom.players[currentPlayer.username].snake)
-        inputManager = new InputManager(currentRoom.players[currentPlayer.username].snake, 'A', 'D');
-
+        currentPlayer.snake = (currentRoom.players[currentPlayer.username].snake);
+        inputManager = new InputManager(currentRoom.players[currentPlayer.username].snake, ["A", "ARROWLEFT"], ["D", "ARROWRIGHT"]);
+        powerupHandler = new PowerupHandler();
     }
     else {
         let currentUsernames: string[] = [];
@@ -89,6 +94,16 @@ export function updateGameState(gameState: MessageGameplay) {
             let username = newHeadData.username;
             let endPos = head.endPoint
             let snakeToUpdate = currentRoom.players[username].snake;
+
+        //update powerups list
+        if(gameState.powerUpInfo !== null){
+            if (gameState.powerUpInfo.action === PowerupAction.ADD){
+                powerupHandler.addPowerup(Powerup.fromMessagePowerup(gameState.powerUpInfo, gameCanvasCtx));
+            }
+            else{
+                powerupHandler.removePowerup(Powerup.fromMessagePowerup(gameState.powerUpInfo, gameCanvasCtx));
+            }
+        }
 
             //keep track of the usernames sent by the server in the data
             currentUsernames.push(username);
