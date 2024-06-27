@@ -1,5 +1,5 @@
 import { Vector } from "vector2d";
-import Emitter from "../ParticleSystem/Emitter";
+import CircleEmitter from "../ParticleSystem/CircleEmitter";
 import { hexToRgb } from "../ParticleSystem/ParticleSystemUtils";
 import { MessagePowerup } from "../WebSocketClient/messageTypes";
 
@@ -29,7 +29,7 @@ export default class Powerup {
   private _radius: number = 30;
   private _type: PowerupType;
   private _img: HTMLImageElement;
-  private _emitter: Emitter;
+  private _emitter: CircleEmitter;
 
   constructor(
     id: number,
@@ -45,8 +45,7 @@ export default class Powerup {
     this._type = type;
     this._img = new Image();
     this._img.src = SVG_PATHS[this._type];
-    this._emitter = new Emitter(this._position, this._canvasCtx, {
-      emitterSize: this._radius * 0.6,
+    this._emitter = new CircleEmitter(this._radius * 0.6, this._position, this._canvasCtx, {
       color: { ...hexToRgb(this._color), a: 0.8 },
       particleSize: this._radius / 2.85,
       particleAge: 60,

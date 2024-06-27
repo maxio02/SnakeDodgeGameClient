@@ -1,0 +1,81 @@
+import { Vector } from "vector2d";
+import Particle, { shape } from "./Particle";
+import { getBiasedRandomDirection, getPositionInCircle, getRandomDirection } from "./ParticleSystemUtils";
+import Emitter, { EmitterOptions } from "./Emitter";
+
+
+export default class CircleEmitter extends Emitter{
+    private _emitterRadius: number;
+
+    public constructor(
+        emitterRadius: number,
+        position: Vector,
+        canvasCtx: CanvasRenderingContext2D,
+        emitterOptions: EmitterOptions
+    ){
+        super(position, canvasCtx, emitterOptions);
+        this._emitterRadius = emitterRadius;
+    }
+
+    public tick(dt: number) {
+        if ((this._remainingEmitTimeMillis + this._particleMaxAge) < 0) return;
+
+        this._remainingEmitTimeMillis -= dt;
+
+        //emit new particles if the emitter is "alive"
+        if (this._ticks % this._emitInterval === 0 && this._remainingEmitTimeMillis > 0) {
+
+            const scaleY = this._canvasCtx.canvas.height / 2000;
+            for (let i = 0; i < this._emitAmountPerTick; i++) {
+                this._aliveParticles.push(new Particle(this.position.clone().add(getPositionInCircle(this._emitterRadius, this._spawnParticlesOnEdge)) as Vector,
+                    getBiasedRandomDirection(this.emitDirection, this._spreadAngle),
+                    this._particleSize * scaleY,
+                    this._speed,
+                    this._particleShape,
+                    { ...this._color },
+                    this._canvasCtx,
+                    this._particleMaxAge,
+                    this._doFadeColor,
+                    this._doFadeSize,
+                    this._fadeDirection));
+            }
+        }
+
+        //move all the particles forward in time
+        this._aliveParticles.forEach(particle => {
+            particle.tick(dt)
+        });
+
+        //remove particles that have reached the end of their lifespan
+        this._aliveParticles = this._aliveParticles.filter(particle => particle.age > 0);
+
+
+        this._ticks++;
+    }
+
+    public draw() {
+
+        if ((this._remainingEmitTimeMillis + this._particleMaxAge) < 0) return;
+
+        if (this._drawEmitterZone === true) {
+            const scaleX = this._canvasCtx.canvas.width / 2000;
+            const scaleY = this._canvasCtx.canvas.height / 2000;
+            
+            this._canvasCtx.moveTo(this.position.x * scaleX, this.position.y * scaleY);
+            this._canvasCtx.fillStyle = `rgba(${this._color.r},${this._color.g}, ${this._color.b}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;
+            this._canvasCtx.beginPath();
+            this._canvasCtx.arc(this.position.x * scaleX, this.position.y * scaleY, this._emitterRadius, 0, 2 * Math.PI);
+            this._canvasCtx.fill();
+            this._canvasCtx.closePath();
+        }
+
+        this._aliveParticles.forEach(particle => {
+            particle.draw()
+        });
+    }
+
+    set emitTime(newEmitTime: number) {
+        this._remainingEmitTimeMillis = newEmitTime;
+    }
+
+}

@@ -11,13 +11,20 @@ export function getBiasedRandomDirection(direction: Vector, spreadAngle: number)
 }
 
 export function getPositionInCircle(radius: number, onEdge: boolean) {
-  const angle = Math.random() * 2 * Math.PI;
-  if (!onEdge) {
-    radius = radius * Math.sqrt(Math.random());
+  let point;
+  do {
+    point = new Vector(Math.random()*2 - 1, Math.random()*2 - 1)
+  } while (point.x**2 + point.y**2 > radius**2)
+
+  if (onEdge){
+    point.normalise().mulS(radius);
   }
-  return new Vector(radius * Math.cos(angle), radius * Math.sin(angle));
+  return point;
 }
 
+export function getPositionInRectangle(width: number, height: number ){
+  return new Vector(Math.random() * width, Math.random() * height);
+}
 export function hexToRgb(hex: string) {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {

@@ -6,7 +6,7 @@
 
 /*! ../Models/Room */
 
-/*! ../ParticleSystem/Emitter */
+/*! ../ParticleSystem/CircleEmitter */
 
 /*! ../ParticleSystem/ParticleSystemUtils */
 
@@ -20,6 +20,8 @@
 
 /*! ./Drawer */
 
+/*! ./Emitter */
+
 /*! ./Float32Vector */
 
 /*! ./InputManager */
@@ -30,7 +32,7 @@
 
 /*! ./Particle */
 
-/*! ./ParticleSystem/Emitter */
+/*! ./ParticleSystem/CircleEmitter */
 
 /*! ./ParticleSystem/ParticleSystemUtils */
 
@@ -118,6 +120,10 @@
 
 /*!*********************************************!*\
   !*** ./node_modules/vector2d/src/Vector.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./src/ParticleSystem/CircleEmitter.ts ***!
   \*********************************************/
 
 /*!**************************************************!*\

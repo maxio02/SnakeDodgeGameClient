@@ -4,7 +4,7 @@ import { drawGrid } from "./Drawer";
 import InputManager from "./InputManager";
 import LineSegment from "./LineSegment";
 import Snake from "./Snake";
-import Emitter from "./ParticleSystem/Emitter";
+import CircleEmitter from "./ParticleSystem/CircleEmitter";
 import { MessageGameplay, PowerupAction, messageArcSegment, messageLineSegment } from "./WebSocketClient/messageTypes";
 import { currentPlayer, currentRoom } from "./MenuManager/login";
 import PowerupHandler from "./PowerupHandler";
