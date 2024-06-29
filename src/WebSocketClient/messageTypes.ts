@@ -1,6 +1,7 @@
 import { Vector } from "vector2d";
 import { Room } from "../Models/Room";
 import Powerup from "../PowerupSystem/powerup";
+import { Player } from "../Models/Player";
 
 
 export interface GameStateData {
@@ -10,9 +11,9 @@ export interface GameStateData {
   
   export const enum PowerupAction {
     REMOVE,
-    ADD
+    SPAWN,
+    APPLY
   }
-
   
   export interface RoomData {
     room: MessageRoom;
@@ -35,12 +36,13 @@ export interface GameStateData {
   export interface MessageGameplay{
     type: string;
     snakeHeads: SnakeHeadData[];
-    powerUpInfo: MessagePowerup;
+    powerupList: MessagePowerup[];
   }
 
   export interface MessagePowerup{
     action: PowerupAction;
     powerup: Powerup;
+    player: Player;
   }
 
 
@@ -55,13 +57,10 @@ export interface GameStateData {
     endAngle: number;
     center: Vector;
     radius: number;
-
     endPoint: Vector;
     isCollidable: boolean;
     isNewThisTick: boolean;
-    
     counterClockwise: boolean;
-
   }
 
   export interface messageLineSegment{

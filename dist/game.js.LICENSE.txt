@@ -1,3 +1,5 @@
+/*! . */
+
 /*! .. */
 
 /*! ../MenuManager/login */
@@ -6,7 +8,7 @@
 
 /*! ../Models/Room */
 
-/*! ../ParticleSystem/CircleEmitter */
+/*! ../ParticleSystem/CircularEmitter */
 
 /*! ../ParticleSystem/ParticleSystemUtils */
 
@@ -32,9 +34,11 @@
 
 /*! ./Particle */
 
-/*! ./ParticleSystem/CircleEmitter */
+/*! ./ParticleSystem/CircularEmitter */
 
 /*! ./ParticleSystem/ParticleSystemUtils */
+
+/*! ./ParticleSystem/RectangularEmitter */
 
 /*! ./ParticleSystemUtils */
 
@@ -122,12 +126,16 @@
   !*** ./node_modules/vector2d/src/Vector.js ***!
   \*********************************************/
 
-/*!*********************************************!*\
-  !*** ./src/ParticleSystem/CircleEmitter.ts ***!
-  \*********************************************/
+/*!***********************************************!*\
+  !*** ./src/ParticleSystem/CircularEmitter.ts ***!
+  \***********************************************/
 
 /*!**************************************************!*\
   !*** ./node_modules/vector2d/src/ArrayVector.js ***!
+  \**************************************************/
+
+/*!**************************************************!*\
+  !*** ./src/ParticleSystem/RectangularEmitter.ts ***!
   \**************************************************/
 
 /*!***************************************************!*\

@@ -1,20 +1,13 @@
 import { Vector } from "vector2d";
 import Particle, { shape } from "./Particle";
 
-interface Color {
-    r: number;
-    g: number;
-    b: number;
-    a: number;
-}
-
 export interface EmitterOptions {
     emitInterval?: number;
     emitAmountPerTick?: number;
     particleSize?: number;
     speed?: number;
     particleShape?: shape;
-    color?: Color;
+    color?: string;
     doFadeColor?: boolean;
     doFadeSize?: boolean;
     fadeDirection?: 'normal' | 'reverse';
@@ -37,7 +30,7 @@ export default abstract class Emitter{
     protected _particleShape: shape;
     protected _particleSize: number;
     protected _speed: number;
-    protected _color: Color;
+    protected _color: string;
     protected _doFadeColor: boolean;
     protected _fadeDirection: 'normal' | 'reverse';
     protected _doFadeSize: boolean;
@@ -58,7 +51,7 @@ export default abstract class Emitter{
             particleSize = 10,
             speed = 2,
             particleShape = 'circle',
-            color = { r: 255, g: 255, b: 255, a: 1 },
+            color = '#ffffffff',
             doFadeColor = true,
             doFadeSize = true,
             fadeDirection = 'normal',

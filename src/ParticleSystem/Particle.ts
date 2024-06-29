@@ -1,4 +1,5 @@
 import { Vector } from "vector2d";
+import { getRgbColor } from './ParticleSystemUtils';
 export type shape = 'circle' | 'square';
 
 export default class Particle {
@@ -28,7 +29,7 @@ export default class Particle {
 
         if (fadeDirection === 'reverse') {
             this._size = 0;
-            this._color = { ...color, a: 0 };
+            this._color = { ...getRgbColor(color), a: 0 };
         } else {
             this._size = size;
             this._color = color;
@@ -80,7 +81,7 @@ export default class Particle {
                 this._canvasCtx.fill();
                 break;
             case 'square':
-                this._canvasCtx.fillRect((this._position.x - this._size) * scaleX, (this._position.y - this._size) * scaleY, this._size * 2 * scaleX, this._size * 2 * scaleY);
+                this._canvasCtx.fillRect((this._position.x - this._size) * scaleX, (this._position.y - this._size) * scaleY, this._size * 2, this._size * 2);
                 break;
         }
         this._canvasCtx.closePath();

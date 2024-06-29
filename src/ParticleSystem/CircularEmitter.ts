@@ -1,10 +1,10 @@
 import { Vector } from "vector2d";
 import Particle, { shape } from "./Particle";
-import { getBiasedRandomDirection, getPositionInCircle, getRandomDirection } from "./ParticleSystemUtils";
+import { getBiasedRandomDirection, getPositionInCircle, getRandomDirection, hexToRgb, hexToRgbA } from './ParticleSystemUtils';
 import Emitter, { EmitterOptions } from "./Emitter";
 
 
-export default class CircleEmitter extends Emitter{
+export default class CircularEmitter extends Emitter{
     private _emitterRadius: number;
 
     public constructor(
@@ -32,7 +32,7 @@ export default class CircleEmitter extends Emitter{
                     this._particleSize * scaleY,
                     this._speed,
                     this._particleShape,
-                    { ...this._color },
+                    { ...hexToRgbA(this._color)},
                     this._canvasCtx,
                     this._particleMaxAge,
                     this._doFadeColor,
@@ -58,11 +58,12 @@ export default class CircleEmitter extends Emitter{
         if ((this._remainingEmitTimeMillis + this._particleMaxAge) < 0) return;
 
         if (this._drawEmitterZone === true) {
+            let color = hexToRgbA(this._color)
             const scaleX = this._canvasCtx.canvas.width / 2000;
             const scaleY = this._canvasCtx.canvas.height / 2000;
             
             this._canvasCtx.moveTo(this.position.x * scaleX, this.position.y * scaleY);
-            this._canvasCtx.fillStyle = `rgba(${this._color.r},${this._color.g}, ${this._color.b}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;
+            this._canvasCtx.fillStyle = `rgba(${color.r},${color.g},${color.b}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;
             this._canvasCtx.beginPath();
             this._canvasCtx.arc(this.position.x * scaleX, this.position.y * scaleY, this._emitterRadius, 0, 2 * Math.PI);
             this._canvasCtx.fill();

@@ -2,7 +2,7 @@ import { Vector } from "vector2d";
 import ArcSegment from "./ArcSegment";
 import LineSegment from "./LineSegment";
 import Segment from "./Segment";
-import CircleEmitter from "./ParticleSystem/CircleEmitter";
+import CircularEmitter from "./ParticleSystem/CircularEmitter";
 import { hexToRgb } from "./ParticleSystem/ParticleSystemUtils";
 
 export default class Snake {
@@ -10,7 +10,7 @@ export default class Snake {
     private _color: string;
     public isAlive: boolean = true;
     public turnRadius: number = 60;
-    private _emitter: CircleEmitter | null = null;
+    private _emitter: CircularEmitter | null = null;
     private _canvasCtx: CanvasRenderingContext2D;
 
 
@@ -18,11 +18,11 @@ export default class Snake {
         this.addSegment(startPos);
         this._color = color;
         this._canvasCtx = canvasCtx;
-        this._emitter = new CircleEmitter(0, this.head.endPoint, this._canvasCtx, {emitInterval: 2,
+        this._emitter = new CircularEmitter(0, this.head.endPoint, this._canvasCtx, {emitInterval: 2,
             emitAmountPerTick: 3,
             particleSize: 7,
             speed: 4,
-            color: { ...hexToRgb(this._color), a: 1 },
+            color: this._color,
         })
     }
     addSegment(segment: Segment) {
