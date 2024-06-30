@@ -59,7 +59,8 @@
   font-family: 'DisposableDroid BB';
 
   display: flex;
-  height: 100vh;
+    /* TODO read about vw*/
+  height: 98vh; 
   align-items: center;
   justify-content: center;
 }

@@ -1,12 +1,12 @@
 import { Vector } from "vector2d";
-import { backgroundCanvas, gameCanvas, gameCanvasCtx } from ".";
-import RectangularEmitter from "./ParticleSystem/RectangularEmitter";
-import Powerup, { PowerupType } from "./PowerupSystem/powerup";
-import { PowerupAction } from "./WebSocketClient/messageTypes";
-import { updateCanvasSize } from './index';
-import { drawGrid } from "./Drawer";
-import { Player } from "./Models/Player";
-import { currentPlayer } from "./MenuManager/login";
+import { backgroundCanvas, gameCanvas, gameCanvasCtx } from "..";
+import RectangularEmitter from "../ParticleSystem/RectangularEmitter";
+import Powerup, { PowerupType } from "./powerup";
+import { PowerupAction } from "../WebSocketClient/messageTypes";
+import { updateCanvasSize } from '../index';
+import { drawGrid } from "../Drawer";
+import { Player } from "../Models/Player";
+import { currentPlayer } from "../MenuManager/login";
 
 export default class PowerupHandler {
   private _powerups: { [key: number]: Powerup } = {};
@@ -53,10 +53,10 @@ export default class PowerupHandler {
             emitDirection: directions[i],
             spreadAngle: Math.PI / 6,
             speed: 0.8,
-            particleSize: 12,
+            particleSize: 8,
             particleAge: 100,
             emitInterval: 1,
-            emitAmountPerTick: 6,
+            emitAmountPerTick: 4,
             fadeDirection: "reverse",
           }
         )
@@ -87,8 +87,10 @@ export default class PowerupHandler {
           break;
         }
         this._cameraLock = true;
+
+        //increase the canvas resolution in order to decrease the blur
         gameCanvas.width = gameCanvas.getBoundingClientRect().width * 2;
-        gameCanvas.height = gameCanvas.getBoundingClientRect().height *2;
+        gameCanvas.height = gameCanvas.getBoundingClientRect().height * 2;
         backgroundCanvas.width = backgroundCanvas.getBoundingClientRect().width * 2;
         backgroundCanvas.height = backgroundCanvas.getBoundingClientRect().height * 2;
         document.getElementById('login-screen-body').style.overflow = 'hidden';
@@ -103,6 +105,10 @@ export default class PowerupHandler {
         }, powerup.duration);
     }
     this.removePowerup(powerup);
+  }
+
+  private generateZones(type: PowerupType, amount: number){
+    
   }
 
   public draw() {

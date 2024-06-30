@@ -12,7 +12,7 @@ import {
   messageLineSegment,
 } from "./WebSocketClient/messageTypes";
 import { currentPlayer, currentRoom } from "./MenuManager/login";
-import PowerupHandler from "./PowerupHandler";
+import PowerupHandler from "./PowerupSystem/PowerupHandler";
 import Powerup from "./PowerupSystem/powerup";
 const gameDiv = document.getElementById(
   "game-canvas-container"
@@ -63,7 +63,7 @@ function animate() {
 
   Object.values(currentRoom.players).forEach((player) => {
     player.snake.draw();
-    player.snake.updateEmitter((performance.now() / 10 - lastTime) / 10);
+    player.snake.updateEmitter((performance.now() / 10 - lastTime) / 15);
   });
 
   powerupHandler.draw();

@@ -11,6 +11,7 @@ export default class InputManager {
   private _snake: Snake;
   private _leftKeys: string[];
   private _rightKeys: string[];
+  
 
   constructor(snake: Snake, leftKeys: string[], rightKeys: string[]) {
     window.addEventListener('keydown', this.onKeyDown.bind(this));
