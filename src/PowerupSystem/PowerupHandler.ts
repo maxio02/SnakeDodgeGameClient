@@ -83,7 +83,7 @@ export default class PowerupHandler {
 
         break;
       case PowerupType.CameraLockToPlayer:
-        if(player.username === currentPlayer.username){
+        if(player.username === currentPlayer.username || !currentPlayer.snake.isAlive){
           break;
         }
         this._cameraLock = true;
