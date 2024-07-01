@@ -14,6 +14,7 @@ import {
 import { currentPlayer, currentRoom } from "./MenuManager/login";
 import PowerupHandler from "./PowerupSystem/PowerupHandler";
 import Powerup from "./PowerupSystem/powerup";
+import { animateCountdown } from "./MenuManager/countdown";
 const gameDiv = document.getElementById(
   "game-canvas-container"
 ) as HTMLDivElement;
@@ -45,10 +46,10 @@ export let gridSize = 66.666;
 let inputManager;
 let powerupHandler: PowerupHandler;
 export function updateCanvasSize() {
-  gameCanvas.width = gameCanvas.getBoundingClientRect().width;
-  gameCanvas.height = gameCanvas.getBoundingClientRect().height;
-  backgroundCanvas.width = backgroundCanvas.getBoundingClientRect().width;
-  backgroundCanvas.height = backgroundCanvas.getBoundingClientRect().height;
+  gameCanvas.width = gameCanvas.getBoundingClientRect().width * 1.5;
+  gameCanvas.height = gameCanvas.getBoundingClientRect().height * 1.5;
+  backgroundCanvas.width = backgroundCanvas.getBoundingClientRect().width * 1.5;
+  backgroundCanvas.height = backgroundCanvas.getBoundingClientRect().height * 1.5;
   drawGrid();
 }
 
@@ -118,6 +119,13 @@ export function updateGameState(gameState: MessageGameplay) {
       ["D", "ARROWRIGHT"]
     );
     powerupHandler = new PowerupHandler();
+    animateCountdown();
+    animate();
+    Object.values(currentRoom.players).forEach((player) => {
+      player.snake.drawHeadingDir();
+    });
+    return;
+    
   } else {
     let currentUsernames: string[] = [];
     // Update existing snakes based on the new game state
@@ -256,4 +264,5 @@ export function updateGameState(gameState: MessageGameplay) {
     });
   }
   animate();
+
 }

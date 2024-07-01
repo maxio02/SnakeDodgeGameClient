@@ -4,67 +4,98 @@ import LineSegment from "./LineSegment";
 import Segment from "./Segment";
 import CircularEmitter from "./ParticleSystem/CircularEmitter";
 import { hexToRgb } from "./ParticleSystem/ParticleSystemUtils";
+import { drawArrow } from "./Drawer";
 
 export default class Snake {
-    public segments: Segment[] = [];
-    private _color: string;
-    public isAlive: boolean = true;
-    public turnRadius: number = 60;
-    private _emitter: CircularEmitter | null = null;
-    private _canvasCtx: CanvasRenderingContext2D;
+  public segments: Segment[] = [];
+  private _color: string;
+  public isAlive: boolean = true;
+  public turnRadius: number = 60;
+  private _emitter: CircularEmitter | null = null;
+  private _canvasCtx: CanvasRenderingContext2D;
 
+  constructor(
+    startPos: LineSegment,
+    color: string,
+    canvasCtx: CanvasRenderingContext2D
+  ) {
+    this.addSegment(startPos);
+    this._color = color;
+    this._canvasCtx = canvasCtx;
+    this._emitter = new CircularEmitter(
+      0,
+      this.head.endPoint,
+      this._canvasCtx,
+      {
+        emitInterval: 2,
+        emitAmountPerTick: 3,
+        particleSize: 7,
+        speed: 4,
+        color: this._color,
+      }
+    );
+  }
+  addSegment(segment: Segment) {
+    this.segments.push(segment);
+  }
 
-    constructor(startPos: LineSegment, color: string, canvasCtx: CanvasRenderingContext2D) {
-        this.addSegment(startPos);
-        this._color = color;
-        this._canvasCtx = canvasCtx;
-        this._emitter = new CircularEmitter(0, this.head.endPoint, this._canvasCtx, {emitInterval: 2,
-            emitAmountPerTick: 3,
-            particleSize: 7,
-            speed: 4,
-            color: this._color,
-        })
-    }
-    addSegment(segment: Segment) {
-        this.segments.push(segment);
-    }
+  get head(): Segment {
+    return this.segments.slice(-1).pop();
+  }
 
-    get head(): Segment {
-        return this.segments.slice(-1).pop();
-    }
+  draw() {
+    const scaleX = this._canvasCtx.canvas.width / 2000;
+    const scaleY = this._canvasCtx.canvas.height / 2000;
 
-    draw() {
-        const scaleX = this._canvasCtx.canvas.width / 2000;
-        const scaleY = this._canvasCtx.canvas.height / 2000;
+    this._canvasCtx.lineWidth = 12 * Math.min(scaleX, scaleY);
+    //TODO fix this to be a single path
 
+    this.segments.forEach((segment, index) => {
+      segment.draw(this._canvasCtx, this._color);
 
-        this._canvasCtx.lineWidth = 12 * Math.min(scaleX, scaleY);
-        //TODO fix this to be a single path
+      //draw a dot at the head, this is useful if the segment is invisible
+      if (this.head === segment) {
+        this._canvasCtx.beginPath();
+        this._canvasCtx.arc(
+          segment.endPoint.x * scaleX,
+          segment.endPoint.y * scaleY,
+          0.5 * Math.min(scaleX, scaleY),
+          0,
+          2 * Math.PI
+        );
+        this._canvasCtx.stroke();
+        this._canvasCtx.closePath();
+      }
+    });
+  }
 
-        this.segments.forEach((segment, index) => {
-            segment.draw(this._canvasCtx, this._color);
+  drawHeadingDir() {
+    const scaleX = this._canvasCtx.canvas.width / 2000;
+    const scaleY = this._canvasCtx.canvas.height / 2000;
 
-            //draw a dot at the head, this is useful if the segment is invisible
-            if (this.head === segment) {
-                this._canvasCtx.beginPath();
-                this._canvasCtx.arc(segment.endPoint.x * scaleX, segment.endPoint.y * scaleY, 0.5 * Math.min(scaleX, scaleY), 0, 2 * Math.PI);
-                this._canvasCtx.stroke();
-                this._canvasCtx.closePath();
-            }
-        });
-    }
+    const arrowLength = 170;
+    const lastSegment = this.head;
+    const dx =  Math.cos(lastSegment.endAngle) * arrowLength;
+    const dy =  Math.sin(lastSegment.endAngle) * arrowLength;
+    const width = 12 * Math.min(scaleX, scaleY);
+    const newEnd = new Vector(
+      lastSegment.endPoint.x + dx,
+      lastSegment.endPoint.y + dy
+    );
 
-kill() {
+    drawArrow(this._canvasCtx, this.head.endPoint.clone().mulS(scaleX) as Vector, newEnd.mulS(scaleX), this._color, width * 0.6);
+  }
+
+  kill() {
     this.isAlive = false;
-    this._emitter.position = this.head.endPoint
+    this._emitter.position = this.head.endPoint;
     this._emitter.emitTime = 10;
-}
+  }
 
-updateEmitter(dt: number) {
+  updateEmitter(dt: number) {
     if (this._emitter) {
-        this._emitter.tick(dt);
-        this._emitter.draw();
+      this._emitter.tick(dt);
+      this._emitter.draw();
     }
-}
-    
+  }
 }

@@ -93,13 +93,11 @@ export default class PowerupHandler {
         gameCanvas.height = gameCanvas.getBoundingClientRect().height * 2;
         backgroundCanvas.width = backgroundCanvas.getBoundingClientRect().width * 2;
         backgroundCanvas.height = backgroundCanvas.getBoundingClientRect().height * 2;
-        document.getElementById('login-screen-body').style.overflow = 'hidden';
         drawGrid();
         setTimeout(() => {
           this._cameraLock = false;
           document.getElementById('game-canvas-container').style.transform = `scale(1) rotate(0rad) translate(0px, 0px)`;
           setTimeout(() => {
-          document.getElementById('login-screen-body').style.overflow = 'visible';
           updateCanvasSize();
           }, 200);
         }, powerup.duration);

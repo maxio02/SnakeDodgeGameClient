@@ -48,7 +48,7 @@ export default class ArcSegment extends Segment {
         tangent_angle += this.endAngle;
         context.lineCap = "round";
         drawDot(this.center.x, this.center.y, 5, '#000000');
-        drawArrow(context, new Vec2D.Vector(this.endPoint.x, this.endPoint.y), new Vec2D.Vector(this.endPoint.x + this.radius * Math.cos(tangent_angle), this.endPoint.y + this.radius * Math.sin(tangent_angle)));
+        drawArrow(context, new Vec2D.Vector(this.endPoint.x, this.endPoint.y), new Vec2D.Vector(this.endPoint.x + this.radius * Math.cos(tangent_angle), this.endPoint.y + this.radius * Math.sin(tangent_angle)), '#bbbbbb', 12);
         drawArc(this.center.x, this.center.y, this.radius, 0, 0, false);
 
     }

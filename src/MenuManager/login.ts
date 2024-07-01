@@ -3,6 +3,7 @@ import { Player } from "../Models/Player";
 import { GameState, Room } from "../Models/Room";
 import { GameStateData, MessagePlayer, MessageRoom } from "../WebSocketClient/messageTypes";
 import { createRoom, joinRoom, sendStartCommand, setPlayerData } from "../WebSocketClient/websocket";
+import { resetCountDown } from "./countdown";
 
 
 export let currentRoom: Room | null = null;
@@ -23,6 +24,9 @@ const playerCount = document.getElementById('player-count') as HTMLParagraphElem
 const colorPickerDiv = document.getElementById('color-picker-container');
 const startProgressBar = document.getElementById('start-progress-bar');
 const lastWinnerSpan = document.getElementById('last-winner') as HTMLSpanElement;
+const settingsButton = document.getElementById('room-settings-button') as HTMLElement;
+const settingsDiv = document.getElementById('settings-div') as HTMLDivElement;
+const colorPickerLabel = document.getElementById('color-label') as HTMLLabelElement;
 // src/login.ts
 export function updateButton() {
 
@@ -136,7 +140,7 @@ export function updateRoomList(data: JSON) {
     currentRoom.host = new Player(roomInfo.host.username, roomInfo.host.isReady, roomInfo.host.color);
     currentRoom.maxSize = roomInfo.maxSize;
 
-
+    
     playerCount.innerHTML = `${Object.keys(currentRoom.players).length}/${currentRoom.maxSize}`;
     roomUsersList.innerHTML = '';
 
@@ -174,7 +178,7 @@ function updateStartButtonProgress(readyPlayerCount: number, maxPlayerCount: num
     if (maxPlayerCount === 0) {
         return;
     }
-    startProgressBar.style.width = Math.floor(readyPlayerCount / maxPlayerCount * 100) + '%';
+    startProgressBar.style.clipPath = `inset(0 ${100 - Math.floor(readyPlayerCount / maxPlayerCount * 100) + '%'} 0 0`;
 }
 export function showErrorAnimation(reason: string) {
     console.log(reason);
@@ -189,12 +193,22 @@ export function showErrorAnimation(reason: string) {
 
 export function updateColorPicker() {
     colorPickerDiv.style.backgroundColor = colorPicker.value;
+
+}
+
+export function changeColorPickerLabelState(enable: boolean) {
+    if(enable){
+        colorPickerLabel.style.opacity = '100';
+    }else{
+        colorPickerLabel.style.opacity = '0';
+    }
+    
 }
 
 export function updatePlayerColor() {
     currentPlayer.color = colorPicker.value;
-    let colorPickerLabel = document.getElementById('color-label');
     colorPickerLabel.style.color = pickTextColorBasedOnBgColorAdvanced(colorPicker.value, '#FFFFFF', '#000000');
+    changeColorPickerLabelState(true);
     setPlayerData(currentPlayer, currentRoom.code);
 }
 
@@ -220,7 +234,6 @@ function startGame() {
     if (currentPlayer.username != currentRoom.host.username) {
         return;
     }
-
     sendStartCommand(currentRoom.code);
 }
 
@@ -230,6 +243,13 @@ function goBackToLobby() {
     currentPlayer.snake = null;
     currentPlayer.isReady = false;
     updateReadyButton(currentPlayer.isReady);
+    resetCountDown();
+}
+
+function toggleSettingsDisplay(){
+
+settingsDiv.classList.toggle('display-none');
+
 }
 
 export function switchGameView(data: GameStateData) {
@@ -242,6 +262,8 @@ export function switchGameView(data: GameStateData) {
         gameDiv.classList.add('display-flex');
         //update the game canvas to fit the screen
         updateCanvasSize();
+        document.getElementById('login-screen-body').style.overflow = 'hidden';
+
 
             break;
         case 1:
@@ -250,20 +272,29 @@ export function switchGameView(data: GameStateData) {
         roomDiv.classList.add('display-flex');
         endgameDiv.classList.add('display-none');
         endgameDiv.classList.remove('display-flex');
+        document.getElementById('login-screen-body').style.overflow = 'visible';
             break;
         case 2:
             lastWinnerSpan.innerHTML = `${currentRoom.lastWinner.username}`;
             gameDiv.classList.add('display-none');
             gameDiv.classList.remove('display-flex');
             endgameDiv.classList.add('display-flex');
+            document.getElementById('login-screen-body').style.overflow = 'visible';
             break;
     }
 
 }
 
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', function () {
     updateButton();
-};
+
+    if (!navigator.userAgent.toLowerCase().includes('firefox')) {
+        colorPicker.onblur = function () {
+          changeColorPickerLabelState(true);
+        };
+      }
+
+});
 
 (window as any).updateButton = updateButton;
 (window as any).handleRoomAction = handleRoomAction;
@@ -272,3 +303,5 @@ window.onload = () => {
 (window as any).updatePlayerColor = updatePlayerColor;
 (window as any).startGame = startGame;
 (window as any).goBackToLobby = goBackToLobby;
+(window as any).toggleSettingsDisplay = toggleSettingsDisplay;
+(window as any).changeColorPickerLabelState = changeColorPickerLabelState;

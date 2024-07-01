@@ -56,13 +56,12 @@ export function drawArc(dotX: number, dotY: number, radius: number, startAngle: 
 
 
 
-export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vector) {
+export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vector, color: string, width: number) {
     if (from.x != to.x && from.y != to.y) {
         let angle = Math.atan2(to.y - from.y, to.x - from.x);
-        const width = 10;
         let headLength = 10;
         let new_to = new Vector(to.x, to.y);
-        // This makes it so the end of the arrow head is located at tox, toy, don't ask where 1.15 comes from
+        // This makes it so the end of the arrow head is located at tox, toy
         new_to.x -= Math.cos(angle) * ((width * 1.15));
         new_to.y -= Math.sin(angle) * ((width * 1.15));
 
@@ -72,7 +71,7 @@ export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vecto
         ctx.beginPath();
         ctx.moveTo(from.x, from.y);
         ctx.lineTo(new_to.x, new_to.y);
-        ctx.strokeStyle = "#bbbbbb";
+        ctx.strokeStyle = color;
         ctx.lineWidth = width;
         ctx.stroke();
 
@@ -89,10 +88,10 @@ export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vecto
         ctx.lineTo(new_to.x - headLength * Math.cos(angle - Math.PI / 7), new_to.y - headLength * Math.sin(angle - Math.PI / 7));
 
         //draws the paths created above
-        ctx.strokeStyle = "#bbbbbb";
+        ctx.strokeStyle = color;
         ctx.lineWidth = width;
         ctx.stroke();
-        ctx.fillStyle = "#bbbbbb";
+        ctx.fillStyle = color;
         ctx.fill();
         ctx.closePath();
     }
