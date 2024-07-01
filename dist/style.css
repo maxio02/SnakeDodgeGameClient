@@ -363,7 +363,6 @@ div#game-canvas-container{
 
 .move-left {
   animation: moveLeft 1s forwards;
-  color: #ff0000;
 }
 
 .move-top {
