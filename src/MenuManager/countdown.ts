@@ -6,19 +6,19 @@ const countdownGo = document.getElementById('countdown-go');
 export function animateCountdown() {
     setTimeout(() => {
         countdownThree.classList.add('move-left');
-    }, 300);
+    }, 500);
 
     setTimeout(() => {
         countdownTwo.classList.add('move-top');
-    }, 700);
+    }, 900);
 
     setTimeout(() => {
         countdownOne.classList.add('move-right');
-    }, 1100);
+    }, 1300);
 
     setTimeout(() => {
         countdownGo.classList.add('move-down');
-    }, 1500);
+    }, 1700);
 }
 
 export function resetCountDown(){
