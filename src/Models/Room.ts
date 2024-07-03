@@ -1,3 +1,4 @@
+import PowerupHandler from "../PowerupSystem/PowerupHandler";
 import { Player } from "./Player";
 
 export const enum GameState {
@@ -5,6 +6,16 @@ export const enum GameState {
     IN_LOBBY,
     FINISHED
 }
+
+export const enum joinResult {
+    ROOM_DOES_NOT_EXIST,
+    ROOM_FULL,
+    GAME_RUNNING,
+    PLAYER_ALREADY_EXISTS,
+    SUCCESS
+
+}
+
 export class Room {
     private _players: { [key: string]: Player; } = {};
     private _maxSize: number;
@@ -12,7 +23,7 @@ export class Room {
     private _host: Player;
     private _code: string;
     private _lastWinner: Player;
-
+    public powerupHandler: PowerupHandler;
 
     constructor(code: string, host: Player, players?: { [key: string]: Player; }, maxSize: number = 5) {
         this._code = code;
@@ -24,6 +35,7 @@ export class Room {
         } else {
             this.addPlayer(host);
         }
+        this.powerupHandler = new PowerupHandler();
 
     }
 
@@ -45,7 +57,7 @@ export class Room {
     public resetRoomForNewGame(){
         //TODO fix this game state bullshit
         this._gameState = GameState.IN_LOBBY;
-
+        this.powerupHandler.reset();
         //also reset all the players
         Object.values(this._players).forEach(player => {
             player.reset();

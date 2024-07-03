@@ -48,25 +48,38 @@ export interface GameStateData {
 
   export interface SnakeHeadData{
     username: string;
-    lastSegment: messageArcSegment | messageLineSegment;
+    lastSegment: NewLineSegmentMessage | ExistingLineSegmentMessage | NewArcSegmentMessage | ExistingArcSegmentMessage;
     segmentType: 'ArcSegment' | 'LineSegment';
   }
 
-  export interface messageArcSegment{
-    startAngle: number;
+  interface Point {
+    x: number;
+    y: number;
+}
+  export interface NewLineSegmentMessage {
+    startPoint: Point;
+    endPoint: Point;
     endAngle: number;
-    center: Vector;
-    radius: number;
-    endPoint: Vector;
     isCollidable: boolean;
     isNewThisTick: boolean;
-    counterClockwise: boolean;
-  }
+}
 
-  export interface messageLineSegment{
-    endAngle: number;
-    startPoint: Vector;
-    endPoint: Vector;
-    isCollidable: boolean;
+export interface ExistingLineSegmentMessage {
+    endPoint: Point;
     isNewThisTick: boolean;
-  }
+}
+
+export interface NewArcSegmentMessage {
+  center: Point
+  radius: number;
+  startAngle: number
+  endAngle: number;
+  counterClockwise: boolean;
+  isCollidable: boolean;
+  isNewThisTick: boolean;
+}
+
+export interface ExistingArcSegmentMessage {
+  endAngle: number;
+  isNewThisTick: boolean;
+}

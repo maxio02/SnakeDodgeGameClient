@@ -52,13 +52,16 @@
   font-display: swap;
 }
 
-
+html {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
 
 #login-screen-body{
   font-family: 'DisposableDroid BB';
-
+  overflow: hidden;
   display: flex;
-    /* TODO read about vw*/
   height: 98vh; 
   align-items: center;
   justify-content: center;
@@ -130,6 +133,7 @@ div#game-canvas-container{
 
 
 .menu-box{
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -142,7 +146,7 @@ div#game-canvas-container{
   text-align: center;
   padding: 5vh;
   box-shadow: 0px 8px 50px #7c687c;
-
+  transition: transform 0.5s;
 }
 
 .menu-box * {
@@ -155,21 +159,32 @@ div#game-canvas-container{
 
 .menu-box input{
   font-family: 'DisposableDroid BB';
-  transition: background-color 0.4s;
+  transition: background-color 0.4s, box-shadow 0.4s;
   border: 1px none #a1a1a1;
-  background-color: #b580b4;
+  /* background-color: #b580b4; */
+  background-color: #ede0ee;
   margin: 1rem 0 1rem 0;
   border-radius: 1rem;
   padding: 1rem;
+  /* box-shadow: 0px 8px 20px #a68ea6; */
+  box-shadow: inset 0px 4px 10px #a68ea6;
+  color:#999
 }
 
 .menu-box input:focus{
   outline: 0;
-  background-color: #976294;
+  /* background-color: #976294; */
+  box-shadow: 0px 8px 40px #673f65;
+  box-shadow: inset 0px 4px 13px #837083;
 }
 
 .menu-box input::placeholder{
+  transition: color 0.4s;
   color: #c0bfc0;
+}
+
+.menu-box input:focus::placeholder{
+  color: #d9d9d9;
 }
 
 
@@ -234,7 +249,7 @@ div#game-canvas-container{
 }
 
 #player-count{
-  margin-bottom: 0.5rem;
+  margin-bottom: 0px;
   margin-top: 0px;
 }
 
@@ -327,8 +342,7 @@ div#game-canvas-container{
 
 #room-settings-button{
   cursor:pointer;
-  margin-bottom: 0.5rem;
-  margin-top: 0px;
+  margin: 0 0 0 0;
   transition: transform 0.5s ease-in-out ;
 }
 
@@ -337,8 +351,17 @@ div#game-canvas-container{
 }
 
 #settings-div{
-  margin-left: 3rem;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease, transform 0.5s;
+  aspect-ratio:unset;
+  transform: translateX(15vw);
+}
+
+.shift-left{
+  transform: translateX(-15vw) !important;
+}
+
+.settings-top{
+  transform: translateX(15vw) translateY(-100vh) scale(0.3)!important;
 }
 
 .countdown {
@@ -358,6 +381,18 @@ div#game-canvas-container{
   width: 100%;
   text-align: center;
   transform: scale(0);
+}
+
+.center-menu-element{
+  transform: translateX(0);
+}
+
+.left-menu-element{
+  transform: translateX(-200vw);
+}
+
+.right-menu-element{
+  transform: translateX(200vw);
 }
 
 
@@ -385,7 +420,7 @@ div#game-canvas-container{
       transform: scale(1);
   }
   100% {
-      transform: translateX(-100vw);
+      transform: translateX(-120vw);
   }
 }
 
@@ -397,7 +432,7 @@ div#game-canvas-container{
       transform: scale(1);
   }
   100% {
-      transform: translateY(-100vh);
+      transform: translateY(-120vh);
   }
 }
 
@@ -409,7 +444,7 @@ div#game-canvas-container{
       transform: scale(1);
   }
   100% {
-      transform: translateX(100vw);
+      transform: translateX(120vw);
   }
 }
 
@@ -421,6 +456,42 @@ div#game-canvas-container{
       transform: scale(1);
   }
   100% {
-      transform: translateY(100vh);
+      transform: translateY(120vh);
   }
+}
+
+.player-count-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu-box #settings-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0 0 0 0;
+}
+
+#settings-list li {
+  display: flex;
+  text-align: left;
+  justify-content: space-between;
+  margin: 1rem 0 1rem 0;
+  
+}
+
+#settings-list input {
+  padding: 0 0 0 0;
+  margin: 0 0 0 1rem;
+  width: 7rem;
+
+}
+
+#settings-list input::-webkit-outer-spin-button,
+#settings-list input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#settings-list input[type=number] {
+  -moz-appearance: textfield;
 }

@@ -13,6 +13,7 @@ export default class PowerupHandler {
   private _wallEmitters: RectangularEmitter[] = [];
   private _portalWalls = false;
   private _cameraLock = false;
+  private _cameraLockTimeoutId: NodeJS.Timeout;
   private _gameCanvasDiv = document.getElementById(
     "game-canvas-container"
   ) as HTMLDivElement;
@@ -75,26 +76,28 @@ export default class PowerupHandler {
   public applyPowerup(powerup: Powerup, player: Player) {
     switch (powerup.type) {
       case PowerupType.PortalWalls:
-        this.flipWallState();
-
-        setTimeout(() => {
-          this.flipWallState();
-        }, powerup.duration);
-
+        this.setWallState(!this._portalWalls);
         break;
       case PowerupType.CameraLockToPlayer:
         if(player.username === currentPlayer.username || !currentPlayer.snake.isAlive){
           break;
         }
-        this._cameraLock = true;
 
+        if(this._cameraLockTimeoutId){
+          clearTimeout(this._cameraLockTimeoutId);
+          
+        }else{
         //increase the canvas resolution in order to decrease the blur
         gameCanvas.width = gameCanvas.getBoundingClientRect().width * 2;
         gameCanvas.height = gameCanvas.getBoundingClientRect().height * 2;
         backgroundCanvas.width = backgroundCanvas.getBoundingClientRect().width * 2;
         backgroundCanvas.height = backgroundCanvas.getBoundingClientRect().height * 2;
         drawGrid();
-        setTimeout(() => {
+        }
+        this._cameraLock = true;
+
+
+        this._cameraLockTimeoutId = setTimeout(() => {
           this._cameraLock = false;
           document.getElementById('game-canvas-container').style.transform = `scale(1) rotate(0rad) translate(0px, 0px)`;
           setTimeout(() => {
@@ -119,14 +122,22 @@ export default class PowerupHandler {
     });
   }
 
-  private flipWallState() {
-    this._portalWalls = !this._portalWalls;
+  private setWallState(isPortal: boolean) {
+    this._portalWalls = isPortal;
     this._wallEmitters.forEach(
-      (emitter) => (emitter.emitTime = this._portalWalls ? Infinity : 0)
+      (emitter) => (emitter.emitTime = isPortal ? Infinity : 0)
     );
-    this._gameCanvasDiv.style.borderColor = this._portalWalls
+    this._gameCanvasDiv.style.borderColor = isPortal
       ? "#34c6dc"
       : "#555555";
+  }
+
+  public reset(){
+    this._powerups = {};
+    clearTimeout(this._cameraLockTimeoutId);
+    this._cameraLock = false;
+    document.getElementById('game-canvas-container').style.transform = null;
+    this.setWallState(false);
   }
 
   public get cameraLock() {

@@ -1,6 +1,6 @@
 import { updateCanvasSize } from "..";
 import { Player } from "../Models/Player";
-import { GameState, Room } from "../Models/Room";
+import { GameState, Room, joinResult } from "../Models/Room";
 import { GameStateData, MessagePlayer, MessageRoom } from "../WebSocketClient/messageTypes";
 import { createRoom, joinRoom, sendStartCommand, setPlayerData } from "../WebSocketClient/websocket";
 import { resetCountDown } from "./countdown";
@@ -57,6 +57,14 @@ export function handleRoomAction() {
     }
 }
 
+function triggerActionOnEnter(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+        handleRoomAction();
+    }
+};
+
+
+
 export function handleReadyState() {
 
     currentPlayer.isReady = !currentPlayer.isReady;
@@ -104,8 +112,7 @@ export function showRoomView(data: JSON) {
     colorPickerLabel.style.color = pickTextColorBasedOnBgColorAdvanced(colorPicker.value, '#FFFFFF', '#000000');
 
     //show the new element
-    loginDiv.classList.add('display-none');
-    roomDiv.classList.add('display-flex');
+    switchGameView({type: 'GAME_STATE',state: GameState.IN_LOBBY});
 
 
 
@@ -180,13 +187,38 @@ function updateStartButtonProgress(readyPlayerCount: number, maxPlayerCount: num
     }
     startProgressBar.style.clipPath = `inset(0 ${100 - Math.floor(readyPlayerCount / maxPlayerCount * 100) + '%'} 0 0`;
 }
-export function showErrorAnimation(reason: string) {
-    console.log(reason);
-    roomButton.classList.add('red-button');
-    roomButton.classList.add('wiggle');
+export function showErrorAnimation(reason: joinResult) {
+    let animationElement: HTMLElement = null;
+    let message = '';
+    switch(reason){
+    case joinResult.ROOM_DOES_NOT_EXIST:
+        animationElement = roomCodeInput;
+        break;
+    case joinResult.ROOM_FULL:
+        animationElement = roomButton;
+        message = 'ROOM FULL';
+        break;
+    case joinResult.GAME_RUNNING:
+        animationElement = roomButton;
+        message = 'GAME RUNNING';
+        break;
+    case joinResult.PLAYER_ALREADY_EXISTS:
+        animationElement = usernameInput;
+        break;
+    case joinResult.SUCCESS:
+    }
+
+    animationElement.classList.add('red-button');
+    animationElement.classList.add('wiggle');
+    if(message !== ''){
+        animationElement.innerText=message;
+    }
     setTimeout(() => {
-        roomButton.classList.remove('red-button');
-        roomButton.classList.remove('wiggle');
+        animationElement.classList.remove('red-button');
+        animationElement.classList.remove('wiggle');
+        if(message !== ''){
+            animationElement.innerText='JOIN ROOM';
+        }
     }, 600)
 }
 
@@ -239,47 +271,59 @@ function startGame() {
 
 function goBackToLobby() {
     switchGameView({type: 'GAME_STATE',state: GameState.IN_LOBBY});
-    currentRoom.resetRoomForNewGame();
-    currentPlayer.snake = null;
-    currentPlayer.isReady = false;
-    updateReadyButton(currentPlayer.isReady);
-    resetCountDown();
+    
 }
 
 function toggleSettingsDisplay(){
-
-settingsDiv.classList.toggle('display-none');
+settingsDiv.classList.toggle('settings-top');
+roomDiv.classList.toggle('shift-left');
 
 }
+
+function updateClasses(element: HTMLElement, classesToAdd: string[], classesToRemove: string[]) {
+    element.classList.add(...classesToAdd);
+    element.classList.remove(...classesToRemove);
+  }
 
 export function switchGameView(data: GameStateData) {
     switch (data.state) {
         case 0:
-        loginDiv.classList.add('display-none');
-        roomDiv.classList.add('display-none');
-        roomDiv.classList.remove('display-flex');
-        gameDiv.classList.remove('display-none');
-        gameDiv.classList.add('display-flex');
         //update the game canvas to fit the screen
         updateCanvasSize();
-        document.getElementById('login-screen-body').style.overflow = 'hidden';
-
-
+        updateClasses(gameDiv, ['center-menu-element'], ['right-menu-element','left-menu-element', 'display-none']);
+        updateClasses(roomDiv, ['left-menu-element'], ['center-menu-element', 'shift-left']);
+        updateClasses(settingsDiv, ['settings-top'], [])
+        // setTimeout(() => {
+        //     updateClasses(roomDiv, ['display-none'], []);
+        // },500)
             break;
         case 1:
-        loginDiv.classList.add('display-none');
-        loginDiv.classList.remove('display-flex');
-        roomDiv.classList.add('display-flex');
-        endgameDiv.classList.add('display-none');
-        endgameDiv.classList.remove('display-flex');
-        document.getElementById('login-screen-body').style.overflow = 'visible';
+
+        updateClasses(roomDiv, ['center-menu-element'], ['right-menu-element', 'left-menu-element', 'display-none']);
+        updateClasses(loginDiv, ['left-menu-element'], ['center-menu-element']);
+        updateClasses(endgameDiv, ['right-menu-element'], ['center-menu-element']);
+        // setTimeout(() => {
+        //     updateClasses(loginDiv, ['display-none'], []);
+        //     updateClasses(endgameDiv, ['display-none'], []);
+        // },500)
+
             break;
         case 2:
+            updateClasses(endgameDiv, ['center-menu-element'], ['right-menu-element', 'display-none']);
+            updateClasses(gameDiv, ['left-menu-element'], ['center-menu-element']);
+
+            // setTimeout(() => {
+            //     updateClasses(gameDiv, ['display-none'], []);
+            // },500)
+
             lastWinnerSpan.innerHTML = `${currentRoom.lastWinner.username}`;
-            gameDiv.classList.add('display-none');
-            gameDiv.classList.remove('display-flex');
-            endgameDiv.classList.add('display-flex');
-            document.getElementById('login-screen-body').style.overflow = 'visible';
+
+            currentRoom.resetRoomForNewGame();
+            currentPlayer.snake = null;
+            currentPlayer.isReady = false;
+            updateReadyButton(currentPlayer.isReady);
+            resetCountDown();
+            
             break;
     }
 
@@ -287,7 +331,8 @@ export function switchGameView(data: GameStateData) {
 
 document.addEventListener('DOMContentLoaded', function () {
     updateButton();
-
+    usernameInput.addEventListener("keydown", triggerActionOnEnter);
+    roomCodeInput.addEventListener("keydown", triggerActionOnEnter);
     if (!navigator.userAgent.toLowerCase().includes('firefox')) {
         colorPicker.onblur = function () {
           changeColorPickerLabelState(true);
@@ -295,6 +340,18 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
 });
+
+
+function enforceMinMax(el: HTMLInputElement) {
+    if (el.value != "") {
+      if (parseInt(el.value) < parseInt(el.min)) {
+        el.value = el.min;
+      }
+      if (parseInt(el.value) > parseInt(el.max)) {
+        el.value = el.max;
+      }
+    }
+  }
 
 (window as any).updateButton = updateButton;
 (window as any).handleRoomAction = handleRoomAction;
@@ -305,3 +362,4 @@ document.addEventListener('DOMContentLoaded', function () {
 (window as any).goBackToLobby = goBackToLobby;
 (window as any).toggleSettingsDisplay = toggleSettingsDisplay;
 (window as any).changeColorPickerLabelState = changeColorPickerLabelState;
+(window as any).enforceMinMax = enforceMinMax;

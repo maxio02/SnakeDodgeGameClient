@@ -20,6 +20,7 @@
         placeholder="ENTER USERNAME"
         maxlength="15"
         oninput="updateButton()"
+        
       />
       <input
         type="text"
@@ -33,7 +34,7 @@
         CREATE ROOM
       </button>
     </div>
-    <div class="menu-box display-none" id="room-div">
+    <div class="menu-box right-menu-element" id="room-div">
       <p id="room-title">WELCOME TO<br /><span id="room-code"></span></p>
 
       <div id="color-picker-container">
@@ -47,12 +48,15 @@
         /><label id="color-label" for="color-picker">PICK COLOR</label>
       </div>
       <ul id="room-users-list"></ul>
+      <div class="player-count-wrapper">
+      <i class="fa-solid fa-circle" style="color: rgba(255, 255, 255, 0);"></i>
       <p id="player-count">0/0</p>
       <i
         class="fa-solid fa-gear display-none"
         id="room-settings-button"
         onclick="toggleSettingsDisplay()"
       ></i>
+    </div>
       <button class="red-button" id="readyButton" onclick="handleReadyState()">
         READY
       </button>
@@ -63,14 +67,14 @@
         </div>
       </button>
     </div>
-    <div class="menu-box display-none" id="settings-div">
-      <ol>
-        <li>ROOM SIZE</li>
-        <li>MAX POWERUPS</li>
-        <li>POWERUP INTERVAL</li>
-      </ol>
-    </div>
-    <div class="game-canvas-border center display-none" id="game-canvas-container">
+    <div class="menu-box settings-top" id="settings-div">
+        <ul id="settings-list">
+          <li>ROOM SIZE<input type="text" inputmode="numeric" pattern="[0-9]*" value="4"  max="10" min="1" oninput=enforceMinMax(this)></li>
+          <li>MAX POWERUPS<input type="number" value="7" max="30" min="0" oninput=enforceMinMax(this)></li>
+          <li>POWERUP INTERVAL <input type="number" value="3" max="30" min="1" oninput=enforceMinMax(this)></li>
+        </ul>
+      </div>
+    <div class="game-canvas-border center right-menu-element" id="game-canvas-container">
       <canvas id="background-canvas"></canvas>
       <canvas id="game-canvas"></canvas>
       <div class="countdown">
@@ -80,7 +84,7 @@
         <span id="countdown-go" class="countdown-number">GO!</span>
       </div>
     </div>
-    <div class="menu-box display-none" id="endgame-div">
+    <div class="menu-box right-menu-element" id="endgame-div">
       <p id="end-message">
         EVERYONE HAS DIED<br />BUT <span id="last-winner"></span><br />WAS THE
         BEST
