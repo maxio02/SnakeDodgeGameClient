@@ -26,10 +26,8 @@ export default class ArcSegment extends Segment {
 
 
     draw(context: CanvasRenderingContext2D, color: string): void {
-
         const scaleX = context.canvas.width / 2000;
         const scaleY = context.canvas.height / 2000;
-
 
         context.lineCap = "round";
         context.strokeStyle = color;
@@ -42,7 +40,6 @@ export default class ArcSegment extends Segment {
     }
 
     drawDebug(context: CanvasRenderingContext2D, color: string): void {
-        // context.strokeStyle = '#ff00ffff'
         let tangent_angle = this._counterClockwise ? - Math.PI : Math.PI;
 
         tangent_angle += this.endAngle;

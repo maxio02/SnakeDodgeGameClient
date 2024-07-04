@@ -69,9 +69,11 @@
     </div>
     <div class="menu-box settings-top" id="settings-div">
         <ul id="settings-list">
-          <li>ROOM SIZE<input type="text" inputmode="numeric" pattern="[0-9]*" value="4"  max="10" min="1" oninput=enforceMinMax(this)></li>
+          <li>ROOM SIZE<input type="number" value="4"  max="10" min="1" oninput=enforceMinMax(this)></li>
           <li>MAX POWERUPS<input type="number" value="7" max="30" min="0" oninput=enforceMinMax(this)></li>
-          <li>POWERUP INTERVAL <input type="number" value="3" max="30" min="1" oninput=enforceMinMax(this)></li>
+          <li>POWERUP<br>INTERVAL (S)<input type="number" value="3" max="30" min="1" oninput=enforceMinMax(this)></li>
+          <li>SELF COLLISION<input type="checkbox" checked="true"></li>
+          <li>ARENA SIZE<input type="number" value="2000" max="10000" min="1000" oninput=enforceMinMax(this)></li>
         </ul>
       </div>
     <div class="game-canvas-border center right-menu-element" id="game-canvas-container">

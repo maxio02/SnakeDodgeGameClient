@@ -293,6 +293,7 @@ export function switchGameView(data: GameStateData) {
         updateClasses(gameDiv, ['center-menu-element'], ['right-menu-element','left-menu-element', 'display-none']);
         updateClasses(roomDiv, ['left-menu-element'], ['center-menu-element', 'shift-left']);
         updateClasses(settingsDiv, ['settings-top'], [])
+        updateClasses(endgameDiv, ['right-menu-element'], ['center-menu-element']);
         // setTimeout(() => {
         //     updateClasses(roomDiv, ['display-none'], []);
         // },500)

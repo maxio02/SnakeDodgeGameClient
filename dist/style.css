@@ -353,11 +353,11 @@ div#game-canvas-container{
 #settings-div{
   transition: opacity 0.5s ease, transform 0.5s;
   aspect-ratio:unset;
-  transform: translateX(15vw);
+  transform: translateX(20rem);
 }
 
 .shift-left{
-  transform: translateX(-15vw) !important;
+  transform: translateX(-20rem) !important;
 }
 
 .settings-top{

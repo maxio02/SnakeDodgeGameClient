@@ -105,10 +105,10 @@ export function updateGameState(gameState: MessageGameplay) {
       let pos = serverHead.endPoint;
       currentRoom.players[username].snake = new Snake(
         new LineSegment(
-          new Vector(pos.x, pos.y),
-          new Vector(pos.x, pos.y),
+          new Vector(parseFloat(pos.x), parseFloat(pos.y)),
+          new Vector(parseFloat(pos.x), parseFloat(pos.y)),
           serverHead.isCollidable,
-          serverHead.endAngle
+          parseFloat(serverHead.endAngle)
         ),
         currentRoom.players[username].color,
         gameCanvasCtx
@@ -169,10 +169,10 @@ export function updateGameState(gameState: MessageGameplay) {
 
           snakeToUpdate.addSegment(
             new LineSegment(
-              new Vector(newLineHead.startPoint.x, newLineHead.startPoint.y),
-              new Vector(newLineHead.endPoint.x, newLineHead.endPoint.y),
+              new Vector(parseFloat(newLineHead.startPoint.x), parseFloat(newLineHead.startPoint.y)),
+              new Vector(parseFloat(newLineHead.endPoint.x), parseFloat(newLineHead.endPoint.y)),
               newLineHead.isCollidable,
-              newLineHead.endAngle
+              parseFloat(newLineHead.endAngle)
             )
           );
         } else if (newHeadData.segmentType === "ArcSegment") {
@@ -180,10 +180,10 @@ export function updateGameState(gameState: MessageGameplay) {
           let center = newArcHead.center;
           snakeToUpdate.addSegment(
             new ArcSegment(
-              new Vector(center.x, center.y),
-              newArcHead.radius,
-              newArcHead.startAngle,
-              newArcHead.endAngle,
+              new Vector(parseFloat(center.x), parseFloat(center.y)),
+              parseFloat(newArcHead.radius),
+              parseFloat(newArcHead.startAngle),
+              parseFloat(newArcHead.endAngle),
               newArcHead.counterClockwise,
               newArcHead.isCollidable
             )
@@ -193,7 +193,7 @@ export function updateGameState(gameState: MessageGameplay) {
         if (newHeadData.segmentType === "LineSegment") {
           serverHead = serverHead as ExistingLineSegmentMessage;
           let clientHead = snakeToUpdate.segments[snakeToUpdate.segments.length - 1] as LineSegment
-          clientHead.endPoint = new Vector(serverHead.endPoint.x, serverHead.endPoint.y);
+          clientHead.endPoint = new Vector(parseFloat(serverHead.endPoint.x), parseFloat(serverHead.endPoint.y));
 
           //camera powerup effect stuff
           if (currentRoom.powerupHandler.cameraLock) {
@@ -217,14 +217,14 @@ export function updateGameState(gameState: MessageGameplay) {
 
           serverHead = serverHead as ExistingArcSegmentMessage;
           let clientHead = snakeToUpdate.segments[snakeToUpdate.segments.length - 1] as ArcSegment
-          clientHead.endAngle = serverHead.endAngle;
+          clientHead.endAngle = parseFloat(serverHead.endAngle);
 
           //camera powerup effect stuff
           if (currentRoom.powerupHandler.cameraLock) {
             if (username === currentPlayer.username) {
 
 
-              let newAngle = clientHead.isCounterClockwise
+              let newAngle = clientHead.isCounterClockwise()
                 ? -clientHead.endAngle
                 : -clientHead.endAngle - Math.PI;
               let closestAngle = getClosestAngle(prevGameDivAngle, newAngle);
