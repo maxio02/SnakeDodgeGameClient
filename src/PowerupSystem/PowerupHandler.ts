@@ -6,7 +6,7 @@ import { PowerupAction } from "../WebSocketClient/messageTypes";
 import { updateCanvasSize } from '../index';
 import { drawGrid } from "../Drawer";
 import { Player } from "../Models/Player";
-import { currentPlayer } from "../MenuManager/login";
+import { currentPlayer, currentRoom } from "../MenuManager/login";
 
 export default class PowerupHandler {
   private _powerups: { [key: number]: Powerup } = {};
@@ -17,16 +17,16 @@ export default class PowerupHandler {
   private _gameCanvasDiv = document.getElementById(
     "game-canvas-container"
   ) as HTMLDivElement;
-  constructor() {
-    this.initializeWallEmitters();
+  constructor(arenaSize: number) {
+    this.initializeWallEmitters(arenaSize);
   }
 
-  private initializeWallEmitters() {
+  private initializeWallEmitters(arenaSize: number) {
     let sizes = [
-      new Vector(2000, 50),
-      new Vector(50, 2000),
-      new Vector(2000, 50),
-      new Vector(50, 2000),
+      new Vector(arenaSize, 50),
+      new Vector(50, arenaSize),
+      new Vector(arenaSize, 50),
+      new Vector(50, arenaSize),
     ];
     let directions = [
       new Vector(0, -1),
@@ -35,10 +35,10 @@ export default class PowerupHandler {
       new Vector(1, 0),
     ];
     let positions = [
-      new Vector(1000, 50),
-      new Vector(50, 1000),
-      new Vector(1000, 1950),
-      new Vector(1950, 1000),
+      new Vector(arenaSize/2, 50),
+      new Vector(50, arenaSize/2),
+      new Vector(arenaSize/2, arenaSize - 50),
+      new Vector(arenaSize - 50, arenaSize/2),
     ];
     for (let i = 0; i < 4; i++) {
       this._wallEmitters.push(

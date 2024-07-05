@@ -1,4 +1,5 @@
 import PowerupHandler from "../PowerupSystem/PowerupHandler";
+import { RoomSettings } from "../WebSocketClient/messageTypes";
 import { Player } from "./Player";
 
 export const enum GameState {
@@ -11,37 +12,37 @@ export const enum joinResult {
     ROOM_DOES_NOT_EXIST,
     ROOM_FULL,
     GAME_RUNNING,
-    PLAYER_ALREADY_EXISTS,
+    INVALID_USERNAME,
     SUCCESS
 
 }
 
 export class Room {
     private _players: { [key: string]: Player; } = {};
-    private _maxSize: number;
     private _gameState: GameState;
     private _host: Player;
     private _code: string;
     private _lastWinner: Player;
+    private _settings: RoomSettings;
     public powerupHandler: PowerupHandler;
 
-    constructor(code: string, host: Player, players?: { [key: string]: Player; }, maxSize: number = 5) {
+    constructor(code: string, host: Player, settings: RoomSettings, players?: { [key: string]: Player; }) {
         this._code = code;
         this._host = host;
-        this._maxSize = maxSize;
+        this._settings = settings;
 
         if (players) {
             this._players = players;
         } else {
             this.addPlayer(host);
         }
-        this.powerupHandler = new PowerupHandler();
+        // this.powerupHandler = new PowerupHandler();
 
     }
 
     public addPlayer(player: Player): boolean {
 
-        if (Object.keys(this._players).length >= this._maxSize) {
+        if (Object.keys(this._players).length >= this.settings.roomSize) {
             return false;
         }
 
@@ -83,12 +84,12 @@ export class Room {
     }
 
     public get maxSize(){
-        return this._maxSize;
+        return this.settings.roomSize;
     }
 
     public set maxSize(newMaxSize: number){
         if (newMaxSize > 0){
-            this._maxSize = newMaxSize;
+            this.settings.roomSize = newMaxSize;
         }
     }
 
@@ -100,6 +101,15 @@ export class Room {
         if (Object.keys(this._players).some(username => username === newLastWinner.username)) {
             this._lastWinner = newLastWinner;
         }
+    }
+
+    public set settings(newSettings: RoomSettings){
+        this._settings = newSettings;
+        this.powerupHandler = new PowerupHandler(this.settings.arenaSize);
+    }
+
+    public get settings(){
+        return this._settings;
     }
 
 

@@ -22,10 +22,19 @@ export interface GameStateData {
   export interface MessageRoom{
     code: string;
     gameState: number;
-    maxSize: number;
     host: MessagePlayer;
     players: { [key: string]: MessagePlayer; };
+    settings:RoomSettings;
   }
+
+  export interface RoomSettings {
+    roomSize: number;
+    maxPowerups: number;
+    powerupInterval: number;
+    selfCollision: boolean;
+    arenaSize: number;
+}
+
 
   export interface MessagePlayer{
     isReady: boolean;

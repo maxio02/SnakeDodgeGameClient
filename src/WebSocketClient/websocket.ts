@@ -2,6 +2,7 @@ import { updateGameState } from "..";
 import { Dir } from "../InputManager";
 import { currentPlayer, currentRoom, showErrorAnimation, showRoomView, switchGameView, updateRoomList } from "../MenuManager/login";
 import { Player } from "../Models/Player";
+import { RoomSettings } from "./messageTypes";
 
 let socket: WebSocket;
 
@@ -63,9 +64,9 @@ export function joinRoom(roomCode: string, username: string) {
     }
 }
 
-export function setPlayerData(player: Player, roomCode: string) {
+export function setPlayerData(player: Player) {
     if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ type: 'PLAYER_DATA', player: player, roomCode: roomCode}));
+        socket.send(JSON.stringify({ type: 'PLAYER_DATA', player: player, roomCode: currentRoom.code}));
     } else {
         console.error('WebSocket connection is not open');
     }
@@ -79,12 +80,21 @@ export function sendKeyEventToServer(key: Dir, pressed: boolean){
     }
 }
 
-export function sendStartCommand(roomCode: string) {
+export function sendStartCommand() {
     if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.send(JSON.stringify({ type: 'BEGIN_GAME', roomCode: roomCode}));
+        socket.send(JSON.stringify({ type: 'BEGIN_GAME', roomCode: currentRoom.code}));
     } else {
         console.error('WebSocket connection is not open');
     }
 }
+
+export function sendSettings(settings: RoomSettings){
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ type: 'ROOM_SETTINGS', roomCode: currentRoom.code, settings: settings}));
+    } else {
+        console.error('WebSocket connection is not open');
+    }
+}
+
 
 initWebSocket();

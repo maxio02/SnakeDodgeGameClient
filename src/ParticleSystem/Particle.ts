@@ -1,5 +1,6 @@
 import { Vector } from "vector2d";
 import { getRgbColor } from './ParticleSystemUtils';
+import { currentRoom } from "../MenuManager/login";
 export type shape = 'circle' | 'square';
 
 export default class Particle {
@@ -68,8 +69,8 @@ export default class Particle {
 
     public draw() {
 
-        const scaleX = this._canvasCtx.canvas.width / 2000;
-        const scaleY = this._canvasCtx.canvas.height / 2000;
+        const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
+        const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
 
 
         this._canvasCtx.moveTo(this._position.x * scaleX, this._position.y * scaleY);

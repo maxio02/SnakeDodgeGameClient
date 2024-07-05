@@ -2,6 +2,7 @@ import { Vector } from "vector2d";
 import Particle, { shape } from "./Particle";
 import { getBiasedRandomDirection, getPositionInCircle, getPositionInRectangle, getRandomDirection, hexToRgb, hexToRgbA } from './ParticleSystemUtils';
 import Emitter, { EmitterOptions } from "./Emitter";
+import { currentRoom } from "../MenuManager/login";
 
 
 export default class RectangleEmitter extends Emitter{
@@ -28,7 +29,7 @@ export default class RectangleEmitter extends Emitter{
         //emit new particles if the emitter is "alive"
         if (this._ticks % this._emitInterval === 0 && this._remainingEmitTimeMillis > 0) {
 
-            const scaleY = this._canvasCtx.canvas.height / 2000;
+            const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
             for (let i = 0; i < this._emitAmountPerTick; i++) {
                 this._aliveParticles.push(new Particle(this.position.clone().add(getPositionInRectangle(this._width, this._height).subtract(new Vector(this._width/2, this._height/2))) as Vector,
                     getBiasedRandomDirection(this.emitDirection, this._spreadAngle),
@@ -61,8 +62,8 @@ export default class RectangleEmitter extends Emitter{
         if ((this._remainingEmitTimeMillis + this._particleMaxAge) < 0) return;
 
         if (this._drawEmitterZone === true) {
-            const scaleX = this._canvasCtx.canvas.width / 2000;
-            const scaleY = this._canvasCtx.canvas.height / 2000;
+            const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
+            const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
             
             this._canvasCtx.moveTo((this.position.x - this._width/2) * scaleX, (this.position.y - this._height/2) * scaleY);
             this._canvasCtx.fillStyle = `rgba(${hexToRgb(this._color)}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;

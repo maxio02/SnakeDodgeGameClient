@@ -68,12 +68,13 @@
       </button>
     </div>
     <div class="menu-box settings-top" id="settings-div">
+      <p style="margin: 0 0 0 0; color: #da6666;">ONLY THE HOST<br/>CAN CHANGE OPTIONS</p>
         <ul id="settings-list">
-          <li>ROOM SIZE<input type="number" value="4"  max="10" min="1" oninput=enforceMinMax(this)></li>
-          <li>MAX POWERUPS<input type="number" value="7" max="30" min="0" oninput=enforceMinMax(this)></li>
-          <li>POWERUP<br>INTERVAL (S)<input type="number" value="3" max="30" min="1" oninput=enforceMinMax(this)></li>
-          <li>SELF COLLISION<input type="checkbox" checked="true"></li>
-          <li>ARENA SIZE<input type="number" value="2000" max="10000" min="1000" oninput=enforceMinMax(this)></li>
+          <li>ROOM SIZE<input name="room-size" type="number" value="4"  max="10" min="1" oninput=enforceMinMax(this) onchange=sendSettingsToServer(this) disabled></li>
+          <li>MAX POWERUPS<input name="max-powerups" type="number" value="7" max="30" min="0" oninput=enforceMinMax(this) onchange=sendSettingsToServer(this) disabled></li>
+          <li>POWERUP<br>INTERVAL (S)<input name="powerup-interval" type="number" value="3" max="30" min="1" oninput=enforceMinMax(this) onchange=sendSettingsToServer(this) disabled></li>
+          <li>SELF COLLISION<input name="self-collision" type="checkbox" checked="true" onchange=sendSettingsToServer(this) disabled></li>
+          <li>ARENA SIZE<input name="arena-size" type="number" value="2000" max="10000" min="1000" oninput=enforceMinMax(this) onchange=sendSettingsToServer(this) disabled></li>
         </ul>
       </div>
     <div class="game-canvas-border center right-menu-element" id="game-canvas-container">

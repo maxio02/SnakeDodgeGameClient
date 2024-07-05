@@ -102,6 +102,7 @@ div#game-canvas-container{
 #title{
   font-family: 'DisposableDroid BB';
   font-size: 7rem;
+  line-height: 7rem;
   font-weight: 600;
   color:white;
   margin-top: 0;
@@ -112,6 +113,7 @@ div#game-canvas-container{
 #end-message{
   font-family: 'DisposableDroid BB';
   font-size: 6rem;
+  line-height: 6rem;
   font-weight: 600;
   color:white;
   margin-top: 0;
@@ -121,6 +123,7 @@ div#game-canvas-container{
 #room-title{
   font-family: 'DisposableDroid BB';
   font-size: 5rem;
+  line-height: 5rem;
   font-weight: 600;
   color:white;
   margin-top: 0;
@@ -129,6 +132,7 @@ div#game-canvas-container{
 
 #room-code{
   font-size: 6rem;
+  line-height: 6rem;
 }
 
 
@@ -153,6 +157,7 @@ div#game-canvas-container{
   font-family: 'DisposableDroid BB';
   color:white;
   font-size: 3rem;
+  line-height: 3rem;
   text-align: center;
   font-weight: 600;
 }
@@ -243,6 +248,8 @@ div#game-canvas-container{
 }
 
 #room-users-list{
+  display: flex;
+  flex-direction: column;
   padding-left: 0;
   list-style-type:inside;
   margin-bottom: 0.5rem;
@@ -259,12 +266,14 @@ div#game-canvas-container{
   justify-content: space-between;
   gap: 8px;
   font-size: 3rem;
+  line-height: 3rem;
   margin-bottom: 1rem;
  
 }
 
 #room-users-list li i{
   font-size: 3rem;
+  line-height: 3rem;
   transition: color 0.4s ease-in-out, background-color 0.4s ease-in-out;
  }
 
@@ -289,6 +298,7 @@ div#game-canvas-container{
 #color-label {
   width: 80%;
   font-size: 3rem;
+  line-height: 3rem;
   cursor: pointer;
   position: absolute;
   left: 50%;
@@ -337,6 +347,7 @@ div#game-canvas-container{
 
 #last-winner{
   font-size: 7rem;
+  line-height: 7rem;
   color:#37cb48;
 }
 
@@ -479,12 +490,24 @@ div#game-canvas-container{
   
 }
 
-#settings-list input {
+#settings-list input[type=number] {
   padding: 0 0 0 0;
   margin: 0 0 0 1rem;
   width: 7rem;
 
 }
+
+#settings-list input[type=checkbox] {
+  padding: 0 0 0 0;
+  margin: 0 2rem 0 1rem;
+  width: 3rem;
+  accent-color: #b580b4;
+}
+
+#settings-list input[type=checkbox]:checked::before {
+  background-color: #c11ed6;
+}
+
 
 #settings-list input::-webkit-outer-spin-button,
 #settings-list input::-webkit-inner-spin-button {

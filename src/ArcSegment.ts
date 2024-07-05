@@ -2,6 +2,7 @@ import { drawArc, drawArrow, drawDot } from "./Drawer";
 import * as Vec2D from 'vector2d';
 import Segment from "./Segment";
 import { gameCanvasCtx } from "./index";
+import { currentRoom } from "./MenuManager/login";
 
 export default class ArcSegment extends Segment {
 
@@ -26,8 +27,8 @@ export default class ArcSegment extends Segment {
 
 
     draw(context: CanvasRenderingContext2D, color: string): void {
-        const scaleX = context.canvas.width / 2000;
-        const scaleY = context.canvas.height / 2000;
+        const scaleX = context.canvas.width / currentRoom.settings.arenaSize;
+        const scaleY = context.canvas.height / currentRoom.settings.arenaSize;
 
         context.lineCap = "round";
         context.strokeStyle = color;

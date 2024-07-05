@@ -1,8 +1,9 @@
 import { updateCanvasSize } from "..";
 import { Player } from "../Models/Player";
 import { GameState, Room, joinResult } from "../Models/Room";
-import { GameStateData, MessagePlayer, MessageRoom } from "../WebSocketClient/messageTypes";
-import { createRoom, joinRoom, sendStartCommand, setPlayerData } from "../WebSocketClient/websocket";
+import PowerupHandler from "../PowerupSystem/PowerupHandler";
+import { GameStateData, MessagePlayer, MessageRoom, RoomSettings } from "../WebSocketClient/messageTypes";
+import { createRoom, joinRoom, sendSettings, sendStartCommand, setPlayerData } from "../WebSocketClient/websocket";
 import { resetCountDown } from "./countdown";
 
 
@@ -68,7 +69,7 @@ function triggerActionOnEnter(event: KeyboardEvent) {
 export function handleReadyState() {
 
     currentPlayer.isReady = !currentPlayer.isReady;
-    setPlayerData(currentPlayer, currentRoom.code);
+    setPlayerData(currentPlayer);
     updateReadyButton(currentPlayer.isReady);
 
 }
@@ -97,8 +98,10 @@ export function showRoomView(data: JSON) {
 
     currentRoom = new Room(roomInfo.code,
         new Player(roomInfo.host.username, roomInfo.host.isReady, roomInfo.host.color),
-        players,
-        roomInfo.maxSize);
+        roomInfo.settings,
+        players);
+
+        currentRoom.powerupHandler = new PowerupHandler(currentRoom.settings.arenaSize);
 
     //show startGameButton 
     if (currentPlayer.username === currentRoom.host.username) {
@@ -118,7 +121,7 @@ export function showRoomView(data: JSON) {
 
     roomCodeInput.value = currentRoom.code;
     roomCodeSpan.innerHTML = currentRoom.code;
-    setPlayerData(currentPlayer, currentRoom.code);
+    setPlayerData(currentPlayer);
     updateRoomList(data);
 
 }
@@ -145,7 +148,7 @@ export function updateRoomList(data: JSON) {
     });
         
     currentRoom.host = new Player(roomInfo.host.username, roomInfo.host.isReady, roomInfo.host.color);
-    currentRoom.maxSize = roomInfo.maxSize;
+    currentRoom.maxSize = roomInfo.settings.roomSize;
 
     
     playerCount.innerHTML = `${Object.keys(currentRoom.players).length}/${currentRoom.maxSize}`;
@@ -172,10 +175,25 @@ export function updateRoomList(data: JSON) {
         roomUsersList.appendChild(playerItem);
     });
 
-    //show startGameButton 
+    //show host things
     if (currentPlayer.username === currentRoom.host.username) {
         document.getElementById('startButton').classList.remove('display-none');
+        let settingsList = document.getElementById("settings-list") as HTMLUListElement;
+        
+        settingsList.querySelectorAll('input').forEach(element => {
+            element.removeAttribute('disabled');
+        });
+
     }
+
+
+        // Update settings values from server
+        currentRoom.settings = roomInfo.settings;
+        (document.querySelector('input[name="room-size"]') as HTMLInputElement).value = roomInfo.settings.roomSize.toString();
+        (document.querySelector('input[name="max-powerups"]') as HTMLInputElement).value = roomInfo.settings.maxPowerups.toString();
+        (document.querySelector('input[name="powerup-interval"]') as HTMLInputElement).value = roomInfo.settings.powerupInterval.toString();
+        (document.querySelector('input[name="self-collision"]') as HTMLInputElement).checked = roomInfo.settings.selfCollision;
+        (document.querySelector('input[name="arena-size"]') as HTMLInputElement).value = roomInfo.settings.arenaSize.toString();
 
     updateStartButtonProgress(Object.values(currentRoom.players).filter(p => p.isReady).length, currentRoom.maxSize);
 }
@@ -202,7 +220,7 @@ export function showErrorAnimation(reason: joinResult) {
         animationElement = roomButton;
         message = 'GAME RUNNING';
         break;
-    case joinResult.PLAYER_ALREADY_EXISTS:
+    case joinResult.INVALID_USERNAME:
         animationElement = usernameInput;
         break;
     case joinResult.SUCCESS:
@@ -241,7 +259,7 @@ export function updatePlayerColor() {
     currentPlayer.color = colorPicker.value;
     colorPickerLabel.style.color = pickTextColorBasedOnBgColorAdvanced(colorPicker.value, '#FFFFFF', '#000000');
     changeColorPickerLabelState(true);
-    setPlayerData(currentPlayer, currentRoom.code);
+    setPlayerData(currentPlayer);
 }
 
 function pickTextColorBasedOnBgColorAdvanced(bgColor: string, lightColor: string, darkColor: string) {
@@ -266,7 +284,7 @@ function startGame() {
     if (currentPlayer.username != currentRoom.host.username) {
         return;
     }
-    sendStartCommand(currentRoom.code);
+    sendStartCommand();
 }
 
 function goBackToLobby() {
@@ -294,28 +312,17 @@ export function switchGameView(data: GameStateData) {
         updateClasses(roomDiv, ['left-menu-element'], ['center-menu-element', 'shift-left']);
         updateClasses(settingsDiv, ['settings-top'], [])
         updateClasses(endgameDiv, ['right-menu-element'], ['center-menu-element']);
-        // setTimeout(() => {
-        //     updateClasses(roomDiv, ['display-none'], []);
-        // },500)
             break;
         case 1:
 
         updateClasses(roomDiv, ['center-menu-element'], ['right-menu-element', 'left-menu-element', 'display-none']);
         updateClasses(loginDiv, ['left-menu-element'], ['center-menu-element']);
         updateClasses(endgameDiv, ['right-menu-element'], ['center-menu-element']);
-        // setTimeout(() => {
-        //     updateClasses(loginDiv, ['display-none'], []);
-        //     updateClasses(endgameDiv, ['display-none'], []);
-        // },500)
 
             break;
         case 2:
             updateClasses(endgameDiv, ['center-menu-element'], ['right-menu-element', 'display-none']);
             updateClasses(gameDiv, ['left-menu-element'], ['center-menu-element']);
-
-            // setTimeout(() => {
-            //     updateClasses(gameDiv, ['display-none'], []);
-            // },500)
 
             lastWinnerSpan.innerHTML = `${currentRoom.lastWinner.username}`;
 
@@ -354,6 +361,19 @@ function enforceMinMax(el: HTMLInputElement) {
     }
   }
 
+  function handleChangeSettings() {
+    const settings: RoomSettings = {
+        roomSize: parseInt((document.querySelector('input[name="room-size"]') as HTMLInputElement).value),
+        maxPowerups: parseInt((document.querySelector('input[name="max-powerups"]') as HTMLInputElement).value),
+        powerupInterval: parseInt((document.querySelector('input[name="powerup-interval"]') as HTMLInputElement).value),
+        selfCollision: (document.querySelector('input[name="self-collision"]') as HTMLInputElement).checked,
+        arenaSize: parseInt((document.querySelector('input[name="arena-size"]') as HTMLInputElement).value),
+    };
+
+    sendSettings(settings);
+  }
+
+  
 (window as any).updateButton = updateButton;
 (window as any).handleRoomAction = handleRoomAction;
 (window as any).handleReadyState = handleReadyState;
@@ -364,3 +384,4 @@ function enforceMinMax(el: HTMLInputElement) {
 (window as any).toggleSettingsDisplay = toggleSettingsDisplay;
 (window as any).changeColorPickerLabelState = changeColorPickerLabelState;
 (window as any).enforceMinMax = enforceMinMax;
+(window as any).sendSettingsToServer = handleChangeSettings;

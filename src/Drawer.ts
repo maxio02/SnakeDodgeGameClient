@@ -1,10 +1,11 @@
 import { Vector } from "vector2d";
 import { backgroundCanvas, backgroundCanvasCtx, gridSize } from "./index";
+import { currentRoom } from "./MenuManager/login";
 
 export function drawGrid() {
 
-    const scaleX = backgroundCanvasCtx.canvas.width / 2000;
-    const scaleY = backgroundCanvasCtx.canvas.height / 2000;
+    const scaleX = backgroundCanvasCtx.canvas.width / (currentRoom ? currentRoom.settings.arenaSize : 2000);
+    const scaleY = backgroundCanvasCtx.canvas.height / (currentRoom ? currentRoom.settings.arenaSize : 2000);
 
 
     backgroundCanvasCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);

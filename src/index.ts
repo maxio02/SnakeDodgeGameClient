@@ -201,10 +201,10 @@ export function updateGameState(gameState: MessageGameplay) {
               let newAngle = -clientHead.endAngle - Math.PI / 2;
               let closestAngle = getClosestAngle(prevGameDivAngle, newAngle);
               gameDiv.style.transform = `scale(2) rotate(${closestAngle}rad) translate(${
-                (-serverHead.endPoint.x * window.innerHeight) / 2000 +
+                (-serverHead.endPoint.x * window.innerHeight) / currentRoom.settings.arenaSize +
                 window.innerHeight / 2
               }px, ${
-                (-serverHead.endPoint.y * window.innerHeight) / 2000 +
+                (-serverHead.endPoint.y * window.innerHeight) / currentRoom.settings.arenaSize +
                 window.innerHeight / 2
               }px)`;
               prevGameDivAngle = closestAngle;
@@ -229,10 +229,10 @@ export function updateGameState(gameState: MessageGameplay) {
                 : -clientHead.endAngle - Math.PI;
               let closestAngle = getClosestAngle(prevGameDivAngle, newAngle);
               gameDiv.style.transform = `scale(2) rotate(${closestAngle}rad) translate(${
-                (-clientHead.endPoint.x * window.innerHeight) / 2000 +
+                (-clientHead.endPoint.x * window.innerHeight) / currentRoom.settings.arenaSize +
                 window.innerHeight / 2
               }px, ${
-                (-clientHead.endPoint.y * window.innerHeight) / 2000 +
+                (-clientHead.endPoint.y * window.innerHeight) / currentRoom.settings.arenaSize +
                 window.innerHeight / 2
               }px)`;
               prevGameDivAngle = closestAngle;

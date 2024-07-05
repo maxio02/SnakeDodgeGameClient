@@ -5,6 +5,7 @@ import Segment from "./Segment";
 import CircularEmitter from "./ParticleSystem/CircularEmitter";
 import { hexToRgb } from "./ParticleSystem/ParticleSystemUtils";
 import { drawArrow } from "./Drawer";
+import { currentRoom } from "./MenuManager/login";
 
 export default class Snake {
   public segments: Segment[] = [];
@@ -44,8 +45,8 @@ export default class Snake {
   }
 
   draw() {
-    const scaleX = this._canvasCtx.canvas.width / 2000;
-    const scaleY = this._canvasCtx.canvas.height / 2000;
+    const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
+    const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
 
     this._canvasCtx.lineWidth = 12 * Math.min(scaleX, scaleY);
     //TODO fix this to be a single path
@@ -70,8 +71,8 @@ export default class Snake {
   }
 
   drawHeadingDir() {
-    const scaleX = this._canvasCtx.canvas.width / 2000;
-    const scaleY = this._canvasCtx.canvas.height / 2000;
+    const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
+    const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
 
     const arrowLength = 170;
     const lastSegment = this.head;

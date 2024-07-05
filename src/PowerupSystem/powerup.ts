@@ -2,12 +2,13 @@ import { Vector } from "vector2d";
 import CircularEmitter from "../ParticleSystem/CircularEmitter";
 import { hexToRgb } from "../ParticleSystem/ParticleSystemUtils";
 import { MessagePowerup } from "../WebSocketClient/messageTypes";
+import { currentRoom } from "../MenuManager/login";
 
 export enum PowerupType {
   SpeedUp,
   SpeedDown,
-  Bomb,
-  FlipButtons,
+  // Bomb,
+  // FlipButtons,
   Invisibility,
   PortalWalls,
   CameraLockToPlayer,
@@ -16,8 +17,8 @@ export enum PowerupType {
 const SVG_PATHS: { [key in PowerupType]: string } = {
   [PowerupType.SpeedUp]: "../assets/powerups/speedup.svg",
   [PowerupType.SpeedDown]: "../assets/powerups/speeddown.svg",
-  [PowerupType.Bomb]: "../assets/powerups/bomb.svg",
-  [PowerupType.FlipButtons]: "../assets/powerups/flipbuttons.svg",
+  // [PowerupType.Bomb]: "../assets/powerups/bomb.svg",
+  // [PowerupType.FlipButtons]: "../assets/powerups/flipbuttons.svg",
   [PowerupType.Invisibility]: "../assets/powerups/invisibility.svg",
   [PowerupType.PortalWalls]: "../assets/powerups/portalwalls.svg",
   [PowerupType.CameraLockToPlayer]: "../assets/powerups/temp.svg",
@@ -69,8 +70,8 @@ export default class Powerup {
     this._emitter.tick(0.5);
     this._emitter.draw();
 
-    const scaleX = this._canvasCtx.canvas.width / 2000;
-    const scaleY = this._canvasCtx.canvas.height / 2000;
+    const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
+    const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
 
     this._canvasCtx.moveTo(
       this._position.x * scaleX,
@@ -93,8 +94,8 @@ export default class Powerup {
   }
 
   private drawSVG() {
-    const scaleX = this._canvasCtx.canvas.width / 2000;
-    const scaleY = this._canvasCtx.canvas.height / 2000;
+    const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
+    const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
     // this._canvasCtx.fillStyle = "#ffffff";
     const imageScaleFactor = 0.6;
 
