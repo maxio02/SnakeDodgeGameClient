@@ -94,6 +94,11 @@ function getClosestAngle(currentAngle: number, targetAngle: number) {
   return currentAngle + delta;
 }
 
+function lerp(a: number, b: number, f: number)
+{
+    return a * (1.0 - f) + (b * f);
+}
+
 export function updateGameState(gameState: MessageGameplay) {
   if (currentPlayer.snake === null) {
     // Initialize snakes the first time this function is called
@@ -199,16 +204,18 @@ export function updateGameState(gameState: MessageGameplay) {
           if (currentRoom.powerupHandler.cameraLock) {
             if (username === currentPlayer.username) {
               let newAngle = -clientHead.endAngle - Math.PI / 2;
-              let closestAngle = getClosestAngle(prevGameDivAngle, newAngle);
-              gameDiv.style.transform = `scale(2) rotate(${closestAngle}rad) translate(${
-                (-serverHead.endPoint.x * window.innerHeight) / currentRoom.settings.arenaSize +
-                window.innerHeight / 2
+              newAngle = lerp(prevGameDivAngle, newAngle, 0.15);
+              gameDiv.style.rotate = `${newAngle}rad`
+              gameDiv.style.transform = `scale(2) translate(${
+                (-serverHead.endPoint.x * gameDiv.offsetHeight) / currentRoom.settings.arenaSize +
+                gameDiv.offsetHeight / 2
               }px, ${
-                (-serverHead.endPoint.y * window.innerHeight) / currentRoom.settings.arenaSize +
-                window.innerHeight / 2
+                (-serverHead.endPoint.y * gameDiv.offsetHeight) / currentRoom.settings.arenaSize +
+                gameDiv.offsetHeight / 2
               }px)`;
-              prevGameDivAngle = closestAngle;
+              prevGameDivAngle = newAngle;
             }
+            
           }
           
           
@@ -227,15 +234,17 @@ export function updateGameState(gameState: MessageGameplay) {
               let newAngle = clientHead.isCounterClockwise()
                 ? -clientHead.endAngle
                 : -clientHead.endAngle - Math.PI;
-              let closestAngle = getClosestAngle(prevGameDivAngle, newAngle);
-              gameDiv.style.transform = `scale(2) rotate(${closestAngle}rad) translate(${
-                (-clientHead.endPoint.x * window.innerHeight) / currentRoom.settings.arenaSize +
-                window.innerHeight / 2
+              // newAngle = newAngle % ( 2 * Math.PI );
+              newAngle = lerp(prevGameDivAngle, newAngle, 0.15);
+              gameDiv.style.rotate = `${newAngle}rad`
+              gameDiv.style.transform = `scale(2) translate(${
+                (-clientHead.endPoint.x * gameDiv.offsetHeight) / currentRoom.settings.arenaSize +
+                gameDiv.offsetHeight / 2
               }px, ${
-                (-clientHead.endPoint.y * window.innerHeight) / currentRoom.settings.arenaSize +
-                window.innerHeight / 2
+                (-clientHead.endPoint.y * gameDiv.offsetHeight) / currentRoom.settings.arenaSize +
+                gameDiv.offsetHeight / 2
               }px)`;
-              prevGameDivAngle = closestAngle;
+              prevGameDivAngle = newAngle
             }
           }
           
