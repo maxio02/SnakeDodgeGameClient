@@ -1,40 +1,42 @@
+import { inflate } from "pako";
 import { updateGameState } from "..";
 import { Dir } from "../InputManager";
 import { currentPlayer, currentRoom, showErrorAnimation, showRoomView, switchGameView, updateRoomList } from "../MenuManager/login";
 import { Player } from "../Models/Player";
-import { RoomSettings } from "./messageTypes";
+import { MessageRoom, RoomSettings } from "./messageTypes";
 
 let socket: WebSocket;
 
 function initWebSocket() {
     // socket = new WebSocket(`ws://${window.location.hostname}:3000`);
     socket = new WebSocket(`wss://snakegame-server.maxio.site`);
+    socket.binaryType = 'arraybuffer';
     socket.onopen = () => {
         console.log('WebSocket connection established');
     };
 
     socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        console.log('Message from server:', data);
+        const JSONdata = JSON.parse(inflate(event.data as Uint8Array, {to: "string"}));
+        console.log('Message from server:', JSONdata);
         
-        switch (data.type) {
+        switch (JSONdata.type) {
             case 'JOINED_ROOM':
-                showRoomView(event.data);
+                showRoomView(JSONdata.room as MessageRoom);
                 break;
             case 'JOIN_FAIL':
-                showErrorAnimation(data.reason);
+                showErrorAnimation(JSONdata.reason);
                 break;
             case 'ROOM_DATA':
-                updateRoomList(event.data);
+                updateRoomList(JSONdata.room as MessageRoom);
                 break;
             case 'GAME_STATE':
-                switchGameView(data);
+                switchGameView(JSONdata);
                 break;
-            case 'GAMEPLAY_DATA':
-                updateGameState(data);
+            case 'GD':
+                updateGameState(JSONdata);
                 break;
             case 'ERROR':
-                alert(`Error: ${data.message}`);
+                alert(`Error: ${JSONdata.message}`);
                 break;
         }
     };

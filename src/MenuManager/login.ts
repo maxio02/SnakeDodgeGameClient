@@ -85,9 +85,7 @@ function updateReadyButton(isReady: boolean) {
     }
 }
 
-export function showRoomView(data: JSON) {
-    //set the client Model of the room to the servers response
-    let roomInfo: MessageRoom = JSON.parse(data.toString())['room'];
+export function showRoomView(roomInfo: MessageRoom) {
 
     let players: { [key: string]: Player } = {};
     Object.keys(roomInfo.players).forEach(username => {
@@ -122,12 +120,11 @@ export function showRoomView(data: JSON) {
     roomCodeInput.value = currentRoom.code;
     roomCodeSpan.innerHTML = currentRoom.code;
     setPlayerData(currentPlayer);
-    updateRoomList(data);
+    updateRoomList(roomInfo);
 
 }
 
-export function updateRoomList(data: JSON) {
-    let roomInfo: MessageRoom = JSON.parse(data.toString())['room'];
+export function updateRoomList(roomInfo: MessageRoom) {
 
     // updating the current room players and host
 

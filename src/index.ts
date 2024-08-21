@@ -102,10 +102,10 @@ function lerp(a: number, b: number, f: number)
 export function updateGameState(gameState: MessageGameplay) {
   if (currentPlayer.snake === null) {
     // Initialize snakes the first time this function is called
-    gameState.snakeHeads.forEach((headData) => {
+    gameState.s.forEach((headData) => {
       //this can be done because the snake always begins with a line segment
-      let serverHead = headData.lastSegment as NewLineSegmentMessage;
-      let username = headData.username;
+      let serverHead = headData.lS as NewLineSegmentMessage;
+      let username = headData.u;
 
       let pos = serverHead.endPoint;
       currentRoom.players[username].snake = new Snake(
@@ -136,14 +136,14 @@ export function updateGameState(gameState: MessageGameplay) {
   } else {
     let currentUsernames: string[] = [];
     // Update existing snakes based on the new game state
-    gameState.snakeHeads.forEach((newHeadData) => {
-      let serverHead = newHeadData.lastSegment;
-      let username = newHeadData.username;
+    gameState.s.forEach((newHeadData) => {
+      let serverHead = newHeadData.lS;
+      let username = newHeadData.u;
       let snakeToUpdate = currentRoom.players[username].snake;
 
-      if (gameState.powerupList !== null) {
+      if (gameState.p !== null) {
         //update powerups list
-        gameState.powerupList.forEach((powerupInfo) => {
+        gameState.p.forEach((powerupInfo) => {
           switch (powerupInfo.action) {
             case PowerupAction.REMOVE:
               currentRoom.powerupHandler.removePowerup(
@@ -169,7 +169,7 @@ export function updateGameState(gameState: MessageGameplay) {
       // translate(${head.endPoint.x * gameCanvas.width / 2000 }px, ${head.endPoint.y * gameCanvas.width / 2000}px)
       
       if (serverHead.isNewThisTick) {
-        if (newHeadData.segmentType === "LineSegment") {
+        if (newHeadData.sT === "L") {
           let newLineHead =  serverHead as NewLineSegmentMessage;
 
           snakeToUpdate.addSegment(
@@ -180,7 +180,7 @@ export function updateGameState(gameState: MessageGameplay) {
               parseFloat(newLineHead.endAngle)
             )
           );
-        } else if (newHeadData.segmentType === "ArcSegment") {
+        } else if (newHeadData.sT === "A") {
           let newArcHead = serverHead as NewArcSegmentMessage;
           let center = newArcHead.center;
           snakeToUpdate.addSegment(
@@ -195,7 +195,7 @@ export function updateGameState(gameState: MessageGameplay) {
           );
         }
       } else {
-        if (newHeadData.segmentType === "LineSegment") {
+        if (newHeadData.sT === "L") {
           serverHead = serverHead as ExistingLineSegmentMessage;
           let clientHead = snakeToUpdate.segments[snakeToUpdate.segments.length - 1] as LineSegment
           clientHead.endPoint = new Vector(parseFloat(serverHead.endPoint.x), parseFloat(serverHead.endPoint.y));
@@ -220,7 +220,7 @@ export function updateGameState(gameState: MessageGameplay) {
           
           
 
-        } else if (newHeadData.segmentType === "ArcSegment") {
+        } else if (newHeadData.sT === "A") {
 
           serverHead = serverHead as ExistingArcSegmentMessage;
           let clientHead = snakeToUpdate.segments[snakeToUpdate.segments.length - 1] as ArcSegment

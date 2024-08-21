@@ -43,9 +43,9 @@ export interface GameStateData {
   }
 
   export interface MessageGameplay{
-    type: string;
-    snakeHeads: SnakeHeadData[];
-    powerupList: MessagePowerup[];
+    t: string; //type
+    s: SnakeHeadData[]; //snakeHeads
+    p: MessagePowerup[]; //PowerupList
   }
 
   export interface MessagePowerup{
@@ -56,9 +56,9 @@ export interface GameStateData {
 
 
   export interface SnakeHeadData{
-    username: string;
-    lastSegment: NewLineSegmentMessage | ExistingLineSegmentMessage | NewArcSegmentMessage | ExistingArcSegmentMessage;
-    segmentType: 'ArcSegment' | 'LineSegment';
+    u: string; //username
+    lS: NewLineSegmentMessage | ExistingLineSegmentMessage | NewArcSegmentMessage | ExistingArcSegmentMessage; //lastSegment
+    sT: 'A' | 'L'; //segmentType L-Line A-Arc
   }
 
   interface Point {
