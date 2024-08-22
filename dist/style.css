@@ -52,10 +52,75 @@
   font-display: swap;
 }
 
+:root[theme="light"] {
+  --theme-switch-bg: #c9c9c9;
+  --theme-switch-icon-color-moon: #00000000;
+  --theme-switch-icon-color-sun: #8f8f8f;
+  --background-color: #ffffff;
+  --grid-color: #00000053;
+  --menu-box-color: #e0c7e0;
+  --menu-box-shadow:#7c687c;
+  --menu-input-color:#ede0ee;
+  --menu-text-input-color: #999;
+  --menu-text-input-placeholder-color:#c0bfc0;
+}
+
+
+:root[theme="dark"] {
+  --theme-switch-bg: #636374;
+  --theme-switch-icon-color-moon: #cfcfeb;
+  --theme-switch-icon-color-sun: #00000000;
+  --background-color: #353539;
+  --grid-color: #ffffff93;
+  --menu-box-color: #7c4f79;
+  --menu-box-shadow:#241322;
+  --menu-input-color: #b580b4;
+  --menu-text-input-color:#555;
+  --menu-text-input-placeholder-color:#686868;
+}
+
+div#theme-switch {
+  background-color: var(--theme-switch-bg);
+  border-radius: 50px;
+  cursor: pointer;
+  padding: 0.5rem;
+  width: 2em;
+  height: 2em;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  margin: 0.5em;
+  align-items: center;
+  box-shadow: 0px 0px 15px var(--menu-box-shadow);
+  transition-duration: 0.4s;
+  z-index: 2;
+}
+
+div#theme-switch:hover {
+  transform: scale(110%);
+
+  box-shadow: 0px 0px 20px var(--menu-box-shadow);
+}
+
+#switch-icon-sun {
+  fill: var(--theme-switch-icon-color-sun);
+}
+
+#switch-icon-moon {
+  fill: var(--theme-switch-icon-color-moon);
+}
+
+#switch-icon-sun, #switch-icon-moon {
+  width: inherit;
+  position: absolute;
+  transition-duration: 0.4s;
+}
+
 html {
   position: fixed;
   width: 100%;
   height: 100%;
+  background-color: var(--background-color);
 }
 
 #login-screen-body{
@@ -145,11 +210,11 @@ div#game-canvas-container{
   -webkit-box-sizing: border-box; 
   box-sizing: border-box;
   aspect-ratio: 1 / 0.6;
-  background-color: #e0c7e0;
+  background-color: var(--menu-box-color);
   border-radius: 30px;
   text-align: center;
   padding: 5vh;
-  box-shadow: 0px 8px 50px #7c687c;
+  box-shadow: 0px 8px 50px var(--menu-box-shadow);
   transition: transform 0.5s;
 }
 
@@ -167,13 +232,13 @@ div#game-canvas-container{
   transition: background-color 0.4s, box-shadow 0.4s;
   border: 1px none #a1a1a1;
   /* background-color: #b580b4; */
-  background-color: #ede0ee;
+  background-color: var(--menu-input-color);
   margin: 1rem 0 1rem 0;
   border-radius: 1rem;
   padding: 1rem;
   /* box-shadow: 0px 8px 20px #a68ea6; */
   box-shadow: inset 0px 4px 10px #a68ea6;
-  color:#999
+  color: var(--menu-text-input-color);
 }
 
 .menu-box input:focus{
@@ -185,7 +250,7 @@ div#game-canvas-container{
 
 .menu-box input::placeholder{
   transition: color 0.4s;
-  color: #c0bfc0;
+  color: var(--menu-text-input-placeholder-color);
 }
 
 .menu-box input:focus::placeholder{
