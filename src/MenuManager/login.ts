@@ -166,9 +166,9 @@ export function updateRoomList(roomInfo: MessageRoom) {
         }
 
         if (player.isReady) {
-            playerItem.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle" style="color: #37cb48;"></i>');
+            playerItem.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle" style="color: var(--menu-accept-button-color);"></i>');
         } else {
-            playerItem.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle" style="color: #cb3737;"></i>');
+            playerItem.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-circle" style="color: var(--menu-decline-button-color);"></i>');
         }
 
         roomUsersList.appendChild(playerItem);

@@ -101,7 +101,7 @@
       </button>
     </div>
     <div class="menu-box settings-top" id="settings-div">
-      <p style="margin: 0 0 0 0; color: #da6666;">ONLY THE HOST<br/>CAN CHANGE OPTIONS</p>
+      <p style="margin: 0 0 0 0; color: var(--menu-decline-button-color);">ONLY THE HOST<br/>CAN CHANGE OPTIONS</p>
         <ul id="settings-list">
           <li>ROOM SIZE<input name="room-size" type="number" value="4"  max="10" min="1" oninput=enforceMinMax(this) onchange=sendSettingsToServer(this) disabled></li>
           <li>MAX POWERUPS<input name="max-powerups" type="number" value="7" max="30" min="0" oninput=enforceMinMax(this) onchange=sendSettingsToServer(this) disabled></li>

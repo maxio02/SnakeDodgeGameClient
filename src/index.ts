@@ -22,7 +22,8 @@ var fpsCounter = document.createElement("div");
 fpsCounter.style.position = "absolute";
 fpsCounter.style.top = "10px";
 fpsCounter.style.left = "10px";
-fpsCounter.style.color = "black";
+fpsCounter.style.fontSize = "2rem";
+fpsCounter.style.color = "var(--count-down-text-color)";
 document.body.appendChild(fpsCounter);
 
 let prevGameDivAngle = 0;

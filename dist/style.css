@@ -57,16 +57,22 @@
   --theme-switch-icon-color-moon: #00000000;
   --theme-switch-icon-color-sun: #f7f0f7;
   --background-color: #ffffff;
-  --grid-color: #555555;
+  --grid-color: #55555555;
   --menu-box-color: #e0c7e0;
   --menu-box-shadow:#967e96;
   --menu-input-color:#ede0ee;
   --menu-button-disabled-color: #ede0ee;
   --menu-button-color: #b580b4;
-  --menu-text-input-color: #999;
+  --menu-text-input-color: #b06ba7;
   --menu-text-input-placeholder-color:#c0bfc0;
   --menu-input-shadow-inset:#a68ea6;
   --menu-input-shadow-inset-focus:#837083;
+  --menu-accept-button-color:#37cb48;
+  --menu-accept-button-text-color:#b1f4ad;
+  --menu-decline-button-color:#cb3737;
+  --menu-decline-button-text-color:#f4adad;
+  --count-down-text-color: #000000;
+
 }
 
 
@@ -75,16 +81,21 @@
   --theme-switch-icon-color-moon: #b580b4;
   --theme-switch-icon-color-sun: #00000000;
   --background-color: #353539;
-  --grid-color: #b7b7b7;
+  --grid-color: #d2d2d265;
   --menu-box-color: #7c4f79;
   --menu-box-shadow:#241322;
   --menu-input-color: #b580b4;
   --menu-button-disabled-color: #b580b4;
-  --menu-button-color: #e0c7e0;
-  --menu-text-input-color:#666;
-  --menu-text-input-placeholder-color:#686868;
-  --menu-input-shadow-inset:#554b55;
-  --menu-input-shadow-inset-focus:#413841;
+  --menu-button-color: #cda5cc;
+  --menu-text-input-color:#500946;
+  --menu-text-input-placeholder-color:#796c78;
+  --menu-input-shadow-inset:#322d32;
+  --menu-input-shadow-inset-focus:#1e1a1e;
+  --menu-accept-button-color:#2aa337;
+  --menu-accept-button-text-color:#2bdf3f;
+  --menu-decline-button-color:#bc3232;
+  --menu-decline-button-text-color:#701e1e;
+  --count-down-text-color: #c4c4c4;
 }
 
 div#theme-switch {
@@ -293,14 +304,14 @@ div#game-canvas-container{
 }
 
 .green-button {
-  color: #b1f4ad !important;
-  background-color: #37cb48 !important;
+  color: var(--menu-accept-button-text-color) !important;
+  background-color: var(--menu-accept-button-color) !important;
   transition: color 0.4s ease-in-out, background-color 0.4s ease-in-out;
 }
 
 .red-button {
-  color: #f4adad !important;
-  background-color: #cb3737 !important;
+  color: var(--menu-decline-button-text-color) !important;
+  background-color: var(--menu-decline-button-color) !important;
   transition: color 0.4s ease-in-out, background-color 0.4s ease-in-out;
 }
 @keyframes wiggle {
@@ -404,13 +415,13 @@ div#game-canvas-container{
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #37cb48;
+  background-color: var(--menu-accept-button-color);
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0.4s ease-in-out;
 }
 
 #start-progress-bar-label{
-  color: #b1f4ad;
+  color: var(--menu-accept-button-text-color);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -422,7 +433,7 @@ div#game-canvas-container{
 #last-winner{
   font-size: 7rem;
   line-height: 7rem;
-  color:#37cb48;
+  color:var(--menu-accept-button-color);
 }
 
 #room-settings-button{
@@ -458,7 +469,7 @@ div#game-canvas-container{
   width: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
-
+  color: var(--count-down-text-color);
 }
 
 .countdown-number {
