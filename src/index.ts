@@ -136,33 +136,34 @@ export function updateGameState(gameState: MessageGameplay) {
   } else {
     let currentUsernames: string[] = [];
     // Update existing snakes based on the new game state
+
+    if (gameState.p !== null) {
+      //update powerups list
+      gameState.p.forEach((powerupInfo) => {
+        switch (powerupInfo.action) {
+          case PowerupAction.REMOVE:
+            currentRoom.powerupHandler.removePowerup(
+              Powerup.fromMessagePowerup(powerupInfo, gameCanvasCtx)
+            );
+            break;
+          case PowerupAction.SPAWN:
+            currentRoom.powerupHandler.addPowerup(
+              Powerup.fromMessagePowerup(powerupInfo, gameCanvasCtx)
+            );
+            break;
+          case PowerupAction.APPLY:
+            currentRoom.powerupHandler.applyPowerup(
+              Powerup.fromMessagePowerup(powerupInfo, gameCanvasCtx), powerupInfo.player
+            );
+            break;
+        }
+      });
+    }
+
     gameState.s.forEach((newHeadData) => {
       let serverHead = newHeadData.lS;
       let username = newHeadData.u;
       let snakeToUpdate = currentRoom.players[username].snake;
-
-      if (gameState.p !== null) {
-        //update powerups list
-        gameState.p.forEach((powerupInfo) => {
-          switch (powerupInfo.action) {
-            case PowerupAction.REMOVE:
-              currentRoom.powerupHandler.removePowerup(
-                Powerup.fromMessagePowerup(powerupInfo, gameCanvasCtx)
-              );
-              break;
-            case PowerupAction.SPAWN:
-              currentRoom.powerupHandler.addPowerup(
-                Powerup.fromMessagePowerup(powerupInfo, gameCanvasCtx)
-              );
-              break;
-            case PowerupAction.APPLY:
-              currentRoom.powerupHandler.applyPowerup(
-                Powerup.fromMessagePowerup(powerupInfo, gameCanvasCtx), powerupInfo.player
-              );
-              break;
-          }
-        });
-      }
 
       //keep track of the usernames sent by the server in the data
       currentUsernames.push(username);
