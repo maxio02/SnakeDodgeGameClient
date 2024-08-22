@@ -5,7 +5,8 @@ module.exports = {
     entry: {
         game: './src/index.ts',
         login: './src/MenuManager/login.ts',
-        websocket: './src/WebSocketClient/websocket.ts'
+        websocket: './src/WebSocketClient/websocket.ts',
+        theme_switch: './src/MenuManager/themeSwitch.ts'
     },
     module: {
         rules: [

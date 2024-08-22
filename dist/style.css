@@ -53,30 +53,38 @@
 }
 
 :root[theme="light"] {
-  --theme-switch-bg: #c9c9c9;
+  --theme-switch-bg: #e0c7e0;
   --theme-switch-icon-color-moon: #00000000;
-  --theme-switch-icon-color-sun: #8f8f8f;
+  --theme-switch-icon-color-sun: #f7f0f7;
   --background-color: #ffffff;
-  --grid-color: #00000053;
+  --grid-color: #555555;
   --menu-box-color: #e0c7e0;
-  --menu-box-shadow:#7c687c;
+  --menu-box-shadow:#967e96;
   --menu-input-color:#ede0ee;
+  --menu-button-disabled-color: #ede0ee;
+  --menu-button-color: #b580b4;
   --menu-text-input-color: #999;
   --menu-text-input-placeholder-color:#c0bfc0;
+  --menu-input-shadow-inset:#a68ea6;
+  --menu-input-shadow-inset-focus:#837083;
 }
 
 
 :root[theme="dark"] {
-  --theme-switch-bg: #636374;
-  --theme-switch-icon-color-moon: #cfcfeb;
+  --theme-switch-bg: #7c4f79;
+  --theme-switch-icon-color-moon: #b580b4;
   --theme-switch-icon-color-sun: #00000000;
   --background-color: #353539;
-  --grid-color: #ffffff93;
+  --grid-color: #b7b7b7;
   --menu-box-color: #7c4f79;
   --menu-box-shadow:#241322;
   --menu-input-color: #b580b4;
-  --menu-text-input-color:#555;
+  --menu-button-disabled-color: #b580b4;
+  --menu-button-color: #e0c7e0;
+  --menu-text-input-color:#666;
   --menu-text-input-placeholder-color:#686868;
+  --menu-input-shadow-inset:#554b55;
+  --menu-input-shadow-inset-focus:#413841;
 }
 
 div#theme-switch {
@@ -89,7 +97,7 @@ div#theme-switch {
   position: absolute;
   right: 0px;
   top: 0px;
-  margin: 0.5em;
+  margin: 0.8em;
   align-items: center;
   box-shadow: 0px 0px 15px var(--menu-box-shadow);
   transition-duration: 0.4s;
@@ -121,6 +129,7 @@ html {
   width: 100%;
   height: 100%;
   background-color: var(--background-color);
+  transition: background-color 0.4s;
 }
 
 #login-screen-body{
@@ -160,7 +169,7 @@ div#game-canvas-container{
 
 
 .game-canvas-border{
-  border: 0.5rem solid #555555;
+  border: 0.5rem solid var(--grid-color);
   border-radius: 1rem;
 }
 
@@ -214,8 +223,8 @@ div#game-canvas-container{
   border-radius: 30px;
   text-align: center;
   padding: 5vh;
-  box-shadow: 0px 8px 50px var(--menu-box-shadow);
-  transition: transform 0.5s;
+  box-shadow: 0px 8px 20px var(--menu-box-shadow);
+  transition: transform 0.5s, background-color 0.4s;
 }
 
 .menu-box * {
@@ -230,14 +239,14 @@ div#game-canvas-container{
 .menu-box input{
   font-family: 'DisposableDroid BB';
   transition: background-color 0.4s, box-shadow 0.4s;
-  border: 1px none #a1a1a1;
+  border-style: none;
   /* background-color: #b580b4; */
   background-color: var(--menu-input-color);
   margin: 1rem 0 1rem 0;
   border-radius: 1rem;
   padding: 1rem;
   /* box-shadow: 0px 8px 20px #a68ea6; */
-  box-shadow: inset 0px 4px 10px #a68ea6;
+  box-shadow: inset 0px 4px 10px var(--menu-input-shadow-inset);
   color: var(--menu-text-input-color);
 }
 
@@ -245,7 +254,7 @@ div#game-canvas-container{
   outline: 0;
   /* background-color: #976294; */
   box-shadow: 0px 8px 40px #673f65;
-  box-shadow: inset 0px 4px 13px #837083;
+  box-shadow: inset 0px 4px 13px var(--menu-input-shadow-inset-focus);
 }
 
 .menu-box input::placeholder{
@@ -263,7 +272,7 @@ div#game-canvas-container{
   
   padding: 1rem;
   border-radius: 1rem;
-  background-color: #b580b4;
+  background-color: var(--menu-button-color);
   border-color: #00000000;
   margin: 1rem 0 1rem 0;
 }
@@ -278,7 +287,7 @@ div#game-canvas-container{
 }
 
 .menu-box button:disabled{
-  background-color: #ede0ee;
+  background-color: var(--menu-button-disabled-color);
   color: #cda5cc;
   cursor:auto;
 }

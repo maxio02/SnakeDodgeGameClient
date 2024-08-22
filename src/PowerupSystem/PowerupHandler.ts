@@ -130,7 +130,7 @@ export default class PowerupHandler {
     );
     this._gameCanvasDiv.style.borderColor = isPortal
       ? "#34c6dc"
-      : "#555555";
+      : "var(--grid-color)"
   }
 
   public reset(){

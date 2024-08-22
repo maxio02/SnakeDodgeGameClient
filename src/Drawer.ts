@@ -9,7 +9,7 @@ export function drawGrid() {
 
 
     backgroundCanvasCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
-    backgroundCanvasCtx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+    backgroundCanvasCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid-color');
     backgroundCanvasCtx.lineWidth = 2;
     for (let x = gridSize * scaleX; x < backgroundCanvas.width; x += gridSize * scaleX) {
         backgroundCanvasCtx.beginPath();
@@ -97,3 +97,7 @@ export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vecto
         ctx.closePath();
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("theme-switch").addEventListener('click', drawGrid);
+});

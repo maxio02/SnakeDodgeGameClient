@@ -4,7 +4,6 @@ import { drawGrid } from "./Drawer";
 import InputManager from "./InputManager";
 import LineSegment from "./LineSegment";
 import Snake from "./Snake";
-import CircularEmitter from "./ParticleSystem/CircularEmitter";
 import {
   ExistingArcSegmentMessage,
   ExistingLineSegmentMessage,
@@ -14,7 +13,6 @@ import {
   PowerupAction,
 } from "./WebSocketClient/messageTypes";
 import { currentPlayer, currentRoom } from "./MenuManager/login";
-import PowerupHandler from "./PowerupSystem/PowerupHandler";
 import Powerup from "./PowerupSystem/powerup";
 import { animateCountdown } from "./MenuManager/countdown";
 const gameDiv = document.getElementById(
@@ -25,8 +23,10 @@ fpsCounter.style.position = "absolute";
 fpsCounter.style.top = "10px";
 fpsCounter.style.left = "10px";
 fpsCounter.style.color = "black";
-let prevGameDivAngle = 0;
 document.body.appendChild(fpsCounter);
+
+let prevGameDivAngle = 0;
+
 export var fps = 60;
 
 export var gameCanvas = document.getElementById(
@@ -81,6 +81,7 @@ function calculateFPS() {
 }
 
 window.addEventListener("resize", updateCanvasSize);
+
 drawGrid();
 
 function getClosestAngle(currentAngle: number, targetAngle: number) {

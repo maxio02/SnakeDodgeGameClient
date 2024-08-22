@@ -1,10 +1,12 @@
 import { updateCanvasSize } from "..";
+import { drawGrid } from "../Drawer";
 import { Player } from "../Models/Player";
 import { GameState, Room, joinResult } from "../Models/Room";
 import PowerupHandler from "../PowerupSystem/PowerupHandler";
 import { GameStateData, MessagePlayer, MessageRoom, RoomSettings } from "../WebSocketClient/messageTypes";
 import { createRoom, joinRoom, sendSettings, sendStartCommand, setPlayerData } from "../WebSocketClient/websocket";
 import { resetCountDown } from "./countdown";
+import { switchTheme} from './themeSwitch';
 
 
 export let currentRoom: Room | null = null;
@@ -338,6 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateButton();
     usernameInput.addEventListener("keydown", triggerActionOnEnter);
     roomCodeInput.addEventListener("keydown", triggerActionOnEnter);
+    
     if (!navigator.userAgent.toLowerCase().includes('firefox')) {
         colorPicker.onblur = function () {
           changeColorPickerLabelState(true);
