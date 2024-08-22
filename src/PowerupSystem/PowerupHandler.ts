@@ -99,7 +99,8 @@ export default class PowerupHandler {
 
         this._cameraLockTimeoutId = setTimeout(() => {
           this._cameraLock = false;
-          document.getElementById('game-canvas-container').style.transform = `scale(1) rotate(0rad) translate(0px, 0px)`;
+          document.getElementById('game-canvas-container').style.transform = `scale(1) translate(0px, 0px)`;
+          document.getElementById('game-canvas-container').style.rotate = '0rad';
           setTimeout(() => {
           updateCanvasSize();
           }, 200);
