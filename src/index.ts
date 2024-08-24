@@ -64,12 +64,14 @@ function animate() {
   }
   gameCanvasCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
+  currentRoom.powerupHandler.drawZones();
+
   Object.values(currentRoom.players).forEach((player) => {
     player.snake.draw();
     player.snake.updateEmitter((performance.now() / 10 - lastTime) / 15);
   });
 
-  currentRoom.powerupHandler.draw();
+  currentRoom.powerupHandler.drawPowerUps();
 }
 var frameCount = 0;
 var lastTime = performance.now() / 10;

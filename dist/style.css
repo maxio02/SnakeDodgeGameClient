@@ -72,7 +72,8 @@
   --menu-decline-button-color:#cb3737;
   --menu-decline-button-text-color:#f4adad;
   --count-down-text-color: #000000;
-
+  --powerup-color-confusion: #8929b21b;
+  --powerup-color-bomb: #ffae0047;
 }
 
 
@@ -96,6 +97,8 @@
   --menu-decline-button-color:#bc3232;
   --menu-decline-button-text-color:#701e1e;
   --count-down-text-color: #c4c4c4;
+  --powerup-color-confusion: #fc9cff42;
+  --powerup-color-bomb: #ffc42042;
 }
 
 div#theme-switch {
@@ -235,7 +238,7 @@ div#game-canvas-container{
   text-align: center;
   padding: 5vh;
   box-shadow: 0px 8px 20px var(--menu-box-shadow);
-  transition: transform 0.5s, background-color 0.4s;
+  transition: transform 0.5s cubic-bezier(.44,0,.18,.99), background-color 0.4s;
 }
 
 .menu-box * {

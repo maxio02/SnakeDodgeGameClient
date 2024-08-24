@@ -18,7 +18,7 @@ function initWebSocket() {
     socket.binaryType = 'arraybuffer';
     socket.onmessage = (event) => {
         const JSONdata = JSON.parse(inflate(event.data as Uint8Array, {to: "string"}));
-        console.log('Message from server:', JSONdata);
+        // console.log('Message from server:', JSONdata);
         
         switch (JSONdata.type) {
             case 'JOINED_ROOM':

@@ -66,7 +66,7 @@ export default class CircularEmitter extends Emitter{
             this._canvasCtx.moveTo(this.position.x * scaleX, this.position.y * scaleY);
             this._canvasCtx.fillStyle = `rgba(${color.r},${color.g},${color.b}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;
             this._canvasCtx.beginPath();
-            this._canvasCtx.arc(this.position.x * scaleX, this.position.y * scaleY, this._emitterRadius, 0, 2 * Math.PI);
+            this._canvasCtx.arc(this.position.x * scaleX, this.position.y * scaleY, this._emitterRadius * Math.min(scaleX, scaleY), 0, 2 * Math.PI);
             this._canvasCtx.fill();
             this._canvasCtx.closePath();
         }
@@ -76,8 +76,16 @@ export default class CircularEmitter extends Emitter{
         });
     }
 
+    get emitTime() {
+        return this._remainingEmitTimeMillis + this._particleMaxAge;
+    }
+
     set emitTime(newEmitTime: number) {
         this._remainingEmitTimeMillis = newEmitTime;
+    }
+
+    set radius(newRadius: number) {
+        this._emitterRadius = newRadius;
     }
 
 }

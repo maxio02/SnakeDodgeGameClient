@@ -7,9 +7,12 @@ import { updateCanvasSize } from '../index';
 import { drawGrid } from "../Drawer";
 import { Player } from "../Models/Player";
 import { currentPlayer, currentRoom } from "../MenuManager/login";
+import Zone from "./Zone";
+import * as seedrandom from "seedrandom";
 
 export default class PowerupHandler {
   private _powerups: { [key: number]: Powerup } = {};
+  private _effectZones: {[key: number]: Zone} = {};
   private _wallEmitters: RectangularEmitter[] = [];
   private _portalWalls = false;
   private _cameraLock = false;
@@ -105,23 +108,61 @@ export default class PowerupHandler {
           updateCanvasSize();
           }, 200);
         }, powerup.duration);
+        break;
+      case PowerupType.Confusion:
+        this.generateZones(powerup, 3);
+        break;
+      case PowerupType.Bomb:
+        this.generateZones(powerup, 3);
+        break;
+
     }
     this.removePowerup(powerup);
   }
 
-  private generateZones(type: PowerupType, amount: number){
-    
+  private generateZones(powerup: Powerup, amount: number){
+    let currentNumberOfZones = Object.values(this._effectZones).length;
+    const rng = seedrandom(`${powerup.id}`);
+    //TODO this radius should be changablej
+    const radius = 200;
+    for(let i = 0; i < amount; i++){
+      setTimeout(() => {
+        const position = new Vector(Math.floor(rng() * (currentRoom.settings.arenaSize - 2*radius)) + radius, Math.floor(rng() * (currentRoom.settings.arenaSize - 2*radius)) + radius);
+        //TODO this will break in the future [currentNumberOfZones + i]
+        this._effectZones[currentNumberOfZones + i] = new Zone(position, gameCanvasCtx, radius, powerup.type);
+        // console.log(this._effectZones[currentNumberOfZones + i].position);
+      }, 300 * i);
+        
+    }
   }
 
-  public draw() {
+  public drawPowerUps() {
     Object.values(this._powerups).forEach((powerup) => {
       powerup.draw();
     });
+
     this._wallEmitters.forEach((emitter) => {
       emitter.tick(1);
       emitter.draw();
     });
   }
+
+  public drawZones() {
+    Object.values(this._effectZones).forEach((zone) => {
+      zone.draw();
+    });
+
+    // Object.values(this._zones).filter(zone => zone.emitter.emitTime < 0);
+
+    Object.keys(this._effectZones).forEach((key) => {
+      const zone = this._effectZones[Number(key)];
+      if (zone.emitter.emitTime < 0) {
+        delete this._effectZones[Number(key)];
+      }
+    });
+    // console.log(this._effectZones);
+  }
+
 
   private setWallState(isPortal: boolean) {
     this._portalWalls = isPortal;
@@ -135,6 +176,7 @@ export default class PowerupHandler {
 
   public reset(){
     this._powerups = {};
+    this._effectZones = {};
     clearTimeout(this._cameraLockTimeoutId);
     this._cameraLock = false;
     document.getElementById('game-canvas-container').style.transform = null;

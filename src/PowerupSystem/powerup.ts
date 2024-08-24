@@ -7,18 +7,20 @@ import { currentRoom } from "../MenuManager/login";
 export enum PowerupType {
   SpeedUp,
   SpeedDown,
-  // Bomb,
+  Bomb,
   // FlipButtons,
   Invisibility,
   PortalWalls,
   CameraLockToPlayer,
+  Confusion
 }
 
 const SVG_PATHS: { [key in PowerupType]: string } = {
   [PowerupType.SpeedUp]: "../assets/powerups/speedup.svg",
   [PowerupType.SpeedDown]: "../assets/powerups/speeddown.svg",
-  // [PowerupType.Bomb]: "../assets/powerups/bomb.svg",
+  [PowerupType.Bomb]: "../assets/powerups/bomb.svg",
   // [PowerupType.FlipButtons]: "../assets/powerups/flipbuttons.svg",
+  [PowerupType.Confusion]: "../assets/powerups/confusion.svg",
   [PowerupType.Invisibility]: "../assets/powerups/invisibility.svg",
   [PowerupType.PortalWalls]: "../assets/powerups/portalwalls.svg",
   [PowerupType.CameraLockToPlayer]: "../assets/powerups/temp.svg",

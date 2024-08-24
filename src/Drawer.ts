@@ -99,5 +99,8 @@ export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vecto
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById("theme-switch").addEventListener('click', drawGrid);
+    const themeSwitch = document.getElementById("theme-switch");
+    if(themeSwitch){
+        themeSwitch.addEventListener('click', drawGrid);
+    }
 });
