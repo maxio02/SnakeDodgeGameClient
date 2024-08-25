@@ -1,3 +1,4 @@
+import { TinyColor } from '@ctrl/tinycolor';
 import { updateCanvasSize } from "..";
 import { drawGrid } from "../Drawer";
 import { Player } from "../Models/Player";
@@ -92,12 +93,12 @@ export function showRoomView(roomInfo: MessageRoom) {
     let players: { [key: string]: Player } = {};
     Object.keys(roomInfo.players).forEach(username => {
         let playerData = roomInfo.players[username];
-        players[username] = new Player(username, playerData.isReady, playerData.color);
+        players[username] = new Player(username, playerData.isReady, new TinyColor(playerData.color));
     });
 
 
     currentRoom = new Room(roomInfo.code,
-        new Player(roomInfo.host.username, roomInfo.host.isReady, roomInfo.host.color),
+        new Player(roomInfo.host.username, roomInfo.host.isReady, new TinyColor(roomInfo.host.color)),
         roomInfo.settings,
         players);
 
@@ -109,8 +110,8 @@ export function showRoomView(roomInfo: MessageRoom) {
     }
 
     //set a random color for a player
-    colorPickerDiv.style.backgroundColor = currentPlayer.color;
-    colorPicker.value = currentPlayer.color;
+    colorPickerDiv.style.backgroundColor = currentPlayer.color.toString();
+    colorPicker.value = currentPlayer.color.toString();
     let colorPickerLabel = document.getElementById('color-label');
     colorPickerLabel.style.color = pickTextColorBasedOnBgColorAdvanced(colorPicker.value, '#FFFFFF', '#000000');
 
@@ -132,9 +133,9 @@ export function updateRoomList(roomInfo: MessageRoom) {
 
         Object.keys(roomInfo.players).forEach(username => {
             if (currentRoom.players[username] == undefined) {
-                currentRoom.addPlayer(new Player(username, false, roomInfo.players[username].color));
+                currentRoom.addPlayer(new Player(username, false, new TinyColor(roomInfo.players[username].color)));
             } else {
-                currentRoom.players[username].color = roomInfo.players[username].color;
+                currentRoom.players[username].color = new TinyColor(roomInfo.players[username].color);
                 currentRoom.players[username].isReady = roomInfo.players[username].isReady;
             }
         })
@@ -146,23 +147,23 @@ export function updateRoomList(roomInfo: MessageRoom) {
         }
     });
         
-    currentRoom.host = new Player(roomInfo.host.username, roomInfo.host.isReady, roomInfo.host.color);
+    currentRoom.host = new Player(roomInfo.host.username, roomInfo.host.isReady, new TinyColor(roomInfo.host.color));
     currentRoom.maxSize = roomInfo.settings.roomSize;
 
     
     playerCount.innerHTML = `${Object.keys(currentRoom.players).length}/${currentRoom.maxSize}`;
     roomUsersList.innerHTML = '';
 
-    Object.values(currentRoom.players).forEach((player: { username: string | number; isReady: boolean; color: string; }) => {
+    Object.values(currentRoom.players).forEach((player: { username: string | number; isReady: boolean; color: TinyColor; }) => {
         const playerItem = document.createElement('li');
 
         playerItem.textContent = player.username + '';
 
         if (player.username === currentRoom.host.username) {
-            playerItem.insertAdjacentHTML('afterbegin', `<i class="fa-solid fa-crown" style="color: ${player.color};"></i>`)
+            playerItem.insertAdjacentHTML('afterbegin', `<i class="fa-solid fa-crown" style="color: ${player.color.toString()};"></i>`)
 
         } else {
-            playerItem.insertAdjacentHTML('afterbegin', `<i class="fa-solid fa-circle" style="color: ${player.color}; margin-left: 4px"></i>`)
+            playerItem.insertAdjacentHTML('afterbegin', `<i class="fa-solid fa-circle" style="color: ${player.color.toString()}; margin-left: 4px"></i>`)
         }
 
         if (player.isReady) {
@@ -255,7 +256,7 @@ export function changeColorPickerLabelState(enable: boolean) {
 }
 
 export function updatePlayerColor() {
-    currentPlayer.color = colorPicker.value;
+    currentPlayer.color = new TinyColor(colorPicker.value);
     colorPickerLabel.style.color = pickTextColorBasedOnBgColorAdvanced(colorPicker.value, '#FFFFFF', '#000000');
     changeColorPickerLabelState(true);
     setPlayerData(currentPlayer);

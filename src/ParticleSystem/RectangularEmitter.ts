@@ -1,6 +1,6 @@
 import { Vector } from "vector2d";
 import Particle, { shape } from "./Particle";
-import { getBiasedRandomDirection, getPositionInCircle, getPositionInRectangle, getRandomDirection, hexToRgb, hexToRgbA } from './ParticleSystemUtils';
+import { getBiasedRandomDirection, getPositionInCircle, getPositionInRectangle, getRandomDirection} from './ParticleSystemUtils';
 import Emitter, { EmitterOptions } from "./Emitter";
 import { currentRoom } from "../MenuManager/login";
 
@@ -36,7 +36,7 @@ export default class RectangleEmitter extends Emitter{
                     this._particleSize * scaleY,
                     this._speed,
                     this._particleShape,
-                    { ...hexToRgbA(this._color)},
+                    this._color,
                     this._canvasCtx,
                     this._particleMaxAge,
                     this._doFadeColor,
@@ -62,11 +62,12 @@ export default class RectangleEmitter extends Emitter{
         if ((this._remainingEmitTimeMillis + this._particleMaxAge) < 0) return;
 
         if (this._drawEmitterZone === true) {
+            let color = this._color.toRgb()
             const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
             const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
             
             this._canvasCtx.moveTo((this.position.x - this._width/2) * scaleX, (this.position.y - this._height/2) * scaleY);
-            this._canvasCtx.fillStyle = `rgba(${hexToRgb(this._color)}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;
+            this._canvasCtx.fillStyle = `rgba(${color.r},${color.g},${color.b}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;
             this._canvasCtx.beginPath();
             this._canvasCtx.rect(this.position.x - this._width/2, this.position.y - this._height/2, this._width, this._height);
             this._canvasCtx.fill();

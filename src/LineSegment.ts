@@ -1,7 +1,7 @@
 import { Vector } from "vector2d";
 import Segment from "./Segment";
 import { currentRoom } from "./MenuManager/login";
-
+import { TinyColor } from '@ctrl/tinycolor';
 export default class LineSegment extends Segment {
 
     public startPoint: Vector;
@@ -18,12 +18,12 @@ export default class LineSegment extends Segment {
 
     }
 
-    draw(context: CanvasRenderingContext2D, color: string): void {
+    draw(context: CanvasRenderingContext2D, color: TinyColor): void {
         const scaleX = context.canvas.width / currentRoom.settings.arenaSize;
         const scaleY = context.canvas.height / currentRoom.settings.arenaSize;
 
         context.lineCap = "round";
-        context.strokeStyle = color;
+        context.strokeStyle = color.toString();
         if (this.isCollidable === true) {
             context.beginPath();
             context.moveTo(this.startPoint.x * scaleX, this.startPoint.y * scaleY);

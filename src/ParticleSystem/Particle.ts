@@ -1,6 +1,6 @@
 import { Vector } from "vector2d";
-import { getRgbColor } from './ParticleSystemUtils';
 import { currentRoom } from "../MenuManager/login";
+import { TinyColor } from '@ctrl/tinycolor';
 export type shape = 'circle' | 'square';
 
 export default class Particle {
@@ -9,7 +9,7 @@ export default class Particle {
     private _shape: shape;
     private _size: number;
     private _speed: number;
-    private _color: { r: number, g: number, b: number, a: number };
+    private _color: TinyColor;
     private _fadeColor: boolean;
     private _fadeSize: boolean;
     private _fadeDirection: 'normal' | 'reverse';
@@ -21,21 +21,22 @@ export default class Particle {
 
 
 
-    public constructor(position: Vector, velocity: Vector, size: number, speed: number, shape: shape = 'circle', color: { r: number, g: number, b: number, a: number }, canvasCtx: CanvasRenderingContext2D, age: number, fadeColor?: boolean, fadeSize?: boolean, fadeDirection?: 'normal' | 'reverse') {
+    public constructor(position: Vector, velocity: Vector, size: number, speed: number, shape: shape = 'circle', color: TinyColor, canvasCtx: CanvasRenderingContext2D, age: number, fadeColor?: boolean, fadeSize?: boolean, fadeDirection?: 'normal' | 'reverse') {
         this._position = position;
         this._velocity = velocity;
         this._age = age;
-        this._colorFadeAmount = color.a / this._age;
-        this._sizeFadeAmount = size / this._age;
-
+        this._color = color.clone();
         if (fadeDirection === 'reverse') {
             this._size = 0;
-            this._color = { ...getRgbColor(color), a: 0 };
+            this._color.setAlpha(0);
         } else {
             this._size = size;
-            this._color = color;
         }
 
+        this._colorFadeAmount = color.getAlpha() / this._age;
+        this._sizeFadeAmount = size / this._age;
+
+        
         this._speed = speed;
         this._shape = shape;
 
@@ -52,9 +53,9 @@ export default class Particle {
         this._position.add(this._velocity.clone().multiplyByScalar(dt * this._speed));
         if (this._fadeColor) {
             if (this._fadeDirection === 'normal') {
-                this._color.a -= this._colorFadeAmount;
+                this._color.setAlpha(this._color.getAlpha() - this._colorFadeAmount);
             } else {
-                this._color.a += this._colorFadeAmount;
+                this._color.setAlpha(this._color.getAlpha() + this._colorFadeAmount);
             }
         }
         if (this._fadeSize) {
@@ -74,7 +75,7 @@ export default class Particle {
 
 
         this._canvasCtx.moveTo(this._position.x * scaleX, this._position.y * scaleY);
-        this._canvasCtx.fillStyle = `rgba(${this._color.r},${this._color.g}, ${this._color.b}, ${this._color.a})`;
+        this._canvasCtx.fillStyle = this._color.toRgbString();
         this._canvasCtx.beginPath();
         switch (this._shape) {
             case 'circle':

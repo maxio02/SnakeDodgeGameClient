@@ -1,8 +1,8 @@
 import { Vector } from "vector2d";
 import CircularEmitter from "../ParticleSystem/CircularEmitter";
-import { hexToRgb } from "../ParticleSystem/ParticleSystemUtils";
 import { MessagePowerup } from "../WebSocketClient/messageTypes";
 import { currentRoom } from "../MenuManager/login";
+import { TinyColor } from '@ctrl/tinycolor';
 
 export enum PowerupType {
   SpeedUp,
@@ -30,7 +30,7 @@ export default class Powerup {
   private _id: number;
   private _position: Vector;
   private _canvasCtx: CanvasRenderingContext2D;
-  private _color: string;
+  private _color: TinyColor;
   private _radius: number = 30;
   private _type: PowerupType;
   private _img: HTMLImageElement;
@@ -41,7 +41,7 @@ export default class Powerup {
     id: number,
     position: Vector,
     canvasCtx: CanvasRenderingContext2D,
-    color: string,
+    color: TinyColor,
     type: PowerupType,
     duration: number
   ) {
@@ -79,7 +79,7 @@ export default class Powerup {
       this._position.x * scaleX,
       this._position.y * scaleY
     );
-    this._canvasCtx.fillStyle = this._color;
+    this._canvasCtx.fillStyle = this._color.toString()
     this._canvasCtx.beginPath();
     this._canvasCtx.arc(
       this._position.x * scaleX,
@@ -138,7 +138,7 @@ export default class Powerup {
     return this._type;
   }
 
-  public get color(): string {
+  public get color(): TinyColor {
     return this._color;
   }
 
@@ -150,7 +150,7 @@ export default class Powerup {
     return {
       id: this._id,
       position: { x: this.position.x, y: this.position.y },
-      color: this._color,
+      color: this._color.toString(),
       type: this._type,
       radius: this._radius,
       duration: this._duration
@@ -165,7 +165,7 @@ export default class Powerup {
       json.powerup.id,
       new Vector(json.powerup.position.x, json.powerup.position.y),
       canvasCtx,
-      json.powerup.color,
+      new TinyColor(json.powerup.color),
       json.powerup.type,
       json.powerup.duration
     );

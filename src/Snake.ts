@@ -3,13 +3,13 @@ import ArcSegment from "./ArcSegment";
 import LineSegment from "./LineSegment";
 import Segment from "./Segment";
 import CircularEmitter from "./ParticleSystem/CircularEmitter";
-import { hexToRgb } from "./ParticleSystem/ParticleSystemUtils";
 import { drawArrow } from "./Drawer";
 import { currentRoom } from "./MenuManager/login";
+import { TinyColor } from '@ctrl/tinycolor';
 
 export default class Snake {
   public segments: Segment[] = [];
-  private _color: string;
+  private _color: TinyColor;
   public isAlive: boolean = true;
   public turnRadius: number = 60;
   private _emitter: CircularEmitter | null = null;
@@ -17,7 +17,7 @@ export default class Snake {
 
   constructor(
     startPos: LineSegment,
-    color: string,
+    color: TinyColor,
     canvasCtx: CanvasRenderingContext2D
   ) {
     this.addSegment(startPos);

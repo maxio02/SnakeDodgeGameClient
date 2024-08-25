@@ -9,6 +9,7 @@ import { Player } from "../Models/Player";
 import { currentPlayer, currentRoom } from "../MenuManager/login";
 import Zone from "./Zone";
 import * as seedrandom from "seedrandom";
+import { TinyColor } from '@ctrl/tinycolor';
 
 export default class PowerupHandler {
   private _powerups: { [key: number]: Powerup } = {};
@@ -52,7 +53,7 @@ export default class PowerupHandler {
           gameCanvasCtx,
           {
             particleShape: "square",
-            color: "#59eeebff",
+            color: new TinyColor("#59eeebff"),
             emitTimeMillis: 0,
             emitDirection: directions[i],
             spreadAngle: Math.PI / 6,

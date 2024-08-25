@@ -1,15 +1,33 @@
+import { TinyColor, random } from '@ctrl/tinycolor';
 import Snake from "../Snake";
 
 export class Player {
   private _username: string;
   public isReady: boolean;
-  public color: string;
+  public color: TinyColor;
   public snake: Snake | null;
 
-  constructor(username: string, isReady: boolean = false, color?: string) {
+  constructor(username: string, isReady: boolean = false, color?: TinyColor) {
     this._username = username;
     this.isReady = isReady;
-    this.color = color || "#000000".replace(/0/g, function () { return (~~(Math.random() * 16)).toString(16); });
+    if(color){
+      if (! color.isValid){
+        this.color = random({
+          luminosity: 'random',
+          hue: 'random',
+        });
+      }
+      else {
+        this.color = color;
+      }
+    }
+    else {
+      this.color = random({
+        luminosity: 'random',
+        hue: 'random',
+      });
+    }
+    
     this.snake = null;
   }
 
@@ -17,7 +35,7 @@ export class Player {
     return {
       username: this.username,
       isReady: this.isReady,
-      color: this.color
+      color: this.color.toString()
     };
   }
 

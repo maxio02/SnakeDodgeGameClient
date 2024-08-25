@@ -1,5 +1,6 @@
 import { Vector } from "vector2d";
 import Particle, { shape } from "./Particle";
+import { TinyColor } from '@ctrl/tinycolor';
 
 export interface EmitterOptions {
     emitInterval?: number;
@@ -7,7 +8,7 @@ export interface EmitterOptions {
     particleSize?: number;
     speed?: number;
     particleShape?: shape;
-    color?: string;
+    color?: TinyColor;
     doFadeColor?: boolean;
     doFadeSize?: boolean;
     fadeDirection?: 'normal' | 'reverse';
@@ -30,7 +31,7 @@ export default abstract class Emitter{
     protected _particleShape: shape;
     protected _particleSize: number;
     protected _speed: number;
-    protected _color: string;
+    protected _color: TinyColor;
     protected _doFadeColor: boolean;
     protected _fadeDirection: 'normal' | 'reverse';
     protected _doFadeSize: boolean;
@@ -51,7 +52,7 @@ export default abstract class Emitter{
             particleSize = 10,
             speed = 2,
             particleShape = 'circle',
-            color = '#ffffffff',
+            color = new TinyColor('#ffffffff'),
             doFadeColor = true,
             doFadeSize = true,
             fadeDirection = 'normal',

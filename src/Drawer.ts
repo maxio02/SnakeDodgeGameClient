@@ -1,6 +1,7 @@
 import { Vector } from "vector2d";
 import { backgroundCanvas, backgroundCanvasCtx, gridSize } from "./index";
 import { currentRoom } from "./MenuManager/login";
+import { TinyColor } from '@ctrl/tinycolor';
 
 export function drawGrid() {
 
@@ -57,7 +58,7 @@ export function drawArc(dotX: number, dotY: number, radius: number, startAngle: 
 
 
 
-export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vector, color: string, width: number) {
+export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vector, color: TinyColor, width: number) {
     if (from.x != to.x && from.y != to.y) {
         let angle = Math.atan2(to.y - from.y, to.x - from.x);
         let headLength = 10;
@@ -72,7 +73,7 @@ export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vecto
         ctx.beginPath();
         ctx.moveTo(from.x, from.y);
         ctx.lineTo(new_to.x, new_to.y);
-        ctx.strokeStyle = color;
+        ctx.strokeStyle = color.toString();
         ctx.lineWidth = width;
         ctx.stroke();
 
@@ -89,10 +90,10 @@ export function drawArrow(ctx: CanvasRenderingContext2D, from: Vector, to: Vecto
         ctx.lineTo(new_to.x - headLength * Math.cos(angle - Math.PI / 7), new_to.y - headLength * Math.sin(angle - Math.PI / 7));
 
         //draws the paths created above
-        ctx.strokeStyle = color;
+        ctx.strokeStyle = color.toString();
         ctx.lineWidth = width;
         ctx.stroke();
-        ctx.fillStyle = color;
+        ctx.fillStyle = color.toString();
         ctx.fill();
         ctx.closePath();
     }

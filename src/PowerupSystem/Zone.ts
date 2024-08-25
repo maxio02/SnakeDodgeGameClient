@@ -2,6 +2,7 @@ import { Vector } from 'vector2d';
 import { PowerupType } from './powerup';
 import Emitter from '../ParticleSystem/Emitter';
 import CircularEmitter from '../ParticleSystem/CircularEmitter';
+import { TinyColor } from '@ctrl/tinycolor';
 export default class Zone {
     public position: Vector;
     private _currentRadius: number;
@@ -9,7 +10,7 @@ export default class Zone {
     private _type: PowerupType;
     private _canvasCtx: CanvasRenderingContext2D;
     private _emitter: CircularEmitter;
-    private _color: string;
+    private _color: TinyColor;
     private _growSpeed: number;
 
     private _animationProgress: number;
@@ -34,7 +35,7 @@ export default class Zone {
         let emitTime = 0;
         switch (type) {
             case PowerupType.Bomb:
-                this._color = getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-bomb');
+                this._color = new TinyColor(getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-bomb'));
                 emitOnEdge = true;
                 spawnAnimationDuration = 3;
                 spawnAmount = 4;
@@ -42,13 +43,14 @@ export default class Zone {
                 emitTime = 3000;
                 break;
             case PowerupType.Confusion:
-                this._color = getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-confusion');
+                this._color = new TinyColor(getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-confusion'));
                 emitOnEdge = false;
                 spawnAnimationDuration = 0.5;
                 spawnAmount = 2;
                 particleAge = 70;
                 emitTime = 10000;
                 break;
+
             default:
                 console.log("this should never happen!")
                 break;

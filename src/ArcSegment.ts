@@ -3,6 +3,7 @@ import * as Vec2D from 'vector2d';
 import Segment from "./Segment";
 import { gameCanvasCtx } from "./index";
 import { currentRoom } from "./MenuManager/login";
+import { TinyColor } from '@ctrl/tinycolor';
 
 export default class ArcSegment extends Segment {
 
@@ -26,12 +27,12 @@ export default class ArcSegment extends Segment {
     }
 
 
-    draw(context: CanvasRenderingContext2D, color: string): void {
+    draw(context: CanvasRenderingContext2D, color: TinyColor): void {
         const scaleX = context.canvas.width / currentRoom.settings.arenaSize;
         const scaleY = context.canvas.height / currentRoom.settings.arenaSize;
 
         context.lineCap = "round";
-        context.strokeStyle = color;
+        context.strokeStyle = color.toString();
         if (this.isCollidable === true) {
             context.beginPath();
             context.arc(this.center.x * scaleX, this.center.y * scaleY, this.radius * Math.min(scaleX, scaleY), this.startAngle, this.endAngle, this._counterClockwise);
@@ -40,13 +41,13 @@ export default class ArcSegment extends Segment {
         }
     }
 
-    drawDebug(context: CanvasRenderingContext2D, color: string): void {
+    drawDebug(context: CanvasRenderingContext2D, color: TinyColor): void {
         let tangent_angle = this._counterClockwise ? - Math.PI : Math.PI;
 
         tangent_angle += this.endAngle;
         context.lineCap = "round";
         drawDot(this.center.x, this.center.y, 5, '#000000');
-        drawArrow(context, new Vec2D.Vector(this.endPoint.x, this.endPoint.y), new Vec2D.Vector(this.endPoint.x + this.radius * Math.cos(tangent_angle), this.endPoint.y + this.radius * Math.sin(tangent_angle)), '#bbbbbb', 12);
+        drawArrow(context, new Vec2D.Vector(this.endPoint.x, this.endPoint.y), new Vec2D.Vector(this.endPoint.x + this.radius * Math.cos(tangent_angle), this.endPoint.y + this.radius * Math.sin(tangent_angle)), new TinyColor('#bbbbbb'), 12);
         drawArc(this.center.x, this.center.y, this.radius, 0, 0, false);
 
     }
