@@ -6,7 +6,7 @@ import { updateCanvasSize } from '../index';
 import { drawGrid } from "../Drawer";
 import { Player } from "../Models/Player";
 import { currentPlayer, currentRoom } from "../MenuManager/login";
-import Zone from "./Zone";
+import Zone, { EaseFunction, ZoneType } from "./Zone";
 import * as seedrandom from "seedrandom";
 import { TinyColor } from '@ctrl/tinycolor';
 
@@ -49,6 +49,7 @@ export default class PowerupHandler {
           sizes[i].x,
           sizes[i].y,
           positions[i],
+          0,
           gameCanvasCtx,
           {
             particleShape: "square",
@@ -121,15 +122,28 @@ export default class PowerupHandler {
   }
 
   private generateZones(powerup: Powerup, amount: number){
-    let currentNumberOfZones = Object.values(this._effectZones).length;
     const rng = seedrandom(`${powerup.id}`);
-    //TODO this radius should be changablej
-    const radius = 200;
+    //TODO this radius should be changable
+    let radius = 0
+    let zoneType: ZoneType;
+    let easeFunction: EaseFunction;
+    switch(powerup.type){
+      case PowerupType.Bomb:
+        radius = 100;
+        zoneType = ZoneType.BombShadow;
+        easeFunction = EaseFunction.linear;
+      break;
+      case PowerupType.Confusion:
+        radius = 200;
+        zoneType = ZoneType.Confusion;
+        easeFunction = EaseFunction.easeOutCubic
+        break;
+    }
     for(let i = 0; i < amount; i++){
       setTimeout(() => {
         const position = new Vector(Math.floor(rng() * (currentRoom.settings.arenaSize - 2*radius)) + radius, Math.floor(rng() * (currentRoom.settings.arenaSize - 2*radius)) + radius);
-        //TODO this will break in the future [currentNumberOfZones + i]
-        this._effectZones[currentNumberOfZones + i] = new Zone(position, gameCanvasCtx, radius, powerup.type);
+        //TODO this this dumb random id, that can overlap
+        this._effectZones[Math.floor(Math.random() * 1000000)] = new Zone(position, gameCanvasCtx, radius, zoneType, easeFunction);
         // console.log(this._effectZones[currentNumberOfZones + i].position);
       }, 300 * i);
         
@@ -157,6 +171,9 @@ export default class PowerupHandler {
     Object.keys(this._effectZones).forEach((key) => {
       const zone = this._effectZones[Number(key)];
       if (zone.emitter.emitTime < 0) {
+        if(zone.type === ZoneType.BombShadow){
+          this._effectZones[Math.floor(Math.random() * 1000000)] = new Zone(zone.position, gameCanvasCtx, 200, ZoneType.Bomb, EaseFunction.easeOutCubic);
+        }
         delete this._effectZones[Number(key)];
       }
     });

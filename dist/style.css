@@ -74,6 +74,7 @@
   --count-down-text-color: #000000;
   --powerup-color-confusion: #8929b21b;
   --powerup-color-bomb: #ffae0047;
+  --powerup-color-bomb-shadow: #36363647;
 }
 
 
@@ -99,6 +100,7 @@
   --count-down-text-color: #c4c4c4;
   --powerup-color-confusion: #fc9cff42;
   --powerup-color-bomb: #ffc42042;
+  --powerup-color-bomb-shadow: #b5b5b547;
 }
 
 div#theme-switch {

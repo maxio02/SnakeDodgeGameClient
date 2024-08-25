@@ -2,22 +2,36 @@ import { Vector } from 'vector2d';
 import { PowerupType } from './powerup';
 import CircularEmitter from '../ParticleSystem/CircularEmitter';
 import { TinyColor } from '@ctrl/tinycolor';
+
+export enum ZoneType {
+    Bomb,
+    BombShadow,
+    Confusion
+  }
+
+export enum EaseFunction {
+    easeOutQuint,
+    easeOutCubic,
+    linear
+}
 export default class Zone {
     public position: Vector;
     private _currentRadius: number;
     private _maxRadius: number;
-    private _type: PowerupType;
+    public type: ZoneType;
     private _canvasCtx: CanvasRenderingContext2D;
     private _emitter: CircularEmitter;
     private _color: TinyColor;
     private _growSpeed: number;
+    private _easeFunction: EaseFunction;
 
     private _animationProgress: number;
     constructor(
         position: Vector,
         canvasCtx: CanvasRenderingContext2D,
         radius: number,
-        type: PowerupType
+        type: ZoneType,
+        easeFunction : EaseFunction = EaseFunction.linear
         ){
 
         
@@ -25,15 +39,16 @@ export default class Zone {
         this._canvasCtx = canvasCtx;
         this._maxRadius = radius;
         this._currentRadius = 0;
-        this._type = type;
+        this.type = type;
         this._animationProgress = 0;
+        this._easeFunction = easeFunction;
         let emitOnEdge = false;
         let spawnAnimationDuration = 0;
         let spawnAmount = 0;
         let particleAge = 0;
         let emitTime = 0;
         switch (type) {
-            case PowerupType.Bomb:
+            case ZoneType.Bomb:
                 this._color = new TinyColor(getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-bomb'));
                 emitOnEdge = true;
                 spawnAnimationDuration = 3;
@@ -41,7 +56,16 @@ export default class Zone {
                 particleAge = 140;
                 emitTime = 3000;
                 break;
-            case PowerupType.Confusion:
+            case ZoneType.BombShadow:
+                this._color = new TinyColor(getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-bomb-shadow'));
+                emitOnEdge = true;
+                spawnAnimationDuration = 3;
+                spawnAmount = 0;
+                particleAge = 140;
+                emitTime = 3000;
+                break;
+
+            case ZoneType.Confusion:
                 this._color = new TinyColor(getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-confusion'));
                 emitOnEdge = false;
                 spawnAnimationDuration = 0.5;
@@ -83,7 +107,18 @@ export default class Zone {
     public draw() {
         if (this._animationProgress < 1){
             this._animationProgress = Math.min(this._animationProgress + this._growSpeed, 1);
-            this._currentRadius = this._maxRadius * easeOutCubic(this._animationProgress);
+            switch(this._easeFunction){
+                case EaseFunction.easeOutQuint:
+                    this._currentRadius = this._maxRadius * easeOutQuint(this._animationProgress);
+                    break;
+                case EaseFunction.easeOutCubic:
+                    this._currentRadius = this._maxRadius * easeOutCubic(this._animationProgress);
+                    break;
+                case EaseFunction.linear:
+                    this._currentRadius = this._maxRadius * linear(this._animationProgress);
+                    break;
+            }
+            
             this._emitter.radius = this._currentRadius;
         }
         
@@ -95,7 +130,7 @@ export default class Zone {
         return {
             position: this.position,
             radius: this._currentRadius,
-            type: this._type
+            type: this.type
         };
     }
 
@@ -114,3 +149,8 @@ function easeOutQuint(x: number): number {
 function easeOutCubic(x: number): number {
     return 1 - Math.pow(1 - x, 3);
 }
+
+function linear(x: number): number{
+    return x;
+}
+
