@@ -2,7 +2,6 @@ import { Vector } from "vector2d";
 import { backgroundCanvas, gameCanvas, gameCanvasCtx } from "..";
 import RectangularEmitter from "../ParticleSystem/RectangularEmitter";
 import Powerup, { PowerupType } from "./powerup";
-import { PowerupAction } from "../WebSocketClient/messageTypes";
 import { updateCanvasSize } from '../index';
 import { drawGrid } from "../Drawer";
 import { Player } from "../Models/Player";

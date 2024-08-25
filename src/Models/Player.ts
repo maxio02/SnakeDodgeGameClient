@@ -35,7 +35,7 @@ export class Player {
     return {
       username: this.username,
       isReady: this.isReady,
-      color: this.color.toString()
+      color: this.color.toString('hex')
     };
   }
 

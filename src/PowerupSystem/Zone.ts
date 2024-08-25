@@ -1,6 +1,5 @@
 import { Vector } from 'vector2d';
 import { PowerupType } from './powerup';
-import Emitter from '../ParticleSystem/Emitter';
 import CircularEmitter from '../ParticleSystem/CircularEmitter';
 import { TinyColor } from '@ctrl/tinycolor';
 export default class Zone {

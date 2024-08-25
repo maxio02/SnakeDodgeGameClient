@@ -1,6 +1,6 @@
 import { Vector } from "vector2d";
-import Particle, { shape } from "./Particle";
-import { getBiasedRandomDirection, getPositionInCircle, getPositionInRectangle, getRandomDirection} from './ParticleSystemUtils';
+import Particle from "./Particle";
+import { getBiasedRandomDirection, getPositionInRectangle} from './ParticleSystemUtils';
 import Emitter, { EmitterOptions } from "./Emitter";
 import { currentRoom } from "../MenuManager/login";
 

@@ -1,5 +1,3 @@
-import { Vector } from "vector2d";
-import { Room } from "../Models/Room";
 import Powerup from "../PowerupSystem/powerup";
 import { Player } from "../Models/Player";
 
