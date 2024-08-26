@@ -1,6 +1,6 @@
 import { Vector } from "vector2d";
 import Particle from "./Particle";
-import { getBiasedRandomDirection, getPositionInRectangle } from './ParticleSystemUtils';
+import { getBiasedRandomDirection, getPositionInRectangle, getQualityMultiplier } from './ParticleSystemUtils';
 import Emitter, { EmitterOptions } from "./Emitter";
 import { currentRoom } from "../MenuManager/login";
 
@@ -9,6 +9,7 @@ export default class RectangleEmitter extends Emitter{
     private _width: number;
     private _height: number;
     private _rotation: number;
+    private _qualityMultiplier: number;
 
     public constructor(
         width: number,
@@ -22,6 +23,8 @@ export default class RectangleEmitter extends Emitter{
         this._width = width;
         this._height = height;
         this._rotation = rotation;
+
+        this._qualityMultiplier = getQualityMultiplier();
     }
 
     public tick(dt: number) {
@@ -33,13 +36,14 @@ export default class RectangleEmitter extends Emitter{
         if (this._ticks % this._emitInterval === 0 && this._remainingEmitTimeMillis > 0) {
 
             const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
-            for (let i = 0; i < this._emitAmountPerTick; i++) {
+            for (let i = 0; i < Math.floor(this._emitAmountPerTick * this._qualityMultiplier); i++) {
                 const localPos = getPositionInRectangle(this._width, this._height).subtract(new Vector(this._width / 2, this._height / 2));
                 const rotatedPos = localPos.rotate(this._rotation);
 
                 this._aliveParticles.push(new Particle(
                     this.position.clone().add(rotatedPos) as Vector,
                     getBiasedRandomDirection(this.emitDirection, this._spreadAngle).rotate(this._rotation),
+                    this._rotation,
                     this._particleSize * scaleY,
                     this._speed,
                     this._particleShape,
@@ -96,10 +100,26 @@ export default class RectangleEmitter extends Emitter{
     }
 
     set rotation(angle: number) {
-        this._rotation = angle;
+        this._rotation = angle ;
     }
 
     get rotation(): number {
         return this._rotation;
+    }
+
+    set height(height: number) {
+        this._height = height ;
+    }
+
+    get height(): number {
+        return this._height;
+    }
+
+    set width(width: number) {
+        this._width = width ;
+    }
+
+    get width(): number {
+        return this._width;
     }
 }

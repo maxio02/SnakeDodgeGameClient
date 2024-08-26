@@ -17,14 +17,17 @@ export default class PowerupHandler {
   private _portalWalls = false;
   private _cameraLock = false;
   private _cameraLockTimeoutId: NodeJS.Timeout;
+  private _arenaSize: number;
   private _gameCanvasDiv = document.getElementById(
     "game-canvas-container"
   ) as HTMLDivElement;
   constructor(arenaSize: number) {
+    this._arenaSize = arenaSize;
     this.initializeWallEmitters(arenaSize);
   }
 
   private initializeWallEmitters(arenaSize: number) {
+    this._wallEmitters = [];
     let sizes = [
       new Vector(arenaSize, 50),
       new Vector(50, arenaSize),
@@ -61,7 +64,7 @@ export default class PowerupHandler {
             particleSize: 8,
             particleAge: 100,
             emitInterval: 1,
-            emitAmountPerTick: 4,
+            emitAmountPerTick: 3,
             fadeDirection: "reverse",
           }
         )
@@ -115,6 +118,9 @@ export default class PowerupHandler {
         break;
       case PowerupType.Bomb:
         this.generateZones(powerup, 3);
+        break;
+      case PowerupType.Laser:
+        // this.generateZones(powerup, 3);
         break;
 
     }
@@ -198,6 +204,8 @@ export default class PowerupHandler {
     this._cameraLock = false;
     document.getElementById('game-canvas-container').style.transform = null;
     this.setWallState(false);
+
+    this.initializeWallEmitters(this._arenaSize);
   }
 
   public get cameraLock() {

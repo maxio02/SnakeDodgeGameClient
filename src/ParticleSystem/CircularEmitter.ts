@@ -1,21 +1,23 @@
 import { Vector } from "vector2d";
 import Particle, { shape } from "./Particle";
-import { getBiasedRandomDirection, getPositionInCircle, getRandomDirection} from './ParticleSystemUtils';
+import { getBiasedRandomDirection, getPositionInCircle, getQualityMultiplier, getRandomDirection } from './ParticleSystemUtils';
 import Emitter, { EmitterOptions } from "./Emitter";
 import { currentRoom } from "../MenuManager/login";
 
 
-export default class CircularEmitter extends Emitter{
+export default class CircularEmitter extends Emitter {
     private _emitterRadius: number;
-
+    private _qualityMultiplier: number;
     public constructor(
         emitterRadius: number,
         position: Vector,
         canvasCtx: CanvasRenderingContext2D,
         emitterOptions: EmitterOptions
-    ){
+    ) {
         super(position, canvasCtx, emitterOptions);
         this._emitterRadius = emitterRadius;
+
+        this._qualityMultiplier = getQualityMultiplier();
     }
 
     public tick(dt: number) {
@@ -27,9 +29,12 @@ export default class CircularEmitter extends Emitter{
         if (this._ticks % this._emitInterval === 0 && this._remainingEmitTimeMillis > 0) {
 
             const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
-            for (let i = 0; i < this._emitAmountPerTick; i++) {
+            // let emitAmountWithQuality: number;
+
+            for (let i = 0; i < Math.floor(this._emitAmountPerTick * this._qualityMultiplier); i++) {
                 this._aliveParticles.push(new Particle(this.position.clone().add(getPositionInCircle(this._emitterRadius, this._spawnParticlesOnEdge)) as Vector,
                     getBiasedRandomDirection(this.emitDirection, this._spreadAngle),
+                    0,
                     this._particleSize * scaleY,
                     this._speed,
                     this._particleShape,
@@ -62,7 +67,7 @@ export default class CircularEmitter extends Emitter{
             let color = this._color.toRgb()
             const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
             const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
-            
+
             this._canvasCtx.moveTo(this.position.x * scaleX, this.position.y * scaleY);
             this._canvasCtx.fillStyle = `rgba(${color.r},${color.g},${color.b}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;
             this._canvasCtx.beginPath();

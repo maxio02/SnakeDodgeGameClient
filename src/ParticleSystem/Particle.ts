@@ -14,6 +14,8 @@ export default class Particle {
     private _fadeSize: boolean;
     private _fadeDirection: 'normal' | 'reverse';
     private _age: number;
+    private _rotation: number;
+    private _scale: Vector;
 
     private _canvasCtx: CanvasRenderingContext2D;
     private _sizeFadeAmount: number;
@@ -21,7 +23,7 @@ export default class Particle {
 
 
 
-    public constructor(position: Vector, velocity: Vector, size: number, speed: number, shape: shape = 'circle', color: TinyColor, canvasCtx: CanvasRenderingContext2D, age: number, fadeColor?: boolean, fadeSize?: boolean, fadeDirection?: 'normal' | 'reverse') {
+    public constructor(position: Vector, velocity: Vector, rotation:number, size: number, speed: number, shape: shape = 'circle', color: TinyColor, canvasCtx: CanvasRenderingContext2D, age: number, fadeColor?: boolean, fadeSize?: boolean, fadeDirection?: 'normal' | 'reverse') {
         this._position = position;
         this._velocity = velocity;
         this._age = age;
@@ -44,7 +46,9 @@ export default class Particle {
         this._fadeColor = fadeColor;
         this._fadeSize = fadeSize;
         this._fadeDirection = fadeDirection;
+        this._rotation = rotation;
 
+        this._scale = new Vector(this._canvasCtx.canvas.width / currentRoom.settings.arenaSize, this._canvasCtx.canvas.height / currentRoom.settings.arenaSize);
 
     }
 
@@ -70,23 +74,26 @@ export default class Particle {
 
     public draw() {
 
-        const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
-        const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
+        this._canvasCtx.save();
+        this._canvasCtx.translate(this._position.x * this._scale.x, this._position.y * this._scale.y);
+        this._canvasCtx.rotate(this._rotation);
 
-
-        this._canvasCtx.moveTo(this._position.x * scaleX, this._position.y * scaleY);
+        // this._canvasCtx.moveTo(this._position.x * this._scale.x, this._position.y * this._scale.y);
+        
         this._canvasCtx.fillStyle = this._color.toRgbString();
         this._canvasCtx.beginPath();
         switch (this._shape) {
             case 'circle':
-                this._canvasCtx.arc(this._position.x * scaleX, this._position.y * scaleY, this._size, 0, 2 * Math.PI);
+                this._canvasCtx.arc(0, 0, this._size, 0, 2 * Math.PI);
                 this._canvasCtx.fill();
                 break;
             case 'square':
-                this._canvasCtx.fillRect((this._position.x - this._size) * scaleX, (this._position.y - this._size) * scaleY, this._size * 2, this._size * 2);
+                this._canvasCtx.fillRect(-this._size, -this._size, this._size * 2, this._size * 2);
                 break;
         }
         this._canvasCtx.closePath();
+
+        this._canvasCtx.restore();
     }
 
     public get age() {

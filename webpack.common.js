@@ -7,7 +7,7 @@ module.exports = {
         login: './src/MenuManager/login.ts',
         websocket: './src/WebSocketClient/websocket.ts',
         test: './src/Test/test.ts',
-        theme_switch: './src/MenuManager/themeSwitch.ts'
+        theme_switch: './src/MenuManager/settingButtons.ts'
     },
     module: {
         rules: [

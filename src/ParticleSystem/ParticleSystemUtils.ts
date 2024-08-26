@@ -33,3 +33,20 @@ function getAngle(vector: Vector): number {
 function fromAngle(angle: number): Vector {
   return new Vector(Math.cos(angle), Math.sin(angle));
 }
+
+export function getQualityMultiplier(): number {
+  let qualitySetting = document.documentElement.getAttribute('quality');
+  let multiplier: number;
+  switch (qualitySetting) {
+    case 'L':
+      multiplier = 0.34;
+        break;
+    case 'M':
+      multiplier = 0.67;
+        break;
+    case 'H':
+      multiplier = 1;
+        break;
+}
+return multiplier;
+}
