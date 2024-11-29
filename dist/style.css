@@ -115,16 +115,37 @@
   --quality-setting: "H"
 }
 
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-color);
+  transition: background-color 0.4s;
+}
+
+
 
 div#theme-switch {
   background-color: var(--theme-switch-bg);
-  border-radius: 50px;
+  border-radius: 5rem;
   cursor: pointer;
   padding: 0.5rem;
   width: 2rem;
   height: 2rem;
   margin: 0.8rem;
-  box-shadow: 0px 0px 15px var(--menu-box-shadow);
+  box-shadow: 0px 0px 1.5rem var(--menu-box-shadow);
   transition-duration: 0.4s;
   z-index: 2;
 }
@@ -138,18 +159,18 @@ div#switches{
 div#theme-switch:hover {
   transform: scale(110%);
 
-  box-shadow: 0px 0px 20px var(--menu-box-shadow);
+  box-shadow: 0px 0px 2rem var(--menu-box-shadow);
 }
 
 div#quality-switch {
   background-color: var(--theme-switch-bg);
-  border-radius: 50px;
+  border-radius: 5rem;
   cursor: pointer;
   padding: 0.5rem;
   width: 2rem;
   height: 2rem;
   margin: 0.8rem;
-  box-shadow: 0px 0px 15px var(--menu-box-shadow);
+  box-shadow: 0px 0px 1.5rem var(--menu-box-shadow);
   transition-duration: 0.4s;
   color: var(--menu-input-color);
   z-index: 2;
@@ -167,7 +188,7 @@ div#quality-switch::before {
 div#quality-switch:hover {
   transform: scale(110%);
 
-  box-shadow: 0px 0px 20px var(--menu-box-shadow);
+  box-shadow: 0px 0px 2rem var(--menu-box-shadow);
 }
 
 #switch-icon-sun {
@@ -184,13 +205,6 @@ div#quality-switch:hover {
   transition-duration: 0.4s;
 }
 
-html {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: var(--background-color);
-  transition: background-color 0.4s;
-}
 
 #login-screen-body{
   font-family: 'DisposableDroid BB';
@@ -280,10 +294,10 @@ div#game-canvas-container{
   box-sizing: border-box;
   aspect-ratio: 1 / 0.6;
   background-color: var(--menu-box-color);
-  border-radius: 30px;
+  border-radius: 3rem;
   text-align: center;
-  padding: 5vh;
-  box-shadow: 0px 8px 20px var(--menu-box-shadow);
+  padding: 4.5rem;
+  box-shadow: 0px .8rem 2rem var(--menu-box-shadow);
   transition: transform 0.5s cubic-bezier(.44,0,.18,.99), background-color 0.4s;
 }
 
@@ -306,7 +320,7 @@ div#game-canvas-container{
   border-radius: 1rem;
   padding: 1rem;
   /* box-shadow: 0px 8px 20px #a68ea6; */
-  box-shadow: inset 0px 4px 10px var(--menu-input-shadow-inset);
+  box-shadow: inset 0px .4rem 1rem var(--menu-input-shadow-inset);
   color: var(--menu-text-input-color);
 }
 
@@ -390,15 +404,15 @@ div#game-canvas-container{
 }
 
 #player-count{
-  margin-bottom: 0px;
-  margin-top: 0px;
+  margin-bottom: 0;
+  margin-top: 0;
 }
 
 #room-users-list li{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: .8rem;
   font-size: 3rem;
   line-height: 3rem;
   margin-bottom: 1rem;
@@ -506,7 +520,7 @@ div#game-canvas-container{
 }
 
 .settings-top{
-  transform: translateX(15vw) translateY(-100vh) scale(0.3)!important;
+  transform: translateX(15vw) translateY(-100rem) scale(0.3)!important;
 }
 
 .countdown {

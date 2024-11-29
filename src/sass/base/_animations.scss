@@ -1,0 +1,47 @@
+@keyframes moveOutLeft {
+  0% {
+      transform: scale(0) translateY(0);
+  }
+  30% {
+      transform: scale(1);
+  }
+  100% {
+      transform: translateX(-120vw);
+  }
+}
+
+@keyframes moveOutTop {
+  0% {
+      transform: scale(0) translateY(0);
+  }
+  30% {
+      transform: scale(1);
+  }
+  100% {
+      transform: translateY(-120vh);
+  }
+}
+
+@keyframes moveOutRight {
+  0% {
+      transform: scale(0) translateY(0);
+  }
+  30% {
+      transform: scale(1);
+  }
+  100% {
+      transform: translateX(120vw);
+  }
+}
+
+@keyframes moveOutDown {
+  0% {
+      transform: scale(0) translateY(0);
+  }
+  30% {
+      transform: scale(1);
+  }
+  100% {
+      transform: translateY(120vh);
+  }
+}
