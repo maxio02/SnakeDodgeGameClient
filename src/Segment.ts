@@ -6,4 +6,5 @@ export default abstract class Segment {
     abstract get endAngle(): number;
     abstract get endPoint(): Vector;
     abstract getContinuingSegment(transform: Vector): Segment;
+    abstract splitSegmentAtCircle(circleCenter: Vector, radius: number): Segment[];
 }

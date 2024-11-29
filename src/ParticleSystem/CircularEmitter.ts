@@ -38,7 +38,7 @@ export default class CircularEmitter extends Emitter {
                     this._particleSize * scaleY,
                     this._speed,
                     this._particleShape,
-                    this._color,
+                    this.color,
                     this._canvasCtx,
                     this._particleMaxAge,
                     this._doFadeColor,
@@ -64,7 +64,7 @@ export default class CircularEmitter extends Emitter {
         if ((this._remainingEmitTimeMillis + this._particleMaxAge) < 0) return;
 
         if (this._drawEmitterZone === true) {
-            let color = this._color.toRgb()
+            let color = this.color.toRgb()
             const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
             const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
 

@@ -37,7 +37,7 @@ export default class RectangleEmitter extends Emitter{
 
             const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
             for (let i = 0; i < Math.floor(this._emitAmountPerTick * this._qualityMultiplier); i++) {
-                const localPos = getPositionInRectangle(this._width, this._height).subtract(new Vector(this._width / 2, this._height / 2));
+                const localPos = getPositionInRectangle(this._width, this._height);
                 const rotatedPos = localPos.rotate(this._rotation);
 
                 this._aliveParticles.push(new Particle(
@@ -47,7 +47,7 @@ export default class RectangleEmitter extends Emitter{
                     this._particleSize * scaleY,
                     this._speed,
                     this._particleShape,
-                    this._color,
+                    this.color,
                     this._canvasCtx,
                     this._particleMaxAge,
                     this._doFadeColor,
@@ -73,19 +73,22 @@ export default class RectangleEmitter extends Emitter{
         if ((this._remainingEmitTimeMillis + this._particleMaxAge) < 0) return;
 
         if (this._drawEmitterZone === true) {
-            let color = this._color.toRgb();
+            let color = this.color.toRgb();
             const scaleX = this._canvasCtx.canvas.width / currentRoom.settings.arenaSize;
             const scaleY = this._canvasCtx.canvas.height / currentRoom.settings.arenaSize;
 
             this._canvasCtx.save();
             this._canvasCtx.translate(this.position.x * scaleX, this.position.y * scaleY);
             this._canvasCtx.rotate(this._rotation);
-
-            this._canvasCtx.fillStyle = `rgba(${color.r},${color.g},${color.b}, ${Math.min(0.2, ((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5))})`;
-            this._canvasCtx.beginPath();
-            this._canvasCtx.rect(-this._width / 2 * scaleX, -this._height / 2 * scaleY, this._width * scaleX, this._height * scaleY);
-            this._canvasCtx.fill();
-            this._canvasCtx.closePath();
+            let alpha;
+            if(((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5) < 1) {
+                alpha = Math.min(((this._remainingEmitTimeMillis + this._particleMaxAge) / this._particleMaxAge / 5), color.a)
+            }
+            else {
+                alpha = color.a;
+            }
+            this._canvasCtx.fillStyle = `rgba(${color.r},${color.g},${color.b},${alpha})`;
+            this._canvasCtx.fillRect(0, 0, this._width * scaleX, this._height * scaleY);
 
             this._canvasCtx.restore();
         }

@@ -74,4 +74,8 @@ export default class ArcSegment extends Segment {
     getContinuingSegment(transform: Vec2D.Vector): Segment {
         return new ArcSegment(this.center.clone().add(transform) as Vec2D.Vector, this.radius, this.endAngle, this.endAngle, this._counterClockwise, this.isCollidable);
     }
+
+    splitSegmentAtCircle(): ArcSegment[] {
+        return []
+    }
 }

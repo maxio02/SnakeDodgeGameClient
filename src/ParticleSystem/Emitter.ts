@@ -31,7 +31,7 @@ export default abstract class Emitter{
     protected _particleShape: shape;
     protected _particleSize: number;
     protected _speed: number;
-    protected _color: TinyColor;
+    public color: TinyColor;
     protected _doFadeColor: boolean;
     protected _fadeDirection: 'normal' | 'reverse';
     protected _doFadeSize: boolean;
@@ -71,7 +71,7 @@ export default abstract class Emitter{
         this._particleSize = particleSize;
         this._speed = speed;
         this._particleShape = particleShape;
-        this._color = color;
+        this.color = color;
         this._doFadeColor = doFadeColor;
         this._doFadeSize = doFadeSize;
         this._fadeDirection = fadeDirection;

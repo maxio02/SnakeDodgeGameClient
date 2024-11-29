@@ -8,8 +8,8 @@ import { MessageRoom, RoomSettings } from "./messageTypes";
 let socket: WebSocket;
 
 function initWebSocket() {
-    // socket = new WebSocket(`ws://${window.location.hostname}:3000`);
-    socket = new WebSocket(`wss://snakegame-server.maxio.site`);
+    socket = new WebSocket(`ws://${window.location.hostname}:3000`);
+    // socket = new WebSocket(`wss://snakegame-server.maxio.site`);
     
     socket.onopen = () => {
         console.log('WebSocket connection established');

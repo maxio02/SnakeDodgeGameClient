@@ -5,7 +5,8 @@ import { TinyColor } from '@ctrl/tinycolor';
 
 export enum ZoneType {
     Bomb,
-    BombShadow,
+    BombShadowInner,
+    BombShadowOuter,
     Confusion
   }
 
@@ -24,12 +25,14 @@ export default class Zone {
     private _color: TinyColor;
     private _growSpeed: number;
     private _easeFunction: EaseFunction;
+    private _spawnAnimationDuration: number;
 
     private _animationProgress: number;
     constructor(
         position: Vector,
         canvasCtx: CanvasRenderingContext2D,
         radius: number,
+        spawnAnimationDuration: number,
         type: ZoneType,
         easeFunction : EaseFunction = EaseFunction.linear
         ){
@@ -42,43 +45,46 @@ export default class Zone {
         this.type = type;
         this._animationProgress = 0;
         this._easeFunction = easeFunction;
+        this._spawnAnimationDuration = spawnAnimationDuration
         let emitOnEdge = false;
-        let spawnAnimationDuration = 0;
         let spawnAmount = 0;
         let particleAge = 0;
         let emitTime = 0;
+        let speed = 0;
         switch (type) {
             case ZoneType.Bomb:
                 this._color = new TinyColor(getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-bomb'));
                 emitOnEdge = true;
-                spawnAnimationDuration = 3;
                 spawnAmount = 4;
                 particleAge = 140;
                 emitTime = 3000;
+                speed = 0.8/20;
                 break;
-            case ZoneType.BombShadow:
+
+            case ZoneType.BombShadowOuter:
+            case ZoneType.BombShadowInner:
                 this._color = new TinyColor(getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-bomb-shadow'));
                 emitOnEdge = true;
-                spawnAnimationDuration = 3;
                 spawnAmount = 0;
                 particleAge = 140;
                 emitTime = 3000;
+                speed = 0.8/20;
                 break;
 
             case ZoneType.Confusion:
                 this._color = new TinyColor(getComputedStyle(document.documentElement).getPropertyValue('--powerup-color-confusion'));
                 emitOnEdge = false;
-                spawnAnimationDuration = 0.5;
                 spawnAmount = 2;
                 particleAge = 70;
                 emitTime = 10000;
+                speed = 0.8/40;
                 break;
 
             default:
                 console.log("this should never happen!")
                 break;
         }
-        this._growSpeed = 1/50/spawnAnimationDuration;
+        this._growSpeed = 1/50/this._spawnAnimationDuration;
 
         this._emitter = new CircularEmitter(
             this._currentRadius,
@@ -91,7 +97,7 @@ export default class Zone {
               particleSize: 10,
               emitTimeMillis: emitTime,
               particleAge: particleAge,
-              speed: 0.8/40,
+              speed: speed,
 
               emitInterval: 1,
               emitAmountPerTick: spawnAmount,
